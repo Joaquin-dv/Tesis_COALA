@@ -6,8 +6,9 @@
 }
 
 .apunte_mochila{
+    font-size: clamp(0.75rem, 0.5625rem + 1vw, 1.125rem);
     border: 1px solid #ccc;
-    border-radius: 10px;
+    border-radius: 24px;
 
     padding: 0px 20px;
     margin: 10px;
