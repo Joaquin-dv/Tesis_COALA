@@ -1,0 +1,99 @@
+*{
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.apunte_mochila{
+    font-size: clamp(0.75rem, 0.5625rem + 1vw, 1.125rem);
+    border: 1px solid #ccc;
+    border-radius: 24px;
+
+    padding: 0px 20px;
+    margin: 10px;
+
+    max-width: 400px;
+    max-height: 300px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Encabezado */
+
+.encabezado_apunte{
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    padding: 20px 0 10px 0;
+    justify-content: space-between;
+    border-bottom: 1px solid #ccc;
+}
+
+.info_encabezado_apunte{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.info_encabezado_apunte h2{
+    font-size: 20px;
+    color: #333;
+}
+
+.info_encabezado_apunte p{
+    font-size: 14px;
+    color: #555;
+}
+
+figure{
+    width: 25%;
+    height: 25%;
+    aspect-ratio: 1/1;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+figure img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Cuerpo */
+
+.cuerpo_apunte{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px 0;
+}
+
+.cuerpo_apunte p:last-child{
+    font-size: 14px;
+    color: #666;
+}
+
+/* Footer */
+footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border-top: 1px solid #ccc;
+    padding: 10px 0 20px 0;
+}
+
+footer button{
+    border: 1px solid #007BFF;
+    border-radius: 5px;
+    padding: 5px 10px;
+    background-color: transparent;
+    color: #007BFF;
+    cursor: pointer;
+}
