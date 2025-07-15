@@ -1,0 +1,802 @@
+[
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Apunte de Ecología",
+    "materia": "Biología",
+    "escuela": "Colegio Fátima",
+    "fecha_creacion": "2025-04-21",
+    "puntuacion": 4.5
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Introducción a la Programación",
+    "materia": "Informática",
+    "escuela": "Instituto Técnico Superior",
+    "fecha_creacion": "2025-03-15",
+    "puntuacion": 4.8
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Historia Universal I",
+    "materia": "Historia",
+    "escuela": "Liceo Belgrano",
+    "fecha_creacion": "2025-05-01",
+    "puntuacion": 4.2
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Cálculo Diferencial",
+    "materia": "Matemáticas",
+    "escuela": "Universidad Nacional",
+    "fecha_creacion": "2025-04-10",
+    "puntuacion": 4.9
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Química Orgánica",
+    "materia": "Química",
+    "escuela": "Escuela Técnica N°1",
+    "fecha_creacion": "2025-03-28",
+    "puntuacion": 4.7
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Apuntes de Física Cuántica",
+    "materia": "Física",
+    "escuela": "Universidad Tecnológica",
+    "fecha_creacion": "2025-05-05",
+    "puntuacion": 4.6
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Literatura Argentina Contemporánea",
+    "materia": "Lengua y Literatura",
+    "escuela": "Colegio Nacional",
+    "fecha_creacion": "2025-04-18",
+    "puntuacion": 4.3
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Derecho Constitucional",
+    "materia": "Derecho",
+    "escuela": "Facultad de Derecho",
+    "fecha_creacion": "2025-03-02",
+    "puntuacion": 4.9
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Economía General",
+    "materia": "Economía",
+    "escuela": "Escuela de Comercio",
+    "fecha_creacion": "2025-04-25",
+    "puntuacion": 4.1
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Diseño Gráfico Básico",
+    "materia": "Diseño",
+    "escuela": "Escuela de Diseño",
+    "fecha_creacion": "2025-05-07",
+    "puntuacion": 4.0
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Psicología del Desarrollo",
+    "materia": "Psicología",
+    "escuela": "Universidad de Psicología",
+    "fecha_creacion": "2025-03-19",
+    "puntuacion": 4.6
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Bases de Datos SQL",
+    "materia": "Informática",
+    "escuela": "Instituto Superior de Informática",
+    "fecha_creacion": "2025-04-03",
+    "puntuacion": 4.8
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Marketing Digital",
+    "materia": "Comercialización",
+    "escuela": "Escuela de Negocios",
+    "fecha_creacion": "2025-04-22",
+    "puntuacion": 4.5
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Geografía de América Latina",
+    "materia": "Geografía",
+    "escuela": "Colegio Nuestra Señora",
+    "fecha_creacion": "2025-05-12",
+    "puntuacion": 4.2
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Filosofía Antigua",
+    "materia": "Filosofía",
+    "escuela": "Universidad de Filosofía",
+    "fecha_creacion": "2025-03-08",
+    "puntuacion": 4.4
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Programación Orientada a Objetos",
+    "materia": "Informática",
+    "escuela": "Universidad de Ingeniería",
+    "fecha_creacion": "2025-04-20",
+    "puntuacion": 4.9
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Arte Moderno",
+    "materia": "Historia del Arte",
+    "escuela": "Academia de Bellas Artes",
+    "fecha_creacion": "2025-04-01",
+    "puntuacion": 4.3
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Neurociencia Cognitiva",
+    "materia": "Neurociencia",
+    "escuela": "Instituto de Neurociencias",
+    "fecha_creacion": "2025-05-14",
+    "puntuacion": 4.7
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Introducción a la Genética",
+    "materia": "Biología",
+    "escuela": "Facultad de Ciencias Naturales",
+    "fecha_creacion": "2025-03-29",
+    "puntuacion": 4.6
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Contabilidad Financiera",
+    "materia": "Contabilidad",
+    "escuela": "Universidad de Ciencias Económicas",
+    "fecha_creacion": "2025-05-06",
+    "puntuacion": 4.4
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Gestión de Proyectos",
+    "materia": "Administración",
+    "escuela": "Escuela de Administración",
+    "fecha_creacion": "2025-04-17",
+    "puntuacion": 4.5
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Estadística Aplicada",
+    "materia": "Matemáticas",
+    "escuela": "Instituto Politécnico",
+    "fecha_creacion": "2025-03-09",
+    "puntuacion": 4.7
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Redes de Computadoras",
+    "materia": "Informática",
+    "escuela": "Academia de Redes",
+    "fecha_creacion": "2025-04-26",
+    "puntuacion": 4.8
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Historia del Arte Antiguo",
+    "materia": "Historia del Arte",
+    "escuela": "Universidad de Historia del Arte",
+    "fecha_creacion": "2025-05-04",
+    "puntuacion": 4.1
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Sociología General",
+    "materia": "Sociología",
+    "escuela": "Facultad de Ciencias Sociales",
+    "fecha_creacion": "2025-03-11",
+    "puntuacion": 4.3
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Física Moderna",
+    "materia": "Física",
+    "escuela": "Instituto de Física",
+    "fecha_creacion": "2025-04-23",
+    "puntuacion": 4.9
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Botánica",
+    "materia": "Biología",
+    "escuela": "Universidad de Biología",
+    "fecha_creacion": "2025-05-16",
+    "puntuacion": 4.0
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Historia Económica Argentina",
+    "materia": "Economía",
+    "escuela": "Universidad de Economía",
+    "fecha_creacion": "2025-04-02",
+    "puntuacion": 4.5
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Introducción al Diseño Web",
+    "materia": "Informática",
+    "escuela": "Academia de Diseño Web",
+    "fecha_creacion": "2025-05-08",
+    "puntuacion": 4.7
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Literatura Universal",
+    "materia": "Lengua y Literatura",
+    "escuela": "Colegio Cervantes",
+    "fecha_creacion": "2025-03-21",
+    "puntuacion": 4.2
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Circuitos Eléctricos",
+    "materia": "Ingeniería Electrónica",
+    "escuela": "Universidad de Ingeniería",
+    "fecha_creacion": "2025-05-13",
+    "puntuacion": 4.6
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Microeconomía",
+    "materia": "Economía",
+    "escuela": "Facultad de Economía",
+    "fecha_creacion": "2025-04-05",
+    "puntuacion": 4.4
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Sistemas Operativos",
+    "materia": "Informática",
+    "escuela": "Instituto de Computación",
+    "fecha_creacion": "2025-05-18",
+    "puntuacion": 4.8
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Educación Cívica",
+    "materia": "Ciencias Sociales",
+    "escuela": "Escuela Secundaria",
+    "fecha_creacion": "2025-03-24",
+    "puntuacion": 4.0
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Geometría Analítica",
+    "materia": "Matemáticas",
+    "escuela": "Colegio Universitario",
+    "fecha_creacion": "2025-05-10",
+    "puntuacion": 4.6
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Historia del Pensamiento Económico",
+    "materia": "Economía",
+    "escuela": "Universidad de Economía",
+    "fecha_creacion": "2025-03-01",
+    "puntuacion": 4.3
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Programación Web Frontend",
+    "materia": "Informática",
+    "escuela": "Centro de Capacitación",
+    "fecha_creacion": "2025-04-07",
+    "puntuacion": 4.9
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Modelado 3D",
+    "materia": "Diseño",
+    "escuela": "Instituto de Diseño",
+    "fecha_creacion": "2025-05-19",
+    "puntuacion": 4.5
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Derecho Civil I",
+    "materia": "Derecho",
+    "escuela": "Facultad de Derecho",
+    "fecha_creacion": "2025-03-26",
+    "puntuacion": 4.7
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Robótica Básica",
+    "materia": "Ingeniería",
+    "escuela": "Escuela de Robótica",
+    "fecha_creacion": "2025-05-11",
+    "puntuacion": 4.8
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Historia del Arte Latinoamericano",
+    "materia": "Historia del Arte",
+    "escuela": "Universidad de Historia del Arte",
+    "fecha_creacion": "2025-04-03",
+    "puntuacion": 4.2
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Macroeconomía",
+    "materia": "Economía",
+    "escuela": "Universidad de Economía",
+    "fecha_creacion": "2025-05-20",
+    "puntuacion": 4.6
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Psicología Social",
+    "materia": "Psicología",
+    "escuela": "Facultad de Psicología",
+    "fecha_creacion": "2025-03-28",
+    "puntuacion": 4.5
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Programación Backend Node.js",
+    "materia": "Informática",
+    "escuela": "Academia de Programación",
+    "fecha_creacion": "2025-04-12",
+    "puntuacion": 4.9
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Anatomía Humana",
+    "materia": "Biología",
+    "escuela": "Universidad de Medicina",
+    "fecha_creacion": "2025-05-06",
+    "puntuacion": 4.7
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Teoría del Color",
+    "materia": "Diseño",
+    "escuela": "Escuela de Artes Visuales",
+    "fecha_creacion": "2025-04-25",
+    "puntuacion": 4.1
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Probabilidad y Estadística",
+    "materia": "Matemáticas",
+    "escuela": "Instituto Universitario",
+    "fecha_creacion": "2025-05-09",
+    "puntuacion": 4.8
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Historia del Pensamiento Político",
+    "materia": "Ciencia Política",
+    "escuela": "Facultad de Ciencias Políticas",
+    "fecha_creacion": "2025-03-02",
+    "puntuacion": 4.3
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Redacción Académica",
+    "materia": "Lengua y Literatura",
+    "escuela": "Universidad de Letras",
+    "fecha_creacion": "2025-05-15",
+    "puntuacion": 4.4
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Investigación de Operaciones",
+    "materia": "Ingeniería Industrial",
+    "escuela": "Universidad de Ingeniería",
+    "fecha_creacion": "2025-04-22",
+    "puntuacion": 4.6
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Educación Física y Salud",
+    "materia": "Educación Física",
+    "escuela": "Instituto de Educación Física",
+    "fecha_creacion": "2025-03-17",
+    "puntuacion": 3.9
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Álgebra Lineal",
+    "materia": "Matemáticas",
+    "escuela": "Facultad de Ciencias Exactas",
+    "fecha_creacion": "2025-04-04",
+    "puntuacion": 4.9
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Gestión de Recursos Humanos",
+    "materia": "Administración",
+    "escuela": "Escuela de Negocios",
+    "fecha_creacion": "2025-04-13",
+    "puntuacion": 4.5
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Cultura y Sociedad",
+    "materia": "Sociología",
+    "escuela": "Universidad de Ciencias Sociales",
+    "fecha_creacion": "2025-05-29",
+    "puntuacion": 4.0
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Teoría de la Computación",
+    "materia": "Informática",
+    "escuela": "Instituto de Computación",
+    "fecha_creacion": "2025-04-08",
+    "puntuacion": 4.8
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Historia del Arte Renacentista",
+    "materia": "Historia del Arte",
+    "escuela": "Academia de Artes",
+    "fecha_creacion": "2025-05-01",
+    "puntuacion": 4.3
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Nutrición y Dietética",
+    "materia": "Nutrición",
+    "escuela": "Universidad de Nutrición",
+    "fecha_creacion": "2025-03-20",
+    "puntuacion": 4.6
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Finanzas Corporativas",
+    "materia": "Finanzas",
+    "escuela": "Escuela de Finanzas",
+    "fecha_creacion": "2025-04-14",
+    "puntuacion": 4.7
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Teoría de la Literatura",
+    "materia": "Literatura",
+    "escuela": "Facultad de Letras",
+    "fecha_creacion": "2025-05-07",
+    "puntuacion": 4.2
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Inteligencia Artificial",
+    "materia": "Informática",
+    "escuela": "Instituto de Inteligencia Artificial",
+    "fecha_creacion": "2025-05-23",
+    "puntuacion": 4.9
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Ecología Marina",
+    "materia": "Biología",
+    "escuela": "Universidad de Ciencias Marinas",
+    "fecha_creacion": "2025-03-05",
+    "puntuacion": 4.5
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Metodología de la Investigación",
+    "materia": "Ciencias Sociales",
+    "escuela": "Universidad Multidisciplinaria",
+    "fecha_creacion": "2025-04-18",
+    "puntuacion": 4.4
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Criptografía",
+    "materia": "Informática",
+    "escuela": "Escuela de Seguridad Informática",
+    "fecha_creacion": "2025-03-10",
+    "puntuacion": 4.8
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Historia del Teatro",
+    "materia": "Arte Dramático",
+    "escuela": "Escuela de Teatro",
+    "fecha_creacion": "2025-05-26",
+    "puntuacion": 4.1
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Desarrollo Sostenible",
+    "materia": "Medio Ambiente",
+    "escuela": "Instituto de Medio Ambiente",
+    "fecha_creacion": "2025-05-03",
+    "puntuacion": 4.6
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Geopolítica",
+    "materia": "Ciencia Política",
+    "escuela": "Facultad de Ciencias Políticas",
+    "fecha_creacion": "2025-04-16",
+    "puntuacion": 4.3
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Ética Profesional",
+    "materia": "Filosofía",
+    "escuela": "Universidad de Filosofía",
+    "fecha_creacion": "2025-03-29",
+    "puntuacion": 4.5
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Modelos Matemáticos",
+    "materia": "Matemáticas",
+    "escuela": "Instituto de Matemática Aplicada",
+    "fecha_creacion": "2025-04-11",
+    "puntuacion": 4.7
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Programación de Videojuegos",
+    "materia": "Informática",
+    "escuela": "Academia de Videojuegos",
+    "fecha_creacion": "2025-05-24",
+    "puntuacion": 4.9
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Diseño de Interiores",
+    "materia": "Diseño",
+    "escuela": "Escuela de Diseño de Interiores",
+    "fecha_creacion": "2025-03-06",
+    "puntuacion": 4.2
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Derecho Laboral",
+    "materia": "Derecho",
+    "escuela": "Facultad de Derecho",
+    "fecha_creacion": "2025-03-19",
+    "puntuacion": 4.6
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Robótica Avanzada",
+    "materia": "Ingeniería",
+    "escuela": "Universidad de Ingeniería Robótica",
+    "fecha_creacion": "2025-04-15",
+    "puntuacion": 4.8
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Historia del Arte Griego y Romano",
+    "materia": "Historia del Arte",
+    "escuela": "Universidad de Historia del Arte",
+    "fecha_creacion": "2025-05-02",
+    "puntuacion": 4.0
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Teoría de Juegos",
+    "materia": "Economía",
+    "escuela": "Instituto de Economía Matemática",
+    "fecha_creacion": "2025-05-28",
+    "puntuacion": 4.7
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Psicopatología",
+    "materia": "Psicología",
+    "escuela": "Facultad de Psicología",
+    "fecha_creacion": "2025-03-09",
+    "puntuacion": 4.5
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Aprendizaje Automático",
+    "materia": "Informática",
+    "escuela": "Centro de Investigación en IA",
+    "fecha_creacion": "2025-05-17",
+    "puntuacion": 4.9
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Bioquímica",
+    "materia": "Biología",
+    "escuela": "Universidad de Bioquímica",
+    "fecha_creacion": "2025-03-04",
+    "puntuacion": 4.6
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Marketing Estratégico",
+    "materia": "Marketing",
+    "escuela": "Escuela de Negocios",
+    "fecha_creacion": "2025-04-21",
+    "puntuacion": 4.4
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Sociología del Trabajo",
+    "materia": "Sociología",
+    "escuela": "Facultad de Ciencias Sociales",
+    "fecha_creacion": "2025-05-13",
+    "puntuacion": 4.2
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Desarrollo de Aplicaciones Móviles",
+    "materia": "Informática",
+    "escuela": "Academia de Desarrollo Móvil",
+    "fecha_creacion": "2025-04-29",
+    "puntuacion": 4.8
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Historia de la Filosofía Medieval",
+    "materia": "Filosofía",
+    "escuela": "Universidad de Filosofía",
+    "fecha_creacion": "2025-04-06",
+    "puntuacion": 4.3
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Derecho Romano",
+    "materia": "Derecho",
+    "escuela": "Facultad de Derecho",
+    "fecha_creacion": "2025-05-10",
+    "puntuacion": 4.5
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Programación Funcional",
+    "materia": "Informática",
+    "escuela": "Instituto de Computación",
+    "fecha_creacion": "2025-05-25",
+    "puntuacion": 4.9
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Análisis de Datos",
+    "materia": "Estadística",
+    "escuela": "Universidad de Estadística",
+    "fecha_creacion": "2025-03-07",
+    "puntuacion": 4.7
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Electrónica Analógica",
+    "materia": "Ingeniería Electrónica",
+    "escuela": "Universidad de Ingeniería",
+    "fecha_creacion": "2025-03-22",
+    "puntuacion": 4.6
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Historia de la Arquitectura",
+    "materia": "Arquitectura",
+    "escuela": "Facultad de Arquitectura",
+    "fecha_creacion": "2025-04-01",
+    "puntuacion": 4.1
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Medicina Forense",
+    "materia": "Medicina",
+    "escuela": "Facultad de Medicina",
+    "fecha_creacion": "2025-05-14",
+    "puntuacion": 4.8
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Diseño de Experiencia de Usuario (UX)",
+    "materia": "Diseño",
+    "escuela": "Academia de UX/UI",
+    "fecha_creacion": "2025-04-20",
+    "puntuacion": 4.9
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Historia de la Música",
+    "materia": "Música",
+    "escuela": "Conservatorio de Música",
+    "fecha_creacion": "2025-03-03",
+    "puntuacion": 4.0
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Biología Marina",
+    "materia": "Biología",
+    "escuela": "Instituto de Biología Marina",
+    "fecha_creacion": "2025-05-16",
+    "puntuacion": 4.7
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Cálculo Numérico",
+    "materia": "Matemáticas",
+    "escuela": "Universidad de Ciencias Exactas",
+    "fecha_creacion": "2025-04-29",
+    "puntuacion": 4.8
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Derecho Penal I",
+    "materia": "Derecho",
+    "escuela": "Facultad de Derecho",
+    "fecha_creacion": "2025-03-11",
+    "puntuacion": 4.6
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Programación en Python",
+    "materia": "Informática",
+    "escuela": "Centro de Capacitación IT",
+    "fecha_creacion": "2025-03-24",
+    "puntuacion": 4.9
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Marketing de Contenidos",
+    "materia": "Marketing",
+    "escuela": "Escuela de Marketing Digital",
+    "fecha_creacion": "2025-05-05",
+    "puntuacion": 4.5
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Gestión de la Calidad",
+    "materia": "Administración",
+    "escuela": "Instituto de Calidad",
+    "fecha_creacion": "2025-03-18",
+    "puntuacion": 4.4
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Psicología Educacional",
+    "materia": "Psicología",
+    "escuela": "Facultad de Psicología",
+    "fecha_creacion": "2025-05-12",
+    "puntuacion": 4.3
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Organización de Eventos",
+    "materia": "Administración",
+    "escuela": "Escuela de Turismo",
+    "fecha_creacion": "2025-03-21",
+    "puntuacion": 4.0
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Física de Materiales",
+    "materia": "Física",
+    "escuela": "Universidad de Ciencia de Materiales",
+    "fecha_creacion": "2025-05-04",
+    "puntuacion": 4.7
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Historia de las Civilizaciones Antiguas",
+    "materia": "Historia",
+    "escuela": "Colegio Histórico",
+    "fecha_creacion": "2025-03-26",
+    "puntuacion": 4.2
+  },
+  {
+    "img": "http://googleusercontent.com/image_generation_content/0",
+    "nombre": "Desarrollo de Videojuegos 3D",
+    "materia": "Informática",
+    "escuela": "Instituto de Diseño de Videojuegos",
+    "fecha_creacion": "2025-04-13",
+    "puntuacion": 4.9
+  }
+]
