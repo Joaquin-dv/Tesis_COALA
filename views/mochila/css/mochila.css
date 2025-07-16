@@ -6,7 +6,6 @@
 }
 
 .apunte_mochila{
-    font-size: clamp(0.75rem, 0.5625rem + 1vw, 1.125rem);
     border: 1px solid #ccc;
     border-radius: 24px;
 
@@ -40,12 +39,12 @@
 }
 
 .info_encabezado_apunte h2{
-    font-size: 20px;
+    font-size: clamp(0.875rem, 0.6875rem + 1vw, 1.25rem);
     color: #333;
 }
 
 .info_encabezado_apunte p{
-    font-size: 14px;
+    font-size: clamp(0.75rem, 0.6875rem + 0.3333vw, 0.875rem);
     color: #555;
 }
 
@@ -70,6 +69,7 @@ figure img{
 .cuerpo_apunte{
     display: flex;
     flex-direction: column;
+    font-size: clamp(0.75rem, 0.6875rem + 0.3333vw, 0.875rem);
     gap: 5px;
     padding: 10px 0;
 }
