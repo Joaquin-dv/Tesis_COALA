@@ -5,14 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/views/inicio/css/inicio.css">
-    <link rel="stylesheet" href="../mochila/css/mochila.css">
+    <link rel="stylesheet" href="/css/mochila.css">
     <title>Panel</title>
 </head>
 
 <body class="josefin-sans-normal">
     <header>
         <div class="contenedor_logo_secundario">
-            <img src="img/logo_secundario.png" alt="">
+            <img src="/views/inicio/img/logo_secundario.png" alt="">
         </div>
 
         <nav class="barra_navegacion">
@@ -24,7 +24,7 @@
 
 
         <section class="perfil">
-            <img src="img/foto_perfil.jpg" alt="foto de perfil">
+            <img src="/views/inicio/img/foto_perfil.jpg" alt="foto de perfil">
         </section>
     </header>
 
