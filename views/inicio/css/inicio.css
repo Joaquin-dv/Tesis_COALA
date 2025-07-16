@@ -89,6 +89,10 @@ body{
                     border: 2px solid #ccc;
                     border-radius: 10px;
                     font-size: 16px;
+                    margin-top: 5px;
+
+                }
+                .input_buscador:hover{
 
                 }
             }
@@ -112,7 +116,6 @@ body{
 
 
         .contenedor_apuntes{
-            background-color: red;
             display: flex;
             flex-wrap: wrap; 
             gap: 20px;       
