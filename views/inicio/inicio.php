@@ -14,10 +14,10 @@
         </div>
 
         <nav class="barra_navegacion">
-            <a href="#">Inicio</a>
-            <a href="#">Explorar</a>
-            <a href="#">Mochila</a>
-            <a href="#">Clases</a>
+            <a href="../inicio/inicio.php">Inicio</a>
+            <a href="../explorar/explorar.php">Explorar</a>
+            <a href="../mochila/mochila.php">Mochila</a>
+            <a href="../clases/clases.php">Clases</a>
         </nav>
 
 
