@@ -1,0 +1,127 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+body{
+    background-color: #f7f7f7;
+
+    header{
+        /* background-color: red; */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+
+        .contenedor_logo_secundario{
+            width: 130px;
+            height: auto;
+            overflow: hidden;
+            img{
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
+            }
+        }
+        .perfil{
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            img{
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
+            }
+                
+        }
+
+        .barra_navegacion {
+            background-color: #00a1db; 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+            padding: 12px 24px;
+            display: flex;
+            gap: 3em;
+            justify-content: center;
+            align-items: center;
+            border-radius: 12px;
+
+            a {
+                color: #ffffff;
+                text-decoration: none;
+                font-size: 18px;
+                font-weight: 500;
+                transition: color 0.3s ease;
+
+                &:hover {
+                    color: #A7D129; 
+                }
+            }
+}
+    }
+
+    main{
+        /* background-color: aqua; */
+        .buscador_subir_apunte{
+            /* background-color: yellow; */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: .5em;
+            padding: 10px 0;
+            
+
+            .contenedor_buscador{
+                width: 100%;
+                max-width: 700px;
+
+                h2{
+                    font-weight: lighter;
+                }
+
+
+                .input_buscador{
+                    background-color: #ffffffff;
+                    width: 100%;
+                    padding: 12px 40px 12px 40px;
+                    border: 2px solid #ccc;
+                    border-radius: 10px;
+                    font-size: 16px;
+
+                }
+            }
+
+            .boton_subir_apunte{
+                button{
+                    background-color: #A7D129;
+                    padding: 10px 20px;
+                    border: none;
+                    border-radius: 10px;
+                    font-size: 17px;
+                    color: #ffffff;
+                    
+                }
+
+                button:hover {
+                    background-color: #92b723;
+                }
+            }
+        }
+
+
+        .contenedor_apuntes{
+            background-color: red;
+            display: flex;
+            flex-wrap: wrap; 
+            gap: 20px;       
+            justify-content: center;
+
+            
+
+        }
+    }
+}
+
+
