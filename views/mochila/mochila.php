@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/views/inicio/css/inicio.css">
-    <link rel="stylesheet" href="/css/mochila.css">
+    <link rel="stylesheet" href="css/mochila.css">
     <title>Panel</title>
 </head>
 
@@ -42,7 +42,10 @@
         <h2 class="vistos_recientemente">Vistos recientemente</h2>
         <section class="contenedor_apuntes">
             <?php
-            include '../mochila/componentes/apunte_mochila.html';
+            // Include the component for displaying notes
+            for ($i = 0; $i < 6; $i++) {
+                include '../mochila/componentes/apunte_mochila.html';
+            }
             ?>
         </section>
         <h2 class="para_ti">Para ti</h2>
