@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../inicio/css/inicio.css">
+    <link rel="stylesheet" href="../inicio/css/modal.css">
     <link rel="stylesheet" href="css/mochila.css">
+    <script src="https://kit.fontawesome.com/f63493d67a.js" crossorigin="anonymous"></script>
     <title>Panel</title>
 </head>
 
@@ -35,7 +37,7 @@
                 <input type="text" placeholder="Buscar..." class="input_buscador">
             </div>
             <div class="boton_subir_apunte">
-                <button>Subir apunte</button>
+                <button id="abrir_modal">Subir apunte</button>
             </div>
         </section>
 
@@ -152,8 +154,36 @@
             }
             ?>
         </section>
-    </main>
 
+        <dialog id="modal">
+                <section class="contenido_modal">
+                    <i id="cerrar_modal" class="fa-solid fa-x"></i>
+                    <label for="titulo">Titulo</label>
+                    <input type="text" id="titulo" placeholder="Titulo" class="campo_modal">
+                    <label for="descripcion">Descripcion</label>
+                    <input type="text" id="descripcion" placeholder="Descripcion" class="campo_modal">
+                    <button id="subir_archivo" class="btn_modal">Agregar archivo</button>
+                    <section class="datos_apunte">
+                    <div class="input_label">                    
+                        <label for="curso">Curso</label>
+                        <input type="text" id="curso" placeholder="Curso" class="campo_modal">
+                        </div>
+                    <div class="input_label">    
+                        <label for="division">Division</label>
+                        <input type="text" id="division" placeholder="Division" class="campo_modal">
+                    </div>
+                    <div class="input_label">
+                        <label for="materia">Materia</label>
+                        <input type="text" id="materia" placeholder="Materia" class="campo_modal">
+                    </div>
+                    </section>
+                    <button id="subir_apunte" class="btn_modal">Subir Apunte</button>
+
+                </section>
+        </dialog>
+
+    </main>
+<script src="../inicio/js/modal.js"></script>
 </body>
 
 </html>
