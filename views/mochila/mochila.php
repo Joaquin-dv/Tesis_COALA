@@ -12,7 +12,7 @@
 <body class="josefin-sans-normal">
     <header>
         <div class="contenedor_logo_secundario">
-            <img src="/views/inicio/img/logo_secundario.png" alt="">
+            <img src="../../assets/img/logo_secundario.png" alt="">
         </div>
 
         <nav class="barra_navegacion">
