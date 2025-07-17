@@ -119,3 +119,11 @@ main .buscador_subir_apunte{
     justify-content: start;
     gap: 10px;
 }
+
+
+.escuela{
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #2f3e4d;
+    margin-bottom: 0;
+}
