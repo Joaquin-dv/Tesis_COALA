@@ -111,3 +111,12 @@ main .buscador_subir_apunte{
 span.escuela {
     color: #A7D129;
 }
+.contenido {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+}
