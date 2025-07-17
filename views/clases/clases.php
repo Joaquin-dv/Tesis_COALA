@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../inicio/css/inicio.css">
+
     <link rel="stylesheet" href="../explorar/css/style_apunte.css">
     <title>Clases</title>
 </head>
@@ -11,6 +12,7 @@
     <header>
         <div class="contenedor_logo_secundario">
             <img src="../../assets/img/logo_secundario.png" alt="">
+
         </div>
 
         <nav class="barra_navegacion">
@@ -23,6 +25,7 @@
 
         <section class="perfil">
             <img src="../inicio/img/foto_perfil.jpg" alt="foto de perfil">
+
         </section>
     </header>
 
