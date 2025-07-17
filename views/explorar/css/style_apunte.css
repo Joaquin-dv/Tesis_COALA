@@ -15,7 +15,7 @@ article
 {
     border: solid 1px var(--linea);
     background-color: var(--fondo);
-    max-width: 15em;
+    width: 250px;
     max-height: 12em;
     display: flex;
     flex-direction: column;
