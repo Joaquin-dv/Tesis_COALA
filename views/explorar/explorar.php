@@ -52,6 +52,7 @@
                 </nav>
                 <section class="buscador_subir_apunte">
                     <div class="contenedor_buscador">
+                        <h2>Busca un apunte</h2>
                         <input type="text" placeholder="Buscar..." class="input_buscador">
                     </div>
                 </section>
