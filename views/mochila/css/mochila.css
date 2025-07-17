@@ -1,5 +1,4 @@
 *{
-    font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -14,7 +13,7 @@
     padding: 0px 20px;
     margin: 10px;
 
-    max-width: 400px;
+    max-width: 28vw;
     max-height: 300px;
 
     display: flex;

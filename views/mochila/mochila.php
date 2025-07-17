@@ -39,7 +39,7 @@
             </div>
         </section>
 
-        <h2 class="vistos_recientemente">Vistos recientemente</h2>
+        <h2 class="vistos_recientemente">Apuntes favoritos</h2>
         <section class="contenedor_apuntes">
             <?php
             // Include the component for displaying notes
@@ -48,9 +48,36 @@
             }
             ?>
         </section>
-        <h2 class="para_ti">Para ti</h2>
+        
+        <h2 class="para_ti">Tus apuntes</h2>
+        <h3>Aprobados</h3>
         <section class="contenedor_apuntes">
+            <?php
+            // Include the component for displaying notes
+            for ($i = 0; $i < 4; $i++) {
+                include '../mochila/componentes/apunte_mochila.html';
+            }
+            ?>
+        </section>
 
+        <h3>Pendientes</h3>
+        <section class="contenedor_apuntes">
+            <?php
+            // Include the component for displaying notes
+            for ($i = 0; $i < 3; $i++) {
+                include '../mochila/componentes/apunte_mochila.html';
+            }
+            ?>
+        </section>
+
+        <h3>Rechazados</h3>
+        <section class="contenedor_apuntes">
+            <?php
+            // Include the component for displaying notes
+            for ($i = 0; $i < 5; $i++) {
+                include '../mochila/componentes/apunte_mochila.html';
+            }
+            ?>
         </section>
     </main>
 
