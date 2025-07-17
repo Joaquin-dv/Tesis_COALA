@@ -1,1 +1,0 @@
-const contenedor = document.getElementsByClassName("contenedor_apuntes");
