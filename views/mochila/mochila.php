@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/views/inicio/css/inicio.css">
+    <link rel="stylesheet" href="../inicio/css/inicio.css">
     <link rel="stylesheet" href="css/mochila.css">
     <title>Panel</title>
 </head>
@@ -24,7 +24,7 @@
 
 
         <section class="perfil">
-            <img src="/views/inicio/img/foto_perfil.jpg" alt="foto de perfil">
+            <img src="../inicio/img/foto_perfil.jpg" alt="foto de perfil">
         </section>
     </header>
 

@@ -1,0 +1,122 @@
+:root 
+{
+    --fondo: #ffffff;
+    --linea: #b8b8b8;
+    --titulo: #2b2b2b;
+    --detalle: #8d8d8d;
+}
+
+*{
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+}
+article
+{
+    border: solid 1px var(--linea);
+    background-color: var(--fondo);
+    max-width: 15em;
+    max-height: 12em;
+    display: flex;
+    flex-direction: column;
+    padding: 13px;
+    align-items: center;
+    border-radius: 20px;
+    gap: .3em;
+}
+figure
+{
+    background-color: rgb(194, 234, 240);
+    border-radius: 0.8em;
+    width: 100%;
+    height: 10em;
+}
+.informacion
+{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: var(--fondo);
+    width: 100%;
+}
+h2{
+    color: var(--titulo);
+    font-size: 19px;
+}
+p{
+    color: var(--detalle);
+    font-size: 15px;
+}
+
+#sidebar_activo {
+    display: none;
+}
+
+
+.abrir_sidebar {
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 0.5em;
+    background-color: #00a1db;
+    border-radius: 10px;
+    margin-left: .5em;
+    color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.escuelas_materias {
+    position: fixed;
+    top: 4.3em;
+    left: 0;
+    width: 12em;
+    height: 100vh;
+    background-color: #00a1db;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1em;
+    transform: translateX(-100%);
+    transition: transform 0.4s ease;
+    z-index: 100;
+    color: white;
+    border-radius: 0 20px 0 0;
+    gap: 1em;
+}
+nav a{
+    text-decoration: none;
+    color: white;
+    transition: background-color 0.4s ease, color 0.4s ease;
+}
+#sidebar_activo:checked ~ .escuelas_materias {
+    transform: translateX(0);
+}
+
+.cerrar_sidebar {
+    align-self: flex-end;
+    font-size: 1.2em;
+    cursor: pointer;
+    margin-bottom: 1em;
+}
+nav a:hover{
+    color: #abdb1a;
+}
+section.barra_superior {
+    display: flex;
+    align-items: center;
+}
+main .buscador_subir_apunte{
+        width: 100%;
+     
+}
+span.escuela {
+    color: #A7D129;
+}
+.contenido {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1em;
+}
