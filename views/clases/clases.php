@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/inicio.css">
+    <link rel="stylesheet" href="../inicio/css/inicio.css">
     <link rel="stylesheet" href="../explorar/css/style_apunte.css">
     <title>Clases</title>
 </head>
 <body class="josefin-sans-normal">
     <header>
         <div class="contenedor_logo_secundario">
-            <img src="img/logo_secundario.png" alt="">
+            <img src="../../assets/img/logo_secundario.png" alt="">
         </div>
 
         <nav class="barra_navegacion">
@@ -22,17 +22,36 @@
 
 
         <section class="perfil">
-            <img src="img/foto_perfil.jpg" alt="foto de perfil">
+            <img src="../inicio/img/foto_perfil.jpg" alt="foto de perfil">
         </section>
     </header>
 
     <main>
-        <?php
-        // Include the component for displaying notes
-        for ($i = 0; $i < 6; $i++) {
-            include '../explorar/componentes/apunte_explorar.html';
-        }  
+        <section class="buscador_subir_apunte">
+            <div class="contenedor_buscador">
+                <h2>Busca clases</h2>
+                <input type="text" placeholder="Buscar..." class="input_buscador">
+            </div>
+            <div class="boton_subir_apunte">
+            </div>
+        </section>
+
+        <h2 class="vistos_recientemente">Vistos recientemente</h2>
+        <section class="contenedor_apuntes">
+        <?php 
+        include '../explorar/componentes/apunte_explorar.html';
+        include '../explorar/componentes/apunte_explorar.html';
+        include '../explorar/componentes/apunte_explorar.html';
+        include '../explorar/componentes/apunte_explorar.html';
+        include '../explorar/componentes/apunte_explorar.html';
+        include '../explorar/componentes/apunte_explorar.html';
+        
         ?>
+
+            
+
+
+        </section>
     </main>
 </body>
 </html>
