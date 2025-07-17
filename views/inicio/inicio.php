@@ -74,7 +74,7 @@
                     <input type="text" id="titulo" placeholder="Titulo" class="campo_modal">
                     <label for="descripcion">Descripcion</label>
                     <input type="text" id="descripcion" placeholder="Descripcion" class="campo_modal">
-                    <button id="subir_apunte" class="btn_modal">Agregar archivo</button>
+                    <button id="subir_archivo" class="btn_modal">Agregar archivo</button>
                     <section class="datos_apunte">
                     <div class="input_label">                    
                         <label for="curso">Curso</label>
@@ -89,7 +89,7 @@
                         <input type="text" id="materia" placeholder="Materia" class="campo_modal">
                     </div>
                     </section>
-                    <button class="btn_modal">Subir Apunte</button>
+                    <button id="subir_apunte" class="btn_modal">Subir Apunte</button>
 
                 </section>
         </dialog>
