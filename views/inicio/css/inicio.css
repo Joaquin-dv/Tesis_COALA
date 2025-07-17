@@ -134,6 +134,10 @@ body{
                 button:hover {
                     background-color: #92b723;
                 }
+
+                button:active {
+                    background-color: #7e9c1d;
+                }
             }
         }
 
