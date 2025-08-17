@@ -1,0 +1,143 @@
+@import url(colores.css);
+@import url(tipografias.css);
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+/* ===== Main ===== */
+body {
+    background-color: var(--bg-body);
+
+    main {
+        padding: 1em 3em;
+    }
+}
+
+/* ===== Header ===== */
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1em;
+
+    .contenedor_logo_secundario {
+        width: 110px;
+        height: auto;
+        overflow: hidden;
+
+        img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+    }
+
+    .perfil {
+        width: 110px;
+        height: 40px;
+        display: flex;
+        justify-content: end;
+
+        img {
+            overflow: hidden;
+            border-radius: 50%;
+            height: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+
+        }
+
+    }
+
+    .barra_navegacion {
+        padding: 12px 24px;
+        display: flex;
+        gap: 3em;
+        justify-content: center;
+        align-items: center;
+        border-radius: 12px;
+
+        a {
+            color: var(--txt-negro);
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+
+            &:hover {
+                color: var(--txt-celeste);
+            }
+        }
+    }
+}
+
+/* ===== Buscador ===== */
+
+.buscador_subir_apunte {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
+    padding: 10px 20px;
+
+    .contenedor_buscador {
+        width: 100%;
+        max-width: 700px;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        h2 {
+            font-weight: lighter;
+            font-size: 20px;
+        }
+
+        .input_buscador {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            background-color: #ffffff;
+            transition: border-color 0.3s ease;
+
+            &:focus {
+                outline: none;
+                border-color: var(--bg-celeste);
+            }
+        }
+    }
+}
+
+/* ===== Botón Subir Apunte ===== */
+
+.boton_subir_apunte {
+    button {
+        background-color: var(--bg-boton-verde);
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        font-size: 17px;
+        color: #ffffff;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+
+    button:hover {
+        background-color: #92b723;
+    }
+
+    button:active {
+        background-color: #7e9c1d;
+    }
+}
