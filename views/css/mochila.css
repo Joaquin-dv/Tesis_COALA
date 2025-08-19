@@ -1,7 +1,11 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+@import url(general/generales.css);
+
+
+.contenedor_apuntes {
+    margin: 1em 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .apunte_mochila{
