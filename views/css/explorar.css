@@ -1,3 +1,5 @@
+@import url(general/generales.css);
+
 :root 
 {
     --fondo: #ffffff;
@@ -6,11 +8,6 @@
     --detalle: #8d8d8d;
 }
 
-*{
-    margin:0;
-    padding: 0;
-    box-sizing: border-box;
-}
 article
 {
     border: solid 1px var(--linea);
