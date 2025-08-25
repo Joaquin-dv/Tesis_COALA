@@ -28,6 +28,10 @@
     overflow: hidden;
 }
 
+.apunte_mochila:hover{
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
 /* Encabezado */
 
 .encabezado_apunte{
@@ -108,4 +112,15 @@ footer button{
     background-color: transparent;
     color: #007BFF;
     cursor: pointer;
+}
+
+footer button:hover{
+    background-color: #007BFF;
+    color: white;
+    transition: all 0.1s ease;
+}
+
+footer button:active{
+    background-color: #0056b3;
+    color: white;
 }
