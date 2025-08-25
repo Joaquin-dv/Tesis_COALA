@@ -3,8 +3,8 @@
 	include 'lib/mopla/Mopla.php';
 
     #Se incluyen los modelos
-	include_once 'models/Pet.php';
-	include_once 'models/usuario.php';
+	// include_once 'models/Pet.php';
+	// include_once 'models/usuario.php';
 
     #Cargamos el controlador por defecto
 	$controller = "landing";
