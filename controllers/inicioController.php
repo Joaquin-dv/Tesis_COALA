@@ -4,6 +4,7 @@
 
 	// Se levanta el componente
 	$componente_apunte = new Mopla('components/tarjeta_apunte');
+	$componente_modal = new Mopla('components/modalSubirApunte');
 
 	// Variable donde se guardan los apuntes con los datos cargados
 	$lista_apuntes_recientes = "";
@@ -59,6 +60,8 @@
 		$componente_apunte->restore();
 	}
 	$tpl->setVar("PARA_TI", $lista_apuntes_para_ti);
+
+	$tpl->setVar("MODAL", $componente_modal->getBuffer());
 
 	$tpl->print();
 
