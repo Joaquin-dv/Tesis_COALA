@@ -4,6 +4,7 @@
 
 	// Se levanta el componente (TEMPORALMENTE ES EL APUNTE)
 	$componente_apunte = new Mopla('components/tarjeta_apunte');
+	$componente_modal = new Mopla('components/modalSubirApunte');
 
 	// ====== CLASES ======
 
@@ -32,8 +33,9 @@
 	}
 	$tpl->setVar("CLASES", $lista_clases);
 
+	$tpl->setVar("MODAL", $componente_modal->getBuffer());
 
 	$tpl -> print();
 
- ?>
+?>
 
