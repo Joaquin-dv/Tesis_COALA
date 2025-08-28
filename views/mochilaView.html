@@ -36,49 +36,29 @@
                 <input type="text" placeholder="Buscar..." class="input_buscador">
             </div>
             <div class="boton_subir_apunte">
-                <button id="abrir_modal">Subir apunte</button>
+                <button>Subir apunte</button>
             </div>
         </section>
 
         <h2 class="vistos_recientemente">Apuntes favoritos</h2>
         <section class="contenedor_apuntes">
-            <?php
-            // Include the component for displaying notes
-            for ($i = 0; $i < 6; $i++) {
-                include '../mochila/componentes/apunte_mochila.html';
-            }
-            ?>
+            {{APUNTES_FAVORITOS}}
         </section>
         
         <h2 class="para_ti">Tus apuntes</h2>
         <h3>Aprobados</h3>
         <section class="contenedor_apuntes">
-            <?php
-            // Include the component for displaying notes
-            for ($i = 0; $i < 4; $i++) {
-                include '../mochila/componentes/apunte_mochila.html';
-            }
-            ?>
+            {{APUNTES_APROBADOS}}
         </section>
 
         <h3>Pendientes</h3>
         <section class="contenedor_apuntes">
-            <?php
-            // Include the component for displaying notes
-            for ($i = 0; $i < 3; $i++) {
-                include '../mochila/componentes/apunte_mochila.html';
-            }
-            ?>
+            {{APUNTES_PENDIENTES}}
         </section>
 
         <h3>Rechazados</h3>
         <section class="contenedor_apuntes">
-            <?php
-            // Include the component for displaying notes
-            for ($i = 0; $i < 5; $i++) {
-                include '../mochila/componentes/apunte_mochila.html';
-            }
-            ?>
+            {{APUNTES_RECHAZADOS}}
         </section>
     </main>
     <script src="views/js/modal.js"></script>
