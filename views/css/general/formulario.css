@@ -1,0 +1,61 @@
+@import url(generales.css);
+.contenedorFormulario{
+    display: flex;
+    flex-direction: column;
+    width: 449px;
+    height: 438px;
+    background-color: var(--txt-blanco);
+    gap: 12px;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    box-shadow: 0px 8px 18.7px -3px rgba(0, 0, 0, 0.20);
+}
+.campo{
+    padding: 8.9px 173px 8.9px 15.6px;
+    border-radius: 8px;
+    border: solid 1px var(--borde);
+    color: var(--placeholder);
+    font-size: 9.8px;
+}
+
+::placeholder{
+    color: var(--placeholder);
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+}
+h1{
+    font-size: 48px;
+    color: var(--principal);
+}
+a{
+    text-decoration: none;
+    color: var(--primario);
+    font-size: 16px;
+}
+.link{
+    font-size: 15,4px; 
+}
+h3{
+    color: var(--txt-negro);
+}
+.fraseLink{
+    display: flex;
+    gap:5px;
+}
+.btn{
+    color: var(--bg-body);
+    padding: 4px 94px 4px 94px;
+    background: var(--primario);
+    border: none;
+    border-radius: 8px;
+    width: 244px;
+    height: 32px;
+    
+}

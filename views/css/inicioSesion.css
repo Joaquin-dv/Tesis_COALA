@@ -1,0 +1,12 @@
+img{
+    position: absolute;
+    opacity: 70%;
+    height: 100vh;
+}
+body{
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
