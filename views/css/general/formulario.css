@@ -2,18 +2,21 @@
 .contenedorFormulario{
     display: flex;
     flex-direction: column;
-    width: 449px;
+    width: 100%;
+    max-width: 450px;
     height: 438px;
     background-color: var(--txt-blanco);
     gap: 12px;
-    padding: 10px;
+    padding: 30px 20px;
     justify-content: center;
     align-items: center;
     border-radius: 8px;
     box-shadow: 0px 8px 18.7px -3px rgba(0, 0, 0, 0.20);
 }
+
 .campo{
     padding: 8.9px 173px 8.9px 15.6px;
+    width: 100%;
     border-radius: 8px;
     border: solid 1px var(--borde);
     color: var(--placeholder);
@@ -55,7 +58,28 @@ h3{
     background: var(--primario);
     border: none;
     border-radius: 8px;
-    width: 244px;
+    max-width: 244px;
+    width: 100%;
     height: 32px;
-    
 }
+.remarcadoError {
+    border: 1px solid #FF5656;
+}
+input:focus{
+    border-bottom: 2px solid var(--primario);
+    transition: 0.3s;
+    outline: none;
+}
+input.remarcadoError:focus {
+  border: 1px solid #FF5656;
+  border-bottom: 2px solid #FF5656;
+}
+.errorMsg {
+    font-weight: 500;
+    color: #FF5656;
+    font-size: 14px;
+    font-family: 'Poppins';
+    text-align: center;
+}
+
+

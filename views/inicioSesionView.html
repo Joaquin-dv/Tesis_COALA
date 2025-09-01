@@ -8,20 +8,28 @@
     <link rel="stylesheet" href="views/css/inicioSesion.css">
     <title>Inicio de sesión</title>
 </head>
+
 <body>
-    <!-- <img src="views/img/branding/logo_koala.png" alt="logoCoala"> -->
-    <section class="contenedorFormulario">
-        <h1 class="poppins-bold">COALA</h1>
-        <h3 class="poppins-semibold">Iniciar Sesión</h3>
-        <form method="post">
-        <input type="email" id="email" class="campo poppins-semibold" placeholder="Correo electrónico">
-        <input type="password" id="contraseña" class="campo poppins-semibold" placeholder="Contraseña">
-        <a href="recuperarContraseñaView.html" class="poppins-regular">¿Olvidaste tu contraseña?</a>
-        <input type="submit" value="Entrar" class="btn poppins-semibold">
-        <div class="fraseLink">
-        <span class="poppins-regular">¿No tienes cuenta?</span><a href="registroView.html" class="link poppins-bold">Registrate</a>
+    <section class="main">
+        <div class="logo">
         </div>
-    </form>
+        <section class="contenedorFormulario">
+            <h1 class="poppins-bold">COALA</h1>
+            <h3 class="poppins-semibold">Iniciar Sesión</h3>
+            <form method="post" id="formulario">
+                <input type="email" id="email" class="campo poppins-semibold" placeholder="Correo electrónico">
+                <input type="password" id="contraseña" class="campo poppins-semibold" placeholder="Contraseña">
+                <a href="recuperarContraseñaView.html" class="poppins-regular">¿Olvidaste tu contraseña?</a>
+                <input type="submit" value="Entrar" class="btn poppins-semibold">
+                <div class="fraseLink">
+                    <span class="poppins-regular">¿No tienes cuenta?</span><a href="registroView.html"
+                        class="link poppins-bold">Registrate</a>
+                </div>
+                <div class="errorMsg" id="errorGeneral"></div>
+            </form>
+        </section>
     </section>
 </body>
+<script src="views/js/validacionFormulario.js"></script>
+
 </html>

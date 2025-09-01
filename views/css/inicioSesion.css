@@ -1,12 +1,31 @@
-img{
-    position: absolute;
-    opacity: 70%;
+.main{
     height: 100vh;
-}
-body{
-    overflow: hidden;
     display: flex;
+    position: relative;
+    justify-content: flex-end;
+    padding-right: 20vw;
     align-items: center;
-    justify-content: center;
+}
+.logo{
+    flex: 0 0 45%;
+    background: url("../img/branding/logo_koala.png") no-repeat center left;
     height: 100vh;
+    background-size: auto 136%;
+    background-position: -26em center;
+    opacity: 0.5;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100vw;
+}
+
+@media screen and (max-width: 750px) {
+    .main{
+        justify-content: center;
+        padding: 2rem;
+    }
+    .logo{
+        display: none;
+    }
 }
