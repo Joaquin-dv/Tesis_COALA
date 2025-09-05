@@ -18,7 +18,7 @@
     padding: 8.9px 173px 8.9px 15.6px;
     width: 100%;
     border-radius: 8px;
-    border: solid 1px var(--borde);
+    border: solid 1px var(--borde-input);
     color: var(--placeholder);
     font-size: 9.8px;
 }
@@ -35,11 +35,11 @@ form{
 }
 h1{
     font-size: 48px;
-    color: var(--principal);
+    color: var(--txt-logotipo);
 }
 a{
     text-decoration: none;
-    color: var(--primario);
+    color: var(--color-accion);
     font-size: 16px;
 }
 .link{
@@ -55,18 +55,21 @@ h3{
 .btn{
     color: var(--bg-body);
     padding: 4px 94px 4px 94px;
-    background: var(--primario);
+    background: var(--color-accion);
     border: none;
     border-radius: 8px;
     max-width: 244px;
     width: 100%;
     height: 32px;
 }
+.btn:hover{
+    background-color: var(--btn-hover);
+}
 .remarcadoError {
     border: 1px solid #FF5656;
 }
 input:focus{
-    border-bottom: 2px solid var(--primario);
+    border-bottom: 2px solid var(--color-accion);
     transition: 0.3s;
     outline: none;
 }

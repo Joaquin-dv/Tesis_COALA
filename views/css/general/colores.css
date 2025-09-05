@@ -8,8 +8,9 @@
     --txt-celeste: #00a1db;
     --txt-blanco: #ffffff;
 
-    --principal: #00AEEF;
+    --txt-logotipo: #00AEEF;
     --placeholder: #B7B7B7;
-    --primario: #56AEFF;
-    --borde: #D8D8D8;
+    --color-accion: #56AEFF;
+    --borde-input: #D8D8D8;
+    --btn-hover: #2D9BFF;
 }
