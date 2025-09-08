@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="views/css/general/formulario.css">
     <link rel="stylesheet" href="views/css/login.css">
-    <title>Inicio de sesión</title>
+    <title>Registro</title>
 </head>
 
 <body>
@@ -15,15 +15,17 @@
         </div>
         <section class="contenedorFormulario">
             <h1 class="poppins-bold">COALA</h1>
-            <h3 class="poppins-semibold">Iniciar Sesión</h3>
+            <h3 class="poppins-semibold">Registrate</h3>
             <form method="post" id="formulario">
+                <input type="text" id="nombre" class="campo poppins-semibold" placeholder="Nombre">
+                <input type="text" id="apellido" class="campo poppins-semibold" placeholder="Apellido">
                 <input type="email" id="email" class="campo poppins-semibold" placeholder="Correo electrónico">
                 <input type="password" id="contraseña" class="campo poppins-semibold" placeholder="Contraseña">
-                <a href="resetPassewordView.html" class="poppins-regular">¿Olvidaste tu contraseña?</a>
+                <input type="password" id="contraseña2" class="campo poppins-semibold" placeholder="Contraseña">
                 <input type="submit" value="Entrar" class="btn poppins-semibold">
                 <div class="fraseLink">
-                    <span class="poppins-regular">¿No tienes cuenta?</span><a href="?slug=register"
-                        class="link poppins-bold">Registrate</a>
+                    <span class="poppins-regular">¿Ya tienes cuenta?</span><a href="?slug=login"
+                        class="link poppins-bold">Iniciar Sesión</a>
                 </div>
                 <div class="errorMsg" id="errorGeneral"></div>
             </form>
