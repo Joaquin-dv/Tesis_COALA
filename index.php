@@ -7,10 +7,10 @@
 	 * 
 	 * */
 
-	require ".env.php"; /*Variables de entorno*/
-	require "models/DBAbstract.php"; /*Modelo de conexión a la db*/
+	require_once ".env.php"; /*Variables de entorno*/
+	require_once "models/DBAbstract.php"; /*Modelo de conexión a la db*/
 	require_once 'models/Usuarios.php';
-	require "lib/mopla/Mopla.php"; /*Motor de plantillas*/
+	require_once "lib/mopla/Mopla.php"; /*Motor de plantillas*/
 
 	session_start();
 	

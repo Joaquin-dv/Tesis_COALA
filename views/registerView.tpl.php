@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="views/css/general/formulario.css">
-    <link rel="stylesheet" href="views/css/register.css">
+    <link rel="stylesheet" href="views/static/css/general/formulario.css">
+    <link rel="stylesheet" href="views/static/css/register.css">
     <title>Registro</title>
 </head>
 
@@ -16,7 +16,7 @@
         <section class="contenedorFormulario">
             <h1 class="poppins-bold">COALA</h1>
             <h3 class="poppins-semibold">Registrate</h3>
-            <form method="post" id="formulario">
+            <form action="?slug=register" method="POST" id="formulario">
                 <div class="nombreCompleto">
                     <input type="text" id="nombre" class="campo poppins-semibold" placeholder="Nombre">
                     <input type="text" id="apellido" class="campo poppins-semibold" placeholder="Apellido">
@@ -34,6 +34,6 @@
         </section>
     </section>
 </body>
-<script src="views/js/validacionFormulario.js"></script>
+<script src="views/static/js/validacionFormulario.js"></script>
 
 </html>

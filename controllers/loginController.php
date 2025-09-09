@@ -2,15 +2,6 @@
 
 	/**
 	 * 
-	 * Se incluyen las librerias
-	 * Los modelos
-	 * 
-	 * */
-
-	require_once 'models/Usuarios.php';
-
-	/**
-	 * 
 	 * Lógica
 	 * 
 	 * */
