@@ -6,7 +6,11 @@
     <link rel="stylesheet" href="views/static/css/explorar.css">
     <link rel="stylesheet" href="views/static/css/style_apunte.css">
     <script src="https://kit.fontawesome.com/f63493d67a.js" crossorigin="anonymous"></script>
-    <title>Explorar</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="views/static/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="views/static/img/favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="views/static/img/favicon/apple-touch-icon.png">
+    <link rel="manifest" href="views/static/img/favicon/site.webmanifest">
+    <title>COALA</title>
 </head>
 <body class="josefin-sans-normal">
     <header>

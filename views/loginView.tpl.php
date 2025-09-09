@@ -6,7 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="views/static/css/general/formulario.css">
     <link rel="stylesheet" href="views/static/css/login.css">
-    <title>Inicio de sesión</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="views/static/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="views/static/img/favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="views/static/img/favicon/apple-touch-icon.png">
+    <link rel="manifest" href="views/static/img/favicon/site.webmanifest">
+    <title>COALA</title>
 </head>
 
 <body>
