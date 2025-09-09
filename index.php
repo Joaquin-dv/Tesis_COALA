@@ -9,8 +9,11 @@
 
 	require ".env.php"; /*Variables de entorno*/
 	require "models/DBAbstract.php"; /*Modelo de conexión a la db*/
+	require_once 'models/Usuarios.php';
 	require "lib/mopla/Mopla.php"; /*Motor de plantillas*/
 
+	session_start();
+	
 	$section = "landing"; /*por defecto section es landing*/
 
 	if(isset($_GET['slug'])){ /* en caso de que se especifique una sección*/
