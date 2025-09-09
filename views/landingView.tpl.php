@@ -19,7 +19,7 @@
         </div>
 
         <section class="inicios_sesion">
-            <a href="?slug=inicio" class="inicio_sesion">Iniciar sesión</a>
+            <a href="?slug=login" class="inicio_sesion">Iniciar sesión</a>
             <a href="?slug=register" class="registrarse">Registrarme</a>
         </section>
     </header>
