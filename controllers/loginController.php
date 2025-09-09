@@ -13,7 +13,7 @@
 	$usuario = new Usuarios();
 
 	/* si se presiono el boton de login*/
-	if(isset($_POST["btn_login"])){
+	if(isset($_POST["txt_password"])){
 
 		$result = $usuario->login($_POST);
 
@@ -22,7 +22,7 @@
 			/* inicializar sesión dentro de PHP */
 			/*¨¨¨*/
 			/* lleva al panel de usuario */
-			header("Location: ?slug=panel");
+			header("Location: ?slug=inicio");
 		}
 
 		/* capturo el mensaje de error en caso de logueo invalido*/

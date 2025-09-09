@@ -2,16 +2,16 @@
 
 	$msg_error = "";
 	
+	// var_dump($_POST);
 	/* si existe el boton de registro*/
-	if(isset($_POST["btn_register"])){
-
+	if(isset($_POST["txt_password"])){
 		/* se instancia la clase usuario*/
 		$usuario = new Usuarios();	
 
 		/* realiza el registro */
 		$response =$usuario->register($_POST);
 
-
+		
 		/* si se creo el usuario correctamente entonces va al login*/
 		if($response["errno"] == 202){
 			header("Location: ?slug=login");

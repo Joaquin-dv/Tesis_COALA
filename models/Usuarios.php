@@ -46,14 +46,14 @@
 
 				$password_encripted = password_hash($form["txt_password"], PASSWORD_DEFAULT);
 
-				$sql = "INSERT INTO `usuarios` (`id`, `nombre_completo`, `correo_electronico`, `contrasena_hash`, `esta_activo`, `correo_verificado_en`, `creado_en`, `actualizado_en`, `borrado_en`) VALUES (NULL, '', '".$form["txt_email"]."', '".$password_encripted."', '1', NULL, current_timestamp, NULL, NULL);";
+				$sql = "INSERT INTO `usuarios` (`id`, `nombre_completo`, `correo_electronico`, `contrasena_hash`, `esta_activo`, `correo_verificado_en`, `creado_en`, `actualizado_en`, `borrado_en`) VALUES (NULL, '', '".$form["txt_email"]."', '".$password_encripted."', '1', NULL, current_timestamp(), current_timestamp(), '2025-09-09 20:50:08.000000');";
 
 				$response = $this->query($sql);
 
 				return ["errno" => 202, "error" => "Se creo el usuario correctamente"];
 			}
 
-			return ["errno" => 409, "error" => "Email ya registrado, recuperar su cuenta?"];
+			return ["errno" => 409, "error" => "El email ingresado ya se encuentra registrado"];
 		}
 
 
@@ -80,7 +80,7 @@
 			}
 
 			/* busca el correo electronico en la tabla usuarios */
-			$response = $this->query("SELECT * FROM `usuarios` WHERE `email` LIKE '".$form["txt_email"]."'");
+			$response = $this->query("SELECT * FROM `usuarios` WHERE `correo_electronico` LIKE '".$form["txt_email"]."'");
 
 			/*si la cantidad de filas es 0 no se encontro email en usuarios*/
 			if(count($response) == 0){

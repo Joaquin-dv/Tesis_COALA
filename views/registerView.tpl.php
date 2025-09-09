@@ -18,18 +18,18 @@
             <h3 class="poppins-semibold">Registrate</h3>
             <form action="?slug=register" method="POST" id="formulario">
                 <div class="nombreCompleto">
-                    <input type="text" id="nombre" class="campo poppins-semibold" placeholder="Nombre">
-                    <input type="text" id="apellido" class="campo poppins-semibold" placeholder="Apellido">
+                    <input type="text" id="nombre" name="txt_nombre" class="campo poppins-semibold" placeholder="Nombre">
+                    <input type="text" id="apellido" name="txt_apellido" class="campo poppins-semibold" placeholder="Apellido">
                 </div>
-                <input type="email" id="email" class="campo poppins-semibold" placeholder="Correo electrónico">
-                <input type="password" id="contraseña" class="campo poppins-semibold" placeholder="Contraseña">
-                <input type="password" id="contraseña2" class="campo poppins-semibold" placeholder="Confirmar contraseña">
-                <input type="submit" value="Entrar" class="btn poppins-semibold">
+                <input type="email" id="email" name="txt_email" class="campo poppins-semibold" placeholder="Correo electrónico">
+                <input type="password" id="contraseña" name="txt_password" class="campo poppins-semibold" placeholder="Contraseña">
+                <input type="password" id="contraseña2" name="txt_password2" class="campo poppins-semibold" placeholder="Confirmar contraseña">
+                <input type="submit" value="Entrar" name="btn_register" class="btn poppins-semibold">
                 <div class="fraseLink">
                     <span class="poppins-regular">¿Ya tienes cuenta?</span><a href="?slug=login"
                         class="link poppins-bold">Iniciar Sesión</a>
                 </div>
-                <div class="errorMsg" id="errorGeneral"></div>
+                <div class="errorMsg" id="errorGeneral">{{ MSG_ERROR }}</div>
             </form>
         </section>
     </section>
