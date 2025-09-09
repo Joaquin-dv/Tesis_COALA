@@ -19,11 +19,11 @@
             <form action="?slug=login" method="POST" id="formulario">
                 <input type="email" id="email" name="txt_email" class="campo poppins-semibold" placeholder="Correo electrónico">
                 <input type="password" id="contraseña" name="txt_password" class="campo poppins-semibold" placeholder="Contraseña">
-                <a href="resetPassewordView.html" class="poppins-regular">¿Olvidaste tu contraseña?</a>
+                <a href="?slug=reestablecer" class="poppins-regular">¿Olvidaste tu contraseña?</a>
                 <input type="submit" value="Entrar" name="btn_login" class="btn poppins-semibold">
                 <div class="fraseLink">
-                    <span class="poppins-regular">¿No tienes cuenta?</span><a href="?slug=register"
-                        class="link poppins-bold">Registrate</a>
+                    <span class="poppins-regular">¿No tienes cuenta?</span>
+                    <a href="?slug=register" class="link poppins-bold">Registrate</a>
                 </div>
                 <div class="errorMsg" id="errorGeneral">{{ MSG_ERROR }}</div>
             </form>
