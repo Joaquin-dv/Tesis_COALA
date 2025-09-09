@@ -1,0 +1,133 @@
+@import url(general/generales.css);
+
+
+.contenedor_apuntes {
+    margin: 1em 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.apunte_mochila{
+    border: 1px solid #ccc;
+    border-radius: 24px;
+
+    background-color: white;
+
+    padding: 0px 20px;
+    margin: 10px;
+
+    max-width: 28vw;
+    max-height: 300px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    overflow: hidden;
+
+    footer{
+        button:hover{
+            background-color: #007BFF;
+            color: white;
+        }    
+    }
+}
+
+.apunte_mochila:hover{
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Encabezado */
+
+.encabezado_apunte{
+    display: flex;
+    width: 100%;
+    gap: 10px;
+    padding: 20px 0 10px 0;
+    justify-content: space-between;
+    border-bottom: 1px solid #ccc;
+}
+
+.info_encabezado_apunte{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.info_encabezado_apunte h2{
+    font-size: clamp(0.875rem, 0.6875rem + 1vw, 1.25rem);
+    color: #333;
+}
+
+.info_encabezado_apunte p{
+    font-size: clamp(0.75rem, 0.6875rem + 0.3333vw, 0.875rem);
+    color: #555;
+}
+
+figure{
+    width: 25%;
+    /* height: 25%; */
+    aspect-ratio: 1/1;
+    border-radius: 12px;
+    border: 1px solid #ccc;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+figure img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Cuerpo */
+
+.cuerpo_apunte{
+    display: flex;
+    flex-direction: column;
+    font-size: clamp(0.75rem, 0.6875rem + 0.3333vw, 0.875rem);
+    gap: 5px;
+    padding: 10px 0;
+}
+
+.cuerpo_apunte p:last-child{
+    font-size: 14px;
+    color: #666;
+}
+
+/* Footer */
+footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    border-top: 1px solid #ccc;
+    padding: 10px 0 20px 0;
+}
+
+footer p{
+    font-size: clamp(0.75rem, 0.6875rem + 0.3333vw, 0.875rem);
+    color: #555;
+}
+
+footer button{
+    border: 1px solid #007BFF;
+    border-radius: 5px;
+    padding: 5px 10px;
+    background-color: transparent;
+    color: #007BFF;
+    cursor: pointer;
+}
+
+footer button:hover{
+    background-color: #007BFF;
+    color: white;
+    transition: all 0.1s ease;
+}
+
+footer button:active{
+    background-color: #0056b3;
+    color: white;
+}
