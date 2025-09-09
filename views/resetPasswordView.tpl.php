@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+
+<body>
+    <section class="step1 contenedorFormulario">
+        <h1 class="poppins-bold">COALA</h1>
+        <h3 class="poppins-semibold">Recupera tu cotraseña</h3>
+        <form method="post" id="formulario">
+            <input type="email" id="email" class="campo poppins-semibold" placeholder="Correo electrónico">
+            <input type="submit" value="Enviar código" class="btn poppins-semibold">
+            <div class="fraseLink">
+            </div>
+            <div class="errorMsg" id="errorGeneral"></div>
+        </form>
+    </section>
+    </section>
+
+    <section class="step2 contenedorFormulario">
+        <h1 class="poppins-bold">COALA</h1>
+        <h3 class="poppins-semibold">Ingresa el codigo enviado a tu email</h3>
+        <form method="post" id="formulario">
+            <section class="codigo">
+                <input type="text" class="campoCode" maxlength="1">
+                <input type="text" class="campoCode" maxlength="1">
+                <input type="text" class="campoCode" maxlength="1">
+                <span class="poppins-semibold">-</span>
+                <input type="text" class="campoCode" maxlength="1">
+                <input type="text" class="campoCode" maxlength="1">
+                <input type="text" class="campoCode" maxlength="1">
+            </section>
+            <input type="submit" value="Recuperar" class="btn poppins-semibold">
+            <div class="errorMsg" id="errorGeneral"></div>
+        </form>
+    </section>
+    </section>
+</body>
+<script src="views/js/saltoCampo.js"></script>
+
+</html>

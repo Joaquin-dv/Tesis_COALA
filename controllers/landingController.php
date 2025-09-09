@@ -1,7 +1,8 @@
-<?php 
-	#Precargamos la vista
-	$tpl = new Mopla('landing');
+<?php
 
-	#Mostramos la vista
-	$tpl->print();
- ?>
+	/* Se instancia a la clase del motor de plantillas */
+	$tpl = new Mopla("landing");
+
+	/* Imprime la plantilla en la página */
+	$tpl->printToScreen();
+?>
