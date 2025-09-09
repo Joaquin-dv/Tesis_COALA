@@ -6,7 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="views/static/css/general/formulario.css">
     <link rel="stylesheet" href="views/static/css/login.css">
-    <title>Inicio de sesión</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="views/static/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="views/static/img/favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="views/static/img/favicon/apple-touch-icon.png">
+    <link rel="manifest" href="views/static/img/favicon/site.webmanifest">
+    <title>COALA</title>
 </head>
 
 <body>
@@ -19,11 +23,11 @@
             <form action="?slug=login" method="POST" id="formulario">
                 <input type="email" id="email" name="txt_email" class="campo poppins-semibold" placeholder="Correo electrónico">
                 <input type="password" id="contraseña" name="txt_password" class="campo poppins-semibold" placeholder="Contraseña">
-                <a href="resetPassewordView.html" class="poppins-regular">¿Olvidaste tu contraseña?</a>
+                <a href="?slug=reestablecer" class="poppins-regular">¿Olvidaste tu contraseña?</a>
                 <input type="submit" value="Entrar" name="btn_login" class="btn poppins-semibold">
                 <div class="fraseLink">
-                    <span class="poppins-regular">¿No tienes cuenta?</span><a href="?slug=register"
-                        class="link poppins-bold">Registrate</a>
+                    <span class="poppins-regular">¿No tienes cuenta?</span>
+                    <a href="?slug=register" class="link poppins-bold">Registrate</a>
                 </div>
                 <div class="errorMsg" id="errorGeneral">{{ MSG_ERROR }}</div>
             </form>
