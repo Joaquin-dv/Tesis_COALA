@@ -7,7 +7,7 @@
     height: 438px;
     background-color: var(--txt-blanco);
     gap: 12px;
-    padding: 30px 20px;
+    padding: 2rem 4rem;
     justify-content: center;
     align-items: center;
     border-radius: 8px;
@@ -15,7 +15,7 @@
 }
 
 .campo{
-    padding: 8.9px 173px 8.9px 15.6px;
+    padding: 8.9px 17.3px 8.9px 15.6px;
     width: 100%;
     border-radius: 8px;
     border: solid 1px var(--borde-input);
@@ -32,6 +32,7 @@ form{
     flex-direction: column;
     gap: 12px;
     align-items: center;
+    width: 100%;
 }
 h1{
     font-size: 48px;
