@@ -2,6 +2,7 @@
 
     $tpl = new Mopla('inicioSesion');
 
-    $tpl->print();
+    /* Imprime la plantilla en la página */
+	$tpl->printToScreen();
 
 ?>

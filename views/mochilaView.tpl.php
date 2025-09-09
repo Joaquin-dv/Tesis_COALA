@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="views/css/modal.css">
-    <link rel="stylesheet" href="views/css/mochila.css">
+    <link rel="stylesheet" href="views/static/css/modal.css">
+    <link rel="stylesheet" href="views/static/css/mochila.css">
     <script src="https://kit.fontawesome.com/f63493d67a.js" crossorigin="anonymous"></script>
     <title>Panel</title>
 </head>
@@ -13,7 +13,7 @@
 <body class="josefin-sans-normal">
     <header>
         <div class="contenedor_logo_secundario">
-            <img src="/views/img/branding/logo_secundario.png" alt="">
+            <img src="/views/static/img/branding/logo_secundario.png" alt="">
         </div>
 
         <nav class="barra_navegacion">
@@ -25,7 +25,7 @@
 
 
         <section class="perfil">
-            <img src="/views/img/inicio/foto_perfil.jpg" alt="foto de perfil">
+            <img src="/views/static/img/inicio/foto_perfil.jpg" alt="foto de perfil">
         </section>
     </header>
 
@@ -36,32 +36,43 @@
                 <input type="text" placeholder="Buscar..." class="input_buscador">
             </div>
             <div class="boton_subir_apunte">
-                <button>Subir apunte</button>
+                <button id="abrir_modal">Subir apunte</button>
             </div>
         </section>
 
         <h2 class="vistos_recientemente">Apuntes favoritos</h2>
         <section class="contenedor_apuntes">
-            {{APUNTES_FAVORITOS}}
+            @extends(apunte_mochila)
+            @extends(apunte_mochila)
+            @extends(apunte_mochila)
+            @extends(apunte_mochila)
         </section>
         
         <h2 class="para_ti">Tus apuntes</h2>
         <h3>Aprobados</h3>
         <section class="contenedor_apuntes">
-            {{APUNTES_APROBADOS}}
+            @extends(apunte_mochila)
+            @extends(apunte_mochila)
+            @extends(apunte_mochila)
         </section>
 
         <h3>Pendientes</h3>
         <section class="contenedor_apuntes">
-            {{APUNTES_PENDIENTES}}
+            @extends(apunte_mochila)
+            @extends(apunte_mochila)
         </section>
 
         <h3>Rechazados</h3>
         <section class="contenedor_apuntes">
-            {{APUNTES_RECHAZADOS}}
+            @extends(apunte_mochila)
+            @extends(apunte_mochila)
+            @extends(apunte_mochila)
+            @extends(apunte_mochila)
+            @extends(apunte_mochila)
         </section>
+        @extends(modalSubirApunte)
     </main>
-    <script src="views/js/modal.js"></script>
+    <script src="views/static/js/modal.js"></script>
 </body>
 
 </html>

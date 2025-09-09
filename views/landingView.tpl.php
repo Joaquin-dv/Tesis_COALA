@@ -4,18 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="views/css/landing.css">
-    <link rel="icon" type="image/png" sizes="32x32" href="views/img/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="views/img/favicon/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="views/img/favicon/apple-touch-icon.png">
-    <link rel="manifest" href="views/img/favicon/site.webmanifest">
+    <link rel="stylesheet" href="views/static/css/landing.css">
+    <link rel="icon" type="image/png" sizes="32x32" href="views/static/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="views/static/img/favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="views/static/img/favicon/apple-touch-icon.png">
+    <link rel="manifest" href="views/static/img/favicon/site.webmanifest">
     <title>COALA</title>
 </head>
 
 <body class="josefin-sans-normal">
     <header>
         <div class="logo_secundario">
-            <img src="views/img/branding/logo_secundario.png" alt="">
+            <img src="views/static/img/branding/logo_secundario.png" alt="">
         </div>
 
         <section class="inicios_sesion">
@@ -26,7 +26,7 @@
     <main>
         <section class="eslogan">
             <div class="contenedor_logo">
-                <img src="views/img/branding/logo_koala.png" alt="">
+                <img src="views/static/img/branding/logo_koala.png" alt="">
             </div>
             <div class="eslogan_texto">
                 <span>Lo que sabés, lo compartís.</span>
@@ -40,7 +40,7 @@
         <section class="informacion_de_coala">
             <article class="carta_informacion" id="carta_informacion">
                 <div class="contenedor_imagen_informacion">
-                    <img src="views/img/landing/imagen_comunidad.png" alt="">
+                    <img src="views/static/img/landing/imagen_comunidad.png" alt="">
                 </div>
                 <section class="informacion">
                     <h2>Comunidad</h2>
@@ -55,7 +55,7 @@
             </article>
             <article class="carta_informacion">
                 <div class="contenedor_imagen_informacion">
-                    <img src="views/img/landing/imagen_alumnos.png" alt="">
+                    <img src="views/static/img/landing/imagen_alumnos.png" alt="">
                 </div>
                 <section class="informacion">
                     <h2>Alumnos</h2>
@@ -68,7 +68,7 @@
             </article>
             <article class="carta_informacion">
                 <div class="contenedor_imagen_informacion">
-                    <img src="views/img/landing/imagen_profesor.png" alt="">
+                    <img src="views/static/img/landing/imagen_profesor.png" alt="">
                 </div>
                 <section class="informacion">
                     <h2>Profesores</h2>

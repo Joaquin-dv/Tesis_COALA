@@ -1,0 +1,10 @@
+<article class="apunte">
+    <figure>
+        {{ IMAGEN }}
+    </figure>
+    <section class="informacion">
+        <h2>{{ TITULO }}</h2>
+        <p>{{ MATERIA }} - {{ ESCUELA }}</p>
+        <p>{{ AÑO }} - {{ PUNTUACION }}</p>
+    </section>
+</article>
