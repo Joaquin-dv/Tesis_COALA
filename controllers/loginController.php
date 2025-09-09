@@ -1,6 +1,6 @@
 <?php
 
-    $tpl = new Mopla('inicioSesion');
+    $tpl = new Mopla('login');
 
     $tpl->print();
 
