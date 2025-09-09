@@ -18,7 +18,37 @@
 		/*Por ahora solo sirve para hacer select*/
 		
 		public function query($ssql){
-			return $this->db->query($ssql)->fetch_all(MYSQLI_ASSOC);
+
+			$response = $this->db->query($ssql);
+
+			$type_query = strtok($ssql, " ");
+
+			switch ($type_query) {
+				case 'SELECT':
+					/* esto de aca es para SELECT*/
+					return $response->fetch_all(MYSQLI_ASSOC);
+					break;
+
+				case 'INSERT':
+						return $this->db->insert_id;
+					break;
+
+				case 'UPDATE':
+					// code...
+					break;
+
+				case 'DELETE':
+					// code...
+					break;
+				
+				default:
+					// code...
+					break;
+			}
+
+			
 		}
 	}
+
+
 ?>

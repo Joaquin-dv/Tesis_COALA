@@ -1,5 +1,9 @@
 <?php 
-
+	/**
+	 * 
+	 * Usuarios.php esta clase es para gestionar los usuarios
+	 * 
+	 * */
 	class Usuarios extends DBAbstract
 	{
 
@@ -13,7 +17,6 @@
 			$this->email = "";
 		}
 
-
 		/**
 		 * 
 		 * Retorna la cantidad de usuarios
@@ -24,6 +27,33 @@
 			// query("CALL getCant()");
 
 			return count($this->query("SELECT * FROM `usuarios`"));
+		}
+
+		/* registra un nuevo usuario, valida si el email ya esta registrado*/
+		public function register($form){
+
+			/* si el email esta vacio*/
+			if($form["txt_email"]==""){
+				return ["errno" => 400, "error" => "Falta email"];
+			}
+
+			/* si el password esta vacio*/
+			if($form["txt_password"]==""){
+				return ["errno" => 400, "error" => "Falta contraseña"];
+			}
+
+			if($this->login($form)["errno"] == 404){
+
+				$password_encripted = password_hash($form["txt_password"], PASSWORD_DEFAULT);
+
+				$sql = "INSERT INTO `usuarios` (`id`, `nombre_completo`, `correo_electronico`, `contrasena_hash`, `esta_activo`, `correo_verificado_en`, `creado_en`, `actualizado_en`, `borrado_en`) VALUES (NULL, '', '".$form["txt_email"]."', '".$password_encripted."', '1', NULL, current_timestamp, NULL, NULL);";
+
+				$response = $this->query($sql);
+
+				return ["errno" => 202, "error" => "Se creo el usuario correctamente"];
+			}
+
+			return ["errno" => 409, "error" => "Email ya registrado, recuperar su cuenta?"];
 		}
 
 
@@ -49,8 +79,6 @@
 				return ["errno" => 400, "error" => "Falta contraseña"];
 			}
 
-			//$sql = "INSERT INTO `usuarios` (`id`, `nombre_completo`, `correo_electronico`, `contrasena_hash`, `esta_activo`, `correo_verificado_en`, `creado_en`, `actualizado_en`) VALUES (NULL, \'\', \'test@test.com\', \'1234\', \'1\', NULL, current_timestamp(), current_timestamp());";
-
 			/* busca el correo electronico en la tabla usuarios */
 			$response = $this->query("SELECT * FROM `usuarios` WHERE `email` LIKE '".$form["txt_email"]."'");
 
@@ -60,16 +88,18 @@
 			}
 
 			/*correo encontrado pero contraseña incorrecta*/
-			if($response[0]["pass"]!=$form["txt_password"]){
+			if(!password_verify($form["txt_password"], $response[0]["contrasena_hash"])){
 				return ["errno" => 403, "error" => "Contraseña incorrecta"];
 			}
 			
+
 			/* correo electronico encontrado y password correcto*/
 
 			$this->email = $form["txt_email"];
 
+			$_SESSION[APP_NAME]["user"] = $this;
+			
 			return ["errno" => 202, "error" => "Acceso valido"];
-
 		}
 	}
 ?>
