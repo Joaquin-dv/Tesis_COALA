@@ -5,14 +5,17 @@
     flex-direction: column;
     width: 100%;
     max-width: 450px;
-    height: 438px;
     background-color: var(--txt-blanco);
     gap: 12px;
-    padding: 2rem 4rem;
+    padding: 4rem 4rem 2rem 4rem;
     justify-content: center;
     align-items: center;
     border-radius: 8px;
     box-shadow: 0px 8px 18.7px -3px rgba(0, 0, 0, 0.20);
+}
+
+.contenedorFormulario > h1 {
+    line-height: 35px;
 }
 
 .campo {
@@ -20,8 +23,7 @@
     width: 100%;
     border-radius: 8px;
     border: solid 1px var(--borde-input);
-    color: var(--placeholder);
-    font-size: 9.8px;
+    font-size: 12px;
 }
 
 .campoCode {
@@ -47,6 +49,7 @@ form {
     gap: 12px;
     align-items: center;
     width: 100%;
+    max-width: 322px;
 }
 
 h1 {
@@ -109,4 +112,5 @@ input.remarcadoError:focus {
     font-size: 14px;
     font-family: 'Poppins';
     text-align: center;
+    min-height: 21px;
 }
