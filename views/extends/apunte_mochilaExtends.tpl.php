@@ -1,11 +1,11 @@
 <article class="apunte_mochila">
     <header class="encabezado_apunte">
         <section class="info_encabezado_apunte">
-            <h2>{{TITULO}}</h2>
-            <p>{{AÑO}}</p>
-            <p>{{MATERIA}} - {{ESCUELA}} | Prof. Gómez</p>
+            <h2>{{ TITULO }}</h2>
+            <p>{{ AÑO }}</p>
+            <p>{{ MATERIA }} - {{ ESCUELA }} | Prof. Gómez</p>
         </section>
-        <figure><img src="{{IMAGEN}}" alt=""></figure>
+        <figure><img src="{{ IMAGEN }}" alt=""></figure>
     </header>
     <section class="cuerpo_apunte">
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut consequat risus risus, in lobortis purus
@@ -14,7 +14,7 @@
         <p>Contiene 2 archivos</p>
     </section>
     <footer>
-        <p>⭐ {{PUNTUACION}} | 👁️ 123</p>
+        <p>⭐ {{ PUNTUACION }} | 👁️ 123</p>
         <button>Ver mas</button>
     </footer>
 </article>

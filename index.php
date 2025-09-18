@@ -1,25 +1,31 @@
 <?php 
-    #Incluimos el controlador
-	include 'lib/mopla/Mopla.php';
+	/***
+	 * 
+	 * Doxygen
+	 * 
+	 * index.php trabaja como un ROUTER - FIREWALL
+	 * 
+	 * */
 
-    #Se incluyen los modelos
-	// include_once 'models/Pet.php';
-	// include_once 'models/usuario.php';
+	require_once ".env.php"; /*Variables de entorno*/
+	require_once "models/DBAbstract.php"; /*Modelo de conexión a la db*/
+	require_once 'models/Usuarios.php';
+	require_once "lib/mopla/Mopla.php"; /*Motor de plantillas*/
 
-    #Cargamos el controlador por defecto
-	$controller = "landing";
+	session_start();
+	
+	$section = "landing"; /*por defecto section es landing*/
 
-    #Obtenemos la babosa (slug)
-	if(isset($_GET["slug"])){
-		$controller = $_GET["slug"];
-	}  
-
-    #Si el controlador que vino en la babosa no existe, cargamos el controlador error404
-	if(!file_exists('controllers/'.$controller.'Controller.php')){
-		$controller = "error404";
+	if(isset($_GET['slug'])){ /* en caso de que se especifique una sección*/
+		$section = $_GET['slug'];
 	}
 
-    #Se carga el contorlador de la babosa
-	include 'controllers/'.$controller.'Controller.php';
+	/* Se especifico una sección pero esta no existe */
+	if(!file_exists("controllers/".$section."Controller.php")){
+		$section = "error404"; /*lo llevamos a la seccion de error*/
+	}
 
- ?>
+	/*Se carga el controlador*/
+	include "controllers/".$section."Controller.php";
+
+?>

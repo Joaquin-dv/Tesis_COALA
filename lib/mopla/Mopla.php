@@ -1,45 +1,121 @@
-<?php 
-	
-	class Mopla{
+<?php
 
-		private $vista;
-		private $buffer;
+/**
+ * clase Mopla
+ * 
+ * Motor de plantillas
+ */
+class Mopla
+{
 
-		function __construct($name_view){
-			// levantar la plantilla
-			$this->buffer = file_get_contents("views/".$name_view."View.html");
+	private $name_tpl;
+	private $buffer_tpl;
 
-			$this->vista = $this->buffer;
-		}
+	function __construct($tpl_name)
+	{
+		$this->name_tpl = $tpl_name;
 
-		function restore(){
-			$this->buffer = $this->vista;
-		}
-
-
-		function setVar($name_var, $value){
-			// alterar la plantilla 
-			$this->buffer=str_replace("{{".$name_var."}}", $value, $this->buffer);
-		}
-
-		function setVars($vars){
-			foreach ($vars as $key => $value) {
-
-				$this->setVar($key, $value);
-			}
-		}
-
-		function getBuffer(){
-			return $this->buffer;
-		}
-
-		function print(){
-			// imprimir la plantilla
-			echo $this->buffer;
-		}
-
-	
+		$this->load_tpl();
 	}
 
+	/**
+	 * 
+	 * Carga la tpl en buffer_tpl
+	 * 
+	 * */
+	private function load_tpl()
+	{
 
- ?>
+		/* en caso que la vista no exista */
+		if (!file_exists('views/' . $this->name_tpl . 'View.tpl.php')) {
+
+			echo "<b>Motor de plantilla:</b> Mopla<br>";
+			echo "<b>Error:</b> no se encontro la vista <b>" . $this->name_tpl . "</b>";
+
+			exit();
+		}
+
+		/* la vista existe */
+
+		$this->buffer_tpl  = file_get_contents('views/' . $this->name_tpl . 'View.tpl.php');
+
+		/*****************************/
+		/* para levantar los extends de forma hardcodeada */
+
+		$array_extends_default = ["head", "footer"];
+
+		/* recorro el arreglo que tiene los extends por defecto*/
+		foreach ($array_extends_default as $key => $value) {
+
+
+			$buffer_extends = file_get_contents('views/extends/' . $value . 'Extends.tpl.php');
+
+			$this->buffer_tpl = str_replace("@extends(" . $value . ")", $buffer_extends, $this->buffer_tpl);
+		}
+
+
+
+		/* fin levantar extends*/
+		/*******************************/
+
+
+		/* para la autocarga de variables por defecto en la plantilla */
+		$environment_vars = [
+			"FONDO_PAGINA",
+			"TEXTO_PRINCIPAL",
+			"FONDO_HEADER_GRADIENTE_INICIO",
+			"FONDO_HEADER_GRADIENTE_FIN",
+			"TEXTO_INVERTIDO",
+			"TEXTO_HOVER_NAV",
+			"FONDO_BOTON",
+			"FONDO_BOTON_HOVER",
+			"FONDO_SECCION_CLARA",
+			"FONDO_TARJETA",
+			"TITULO_TARJETA",
+			"FONDO_FOOTER",
+			"SOMBRA_SUAVE",
+			"SOMBRA_MUY_SUAVE",
+			"APP_NAME",
+			"APP_DESCRIPTION",
+			"APP_AUTHOR",
+			"APP_SLOGAN"
+		];
+
+		foreach ($environment_vars as $key => $var) {
+			$array_replace_assoc[$var] = constant($var);
+		}
+
+
+		/*$array_replace_assoc["APP_DESCRIPTION"] = APP_DESCRIPTION;
+			$array_replace_assoc["APP_AUTHOR"] = APP_AUTHOR;*/
+
+		$this->assignVar($array_replace_assoc);
+
+		return true;
+	}
+
+	/*busca {{ lo que sea }}*/
+	function assignVar($array_replace_assoc)
+	{
+
+		foreach ($array_replace_assoc as $var => $value) {
+			$this->buffer_tpl = str_replace("{{ " . $var . " }}", $value, $this->buffer_tpl);
+		}
+	}
+
+	function printExtends($array_extends_assoc)
+	{
+		/* recorro el arreglo que tiene los extends por defecto*/
+		foreach ($array_extends_assoc as $key => $value) {
+
+			$buffer_extends = file_get_contents('views/extends/' . $value . 'Extends.tpl.php');
+
+			$this->buffer_tpl = str_replace("@extends(" . $value . ")", $buffer_extends, $this->buffer_tpl);
+		}
+	}
+
+	function printToScreen()
+	{
+		echo $this->buffer_tpl;
+	}
+}
