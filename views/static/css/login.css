@@ -28,4 +28,12 @@
     .logo{
         display: none;
     }
+    .contenedorFormulario{
+        padding:  2rem 2rem 2rem;
+    }
+}
+@media screen and (max-width: 1920px) {
+    .logo{
+         background-position: -31em center;
+    }
 }

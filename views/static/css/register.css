@@ -3,21 +3,26 @@
     display: flex;
     position: relative;
     justify-content: flex-end;
-    padding-right: 20vw;
+    padding-left: 20vw;
     align-items: center;
+    flex-direction: row-reverse;
 }
 .logo{
     flex: 0 0 45%;
-    background: url("../img/branding/logo_koala.png") no-repeat center left;
+    background: url("../img/branding/logo_koala.png") no-repeat center right;
     height: 100vh;
     background-size: auto 136%;
-    background-position: -26em center;
     opacity: 0.5;
     position: absolute;
     top: 0;
-    left: 0;
+    left: 26em;
     z-index: -1;
     width: 100vw;
+}
+
+.nombreCompleto{
+    display: flex;
+    gap: .5em;
 }
 
 @media screen and (max-width: 750px) {
@@ -28,8 +33,13 @@
     .logo{
         display: none;
     }
+    .contenedorFormulario{
+        padding: 3rem 2rem 2rem 2rem;
+    }
 }
-.nombreCompleto{
-    display: flex;
-    gap: .5em;
+
+@media screen and (max-width: 1920px) {
+    .logo{
+        left: 30em;
+    }
 }
