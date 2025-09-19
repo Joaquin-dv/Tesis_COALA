@@ -26,6 +26,13 @@
     align-items: center;
 
     overflow: hidden;
+
+    footer{
+        button:hover{
+            background-color: #007BFF;
+            color: white;
+        }    
+    }
 }
 
 .apunte_mochila:hover{
