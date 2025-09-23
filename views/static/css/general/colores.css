@@ -1,0 +1,16 @@
+:root{
+    --bg-body: #f7f7f7;
+    
+    --bg-boton-verde: #A7D129;
+    --bg-celeste: #00a1db;
+
+    --txt-negro: #000000;
+    --txt-celeste: #00a1db;
+    --txt-blanco: #ffffff;
+
+    --txt-logotipo: #00AEEF;
+    --placeholder: #B7B7B7;
+    --color-accion: #56AEFF;
+    --borde-input: #D8D8D8;
+    --btn-hover: #2D9BFF;
+}
