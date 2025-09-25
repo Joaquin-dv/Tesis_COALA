@@ -61,22 +61,7 @@
                 </section>
             </section>
             <section class="contenedor_apuntes">
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
+                {{ APUNTES }}
             </section>
     </main>
     
