@@ -47,23 +47,11 @@
 
         <h2 class="vistos_recientemente">Vistos recientemente</h2>
         <section class="contenedor_apuntes">
-            @extends(apunte)
-            @extends(apunte)
-            @extends(apunte)
-            @extends(apunte)
-            @extends(apunte)
-            @extends(apunte)
+            {{ APUNTES_RECIENTES }}
         </section>
         <h2 class="para_ti">Para ti</h2>
         <section class="contenedor_apuntes">
-            @extends(apunte)
-            @extends(apunte)
-            @extends(apunte)
-            @extends(apunte)
-            @extends(apunte)
-            @extends(apunte)
-            @extends(apunte)
-            @extends(apunte)
+            {{ APUNTES_DESTACADOS }}
         </section>
         @extends(modalSubirApunte)
     </main>

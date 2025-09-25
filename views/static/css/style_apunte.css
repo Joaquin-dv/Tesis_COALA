@@ -25,6 +25,7 @@ article
     align-items: center;
     border-radius: 20px;
     gap: .3em;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.08);
 }
 figure
 {
@@ -85,3 +86,6 @@ p{
     color: var(--detalle);
     font-size: 15px;
 }
+
+
+
