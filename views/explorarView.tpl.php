@@ -60,8 +60,8 @@
                     </div>
                 </section>
             </section>
-            <section class="contenedor_apuntes">
-                {{ APUNTES }}
+            <section class="contenido">
+                {{ EXPLORAR }}
             </section>
     </main>
     

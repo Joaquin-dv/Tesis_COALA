@@ -9,6 +9,8 @@
 		public $id;
 		public $nombre_completo;
 		public $email;
+		public $id_escuela;
+		public $id_anio_lectivo;
 		public $esta_activo;
 		public $correo_verificado_en;
 		public $creado_en;
@@ -21,10 +23,12 @@
 			/* se debe invocar al constructor de la clase padre */
 			parent::__construct();
 
-			$this->id = 0;
+			$this->id = null;
 			$this->nombre_completo = "";
 			$this->email = "";
-			$this->esta_activo = 0;
+			$this->id_escuela = null;
+			$this->id_anio_lectivo = null;
+			$this->esta_activo = null;
 			$this->correo_verificado_en = null;
 			$this->creado_en = "";
 			$this->actualizado_en = "";
@@ -47,7 +51,19 @@
 			$response = $this->query("SELECT `id` FROM `roles_usuario` WHERE `usuario_id` = ".$this->id);
 
 			if(count($response) > 0){
-				return $response[0]["escuela_id"];
+				return $response[0]["id"];
+			}
+
+			return ["errno" => 404, "error" => "No se encontro escuela para el usuario"];
+		}
+
+		public function getYearID($id_escuela){
+			$sql = "SELECT anios_lectivos.id FROM `anios_lectivos` INNER JOIN escuelas ON escuelas.id = anios_lectivos.escuela_id WHERE anios_lectivos.escuela_id = ".$id_escuela.";";
+
+			$response = $this->query($sql);
+
+			if(count($response) > 0){
+				return $response[0]["id"];
 			}
 
 			return ["errno" => 404, "error" => "No se encontro escuela para el usuario"];
@@ -119,16 +135,27 @@
 
 			/* correo electronico encontrado y password correcto*/
 
-			$this->email = $form["txt_email"];
 			$this->id = $response[0]["id"];
 			$this->nombre_completo = $response[0]["nombre_completo"];
+			$this->email = $form["txt_email"];
+			$this->id_escuela = $this->getSchoolID();
+			$this->id_anio_lectivo = $this->getYearID($this->id_escuela);
 			$this->esta_activo = $response[0]["esta_activo"];
 			$this->correo_verificado_en = $response[0]["correo_verificado_en"];
 			$this->creado_en = $response[0]["creado_en"];
 			$this->actualizado_en = $response[0]["actualizado_en"];
 			$this->borrado_en = $response[0]["borrado_en"];
 
-			$_SESSION[APP_NAME]["user"] = $this;
+			// $_SESSION[APP_NAME]["user"] = $this;
+
+			$_SESSION[APP_NAME]['user'] = [
+				'id'              => $this->id,
+				'nombre_completo' => $this->nombre_completo,
+				'email'           => $this->email,
+				'esta_activo'     => $this->esta_activo,
+				'escuela_id'	  => $this->id_escuela,
+				'id_anio_lectivo' => $this->id_anio_lectivo
+			];
 			
 			return ["errno" => 202, "error" => "Acceso valido"];
 		}

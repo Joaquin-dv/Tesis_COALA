@@ -16,7 +16,6 @@
 		}
 
 		/*Por ahora solo sirve para hacer select*/
-		
 		public function query($ssql){
 
 			$response = $this->db->query($ssql);
@@ -39,6 +38,10 @@
 
 				case 'DELETE':
 					// code...
+					break;
+
+				case 'CALL':
+					return $response->fetch_all(MYSQLI_ASSOC);
 					break;
 				
 				default:

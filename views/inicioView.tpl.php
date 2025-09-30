@@ -47,13 +47,15 @@
 
         <h2 class="vistos_recientemente">Vistos recientemente</h2>
         <section class="contenedor_apuntes">
-            {{ APUNTES_RECIENTES }}
+            <!-- @extends(apuntes_vistos_recientemente) -->
+            {{ VISTOS_RECIENTEMENTE }}
         </section>
         <h2 class="para_ti">Para ti</h2>
         <section class="contenedor_apuntes">
-            {{ APUNTES_DESTACADOS }}
+            {{ PARA_TI }}
         </section>
-        @extends(modalSubirApunte)
+        <!-- @extends(modalSubirApunte) -->
+        {{ MODAL_SUBIR_APUNTE }}
     </main>
     <script src="views/static/js/modal.js"></script>
     <script src="views/static/js/validacionFormulario.js"></script>
