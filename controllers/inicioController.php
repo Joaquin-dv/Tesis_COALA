@@ -53,8 +53,6 @@
 	
 	if(isset($_POST["titulo"])){
 		$result = $apunte->create($_POST);
-
-		var_dump($result);
 	}
 
 	/* Imprime la plantilla en la página */

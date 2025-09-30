@@ -64,33 +64,32 @@ class Apuntes extends DBAbstract
 
     public function getApuntes($limit = 100, bool $formated = false)
     {
+        // Evitá inyección por si llega algo raro en $limit
+        $limit = (int) $limit;
 
-        $sql = "SELECT * FROM `apuntes` ORDER BY apuntes.creado_en DESC LIMIT " . $limit . ";";
+        $sql = "SELECT a.id, a.titulo AS TITULO, m.nombre AS MATERIA, e.nombre AS ESCUELA, al.anio AS AÑO, ea.promedio_calificacion AS PUNTUACION FROM apuntes a INNER JOIN materias m ON m.id = a.materia_id INNER JOIN escuelas e ON e.id = a.escuela_id INNER JOIN anios_lectivos al ON al.id = a.anio_lectivo_id LEFT JOIN estadisticas_apunte ea ON ea.apunte_id = a.id LEFT JOIN archivos_apunte aa ON aa.apunte_id = a.id AND aa.es_principal = 1 WHERE a.borrado_en IS NULL ORDER BY a.creado_en DESC LIMIT 100; ";
 
         $result = $this->query($sql);
 
-        if ($formated == true) {
+        if ($formated === true) {
             $temp_array = [];
-
-            $escuela = new Escuelas();
-
-            foreach ($result as $item) {
+            foreach ($result as $row) {
                 $temp_array[] = [
-                    "TITULO"     => $item["titulo"],
-                    "MATERIA"    => $escuela->getMateriaByID($item["materia_id"]),
-                    "ESCUELA"    => $escuela->getNameById($item["escuela_id"]),
-                    "AÑO"        => $escuela->getAnioLectivoById($item["anio_lectivo_id"]), // podrías mapearlo con $item["anio_lectivo_id"]
-                    "PUNTUACION" => $this->getPromedioByIDApunte($item["id"]),  // valor de ejemplo
-                    "IMAGEN"     => ""      // vacío como pediste
+                    "TITULO"     => $row["TITULO"],
+                    "MATERIA"    => $row["MATERIA"],
+                    "ESCUELA"    => $row["ESCUELA"],
+                    "AÑO"        => $row["AÑO"],
+                    "PUNTUACION" => isset($row["PUNTUACION"]) ? (float)$row["PUNTUACION"] : null,
+                    "IMAGEN"     => "",
                 ];
-                // var_dump($temp_array);
             }
-
             return $temp_array;
         }
 
+        // Si no querés formateo, devolvés el resultset crudo
         return $result;
     }
+
     public function getPromedioByIDApunte($apunte_id)
     {
         $sql = "SELECT promedio_calificacion FROM `estadisticas_apunte` WHERE apunte_id = " . $apunte_id . ";";
