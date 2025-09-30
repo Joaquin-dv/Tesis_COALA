@@ -57,11 +57,10 @@ class Apuntes extends DBAbstract
      * */
     public function getCant()
     {
-
-        // query("CALL getCant()");
-
-        return count($this->query("SELECT * FROM `apuntes`"));
+        $row = $this->query("SELECT COUNT(*) AS c FROM apuntes WHERE borrado_en IS NULL");
+        return (int)$row[0]['c'];
     }
+
 
     public function getApuntes($limit = 100, bool $formated = false)
     {
@@ -173,7 +172,7 @@ class Apuntes extends DBAbstract
                 // Sanitizar nombre y generar uno único
                 $safeName = preg_replace('/[^A-Za-z0-9._-]/', '_', $nombreArchivo);
                 $rutaFinal = $carpetaDestino . uniqid('', true) . '_' . $safeName;
-                var_dump($rutaFinal);
+                // var_dump($rutaFinal);
 
                 // Crear la carpeta si no existe
                 if (!file_exists($carpetaDestino)) {
@@ -201,7 +200,7 @@ class Apuntes extends DBAbstract
                 }
             }
 
-            var_dump($response_file);
+            // var_dump($response_file);
 
             return ["errno" => 202, "error" => "Apunte creado correctamente", "apunte_id" => $response];
         } else {
@@ -243,7 +242,7 @@ class Apuntes extends DBAbstract
         $sql = "UPDATE `apuntes` SET `titulo` = '" . $form["titulo"] . "', `descripcion` = '" . $form["descripcion"] . "', `verificado_por_docente` = '0', `verificado_por_usuario_id` = 'null' WHERE `apuntes`.`id` = " . $apunte_id . ";";
 
         $response = $this->query($sql);
-        var_dump($response);
+        // var_dump($response);
         if ($response > 0) {
             return ["errno" => 200, "error" => "Apunte actualizado correctamente"];
         } else {
@@ -263,5 +262,3 @@ class Apuntes extends DBAbstract
         return ["errno" => 202, "error" => "Apunte eliminado correctamente"];
     }
 }
-
-?>
