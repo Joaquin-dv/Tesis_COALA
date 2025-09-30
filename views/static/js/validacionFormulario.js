@@ -6,7 +6,7 @@ document.querySelectorAll('#formulario').forEach(form =>{
         const errorGeneral = form.querySelector('#errorGeneral');
             errorGeneral.textContent = "";
 
-        form.querySelectorAll("input").forEach(input =>{
+        form.querySelectorAll("input[type='text'], input[type='file'], textarea, select").forEach(input =>{
             input.classList.remove('remarcadoError');
             if(input.value === ""){
                 vacio=false;
