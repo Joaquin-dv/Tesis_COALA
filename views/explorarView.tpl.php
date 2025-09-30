@@ -60,23 +60,8 @@
                     </div>
                 </section>
             </section>
-            <section class="contenido">
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
+            <section class="contenedor_apuntes">
+                {{ APUNTES }}
             </section>
     </main>
     
