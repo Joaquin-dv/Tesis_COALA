@@ -68,6 +68,7 @@
         @extends(modalSubirApunte)
     </main>
     <script src="views/static/js/modal.js"></script>
+    <script src="views/static/js/validacionFormulario.js"></script>
 </body>
 
 </html>
