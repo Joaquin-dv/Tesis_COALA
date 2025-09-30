@@ -54,7 +54,8 @@
         <section class="contenedor_apuntes">
             {{ PARA_TI }}
         </section>
-        @extends(modalSubirApunte)
+        <!-- @extends(modalSubirApunte) -->
+        {{ MODAL_SUBIR_APUNTE }}
     </main>
     <script src="views/static/js/modal.js"></script>
     <script src="views/static/js/validacionFormulario.js"></script>

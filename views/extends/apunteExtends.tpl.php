@@ -4,17 +4,17 @@
         {{ IMAGEN }}
     </figure>
     <section class="informacion">
-        <h2>Resumen de Revolución Francesa</h2>
+        <h2>{{ TITULO }}</h2>
         
         <section class="datos_apunte">
             <section class="datos_apunte_izquierda">
-                <p class="informacion_apunte">Historia</p>
-                <p class="informacion_apunte">Roberto Arlt</p>
-                <p class="informacion_apunte">⭐4.5</p>
+                <p class="informacion_apunte">{{ MATERIA }}</p>
+                <p class="informacion_apunte">{{ ESCUELA }}</p>
+                <p class="informacion_apunte">⭐ {{ PUNTUACION }}</p>
 
             </section>
             <section class="datos_apunte_derecha">
-                <p class="informacion_apunte">12/05/25</p>
+                <p class="informacion_apunte">{{ AÑO }}</p>
             </section>
 
         </section>

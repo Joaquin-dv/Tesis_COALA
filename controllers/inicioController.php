@@ -6,6 +6,8 @@
 	// Se carga el componente
 	$apunteExtend = new Extend("apunte");
 
+	$modalSubirApunteExtend = new Extend("modalSubirApunte");
+
 	// Se carga el modelo de apuntes
 	$apunte = new Apuntes();
 
@@ -34,7 +36,7 @@
 	$lista_componente_para_ti = $apunte->getApuntes(15, true);
 	
 	// Cargo la informacion en el componente
-	foreach ($lista_componente_para_ti as $row) {		
+	foreach ($lista_componente_para_ti as $row) {
 		$lista_para_ti .= $apunteExtend->assignVar($row);
 	}
 	
@@ -43,10 +45,16 @@
 
 	// =========================================================================================
 
-	$tpl->printExtends(["modalSubirApunte"]);
+	$modalCargado = $modalSubirApunteExtend->assignVar(["MSG_ERROR" => ""]);
+
+	$tpl->assignVar(["MODAL_SUBIR_APUNTE" => $modalCargado]);
+
+	// $tpl->printExtends(["modalSubirApunte"]);
 	
-	if(isset($_POST["btn_subir_apunte"])){
+	if(isset($_POST["titulo"])){
 		$result = $apunte->create($_POST);
+
+		var_dump($result);
 	}
 
 	/* Imprime la plantilla en la página */
