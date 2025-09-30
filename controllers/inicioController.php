@@ -53,6 +53,8 @@
 	
 	if(isset($_POST["titulo"])){
 		$result = $apunte->create($_POST);
+
+		header("Location: ?slug=inicio");
 	}
 
 	/* Imprime la plantilla en la página */
