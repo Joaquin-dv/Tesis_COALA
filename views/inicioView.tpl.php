@@ -49,7 +49,7 @@
             </div>
         </section>
 
-        <h2 class="vistos_recientemente">Vistos recientemente</h2>
+        <h2 class="vistos_recientemente">Subidos recientemente</h2>
         <section class="contenedor_apuntes">
             <!-- @extends(apuntes_vistos_recientemente) -->
             {{ VISTOS_RECIENTEMENTE }}
