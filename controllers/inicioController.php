@@ -17,7 +17,7 @@
 	$lista_vistos_recientemente = "";
 
 	//obtengo 5 apuntes
-	$lista_apuntes = $apunte->getApuntes(5, true);
+	$lista_apuntes = $apunte->getApuntes(4, true);
 	
 	// Cargo la informacion en el componente
 	foreach ($lista_apuntes as $row) {	
