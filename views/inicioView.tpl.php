@@ -12,7 +12,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="views/static/img/favicon/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="views/static/img/favicon/apple-touch-icon.png">
     <link rel="manifest" href="views/static/img/favicon/site.webmanifest">
-    <title>COALA</title>    
+    <title>COALA</title>
 </head>
 
 <body class="josefin-sans-normal">
@@ -30,7 +30,11 @@
 
 
         <section class="perfil">
-            <img src="/views/static/img/inicio/foto_perfil.jpg" alt="foto de perfil">
+            <img id="perfil-img" src="/views/static/img/inicio/foto_perfil.jpg" alt="foto de perfil">
+            <ul id="menu-desplegable" class="oculto">
+                <li><a href="?slug=perfil">Perfil</a></li>
+                <li><a href="?slug=logout">Cerrar sesión</a></li>
+            </ul>
         </section>
     </header>
 
@@ -59,6 +63,7 @@
     </main>
     <script src="views/static/js/modal.js"></script>
     <script src="views/static/js/validacionFormulario.js"></script>
+    <script src="views/static/js/temp_perfil.js"></script>
 </body>
 
 </html>
