@@ -61,22 +61,7 @@
                 </section>
             </section>
             <section class="contenido">
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
-                @extends(apunte)
+                {{ EXPLORAR }}
             </section>
     </main>
     

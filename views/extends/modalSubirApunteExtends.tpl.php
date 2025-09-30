@@ -10,7 +10,7 @@
             <section class="datos_apunte">
                 <div class="input_label">
                     <label for="curso">Curso</label>
-                    <select name="curso" id="curso" class="campo_modal">
+                    <select name="curso_id" id="curso" class="campo_modal">
                         <option value="">Seleccionar</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -36,7 +36,7 @@
                     <label for="materia">Materia</label>
                     <select name="materia" id="materia" class="campo_modal">
                         <option value="">Seleccionar</option>
-                        <option value="1">Cálculo I</option>
+                        <option value="1">Matematicas</option>
                         <option value="2">Cálculo II</option>
                         <option value="3">Física I</option>
                         <option value="4">Física II</option>
