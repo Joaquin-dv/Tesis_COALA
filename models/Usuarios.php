@@ -6,15 +6,29 @@
 	 * */
 	class Usuarios extends DBAbstract
 	{
-
+		public $id;
+		public $nombre_completo;
 		public $email;
+		public $esta_activo;
+		public $correo_verificado_en;
+		public $creado_en;
+		public $actualizado_en;
+		public $borrado_en;
+
 		
 		function __construct()
 		{
 			/* se debe invocar al constructor de la clase padre */
 			parent::__construct();
 
+			$this->id = 0;
+			$this->nombre_completo = "";
 			$this->email = "";
+			$this->esta_activo = 0;
+			$this->correo_verificado_en = null;
+			$this->creado_en = "";
+			$this->actualizado_en = "";
+			$this->borrado_en = null;
 		}
 
 		/**
@@ -27,6 +41,16 @@
 			// query("CALL getCant()");
 
 			return count($this->query("SELECT * FROM `usuarios`"));
+		}
+
+		public function getSchoolID(){
+			$response = $this->query("SELECT `id` FROM `roles_usuario` WHERE `usuario_id` = ".$this->id);
+
+			if(count($response) > 0){
+				return $response[0]["escuela_id"];
+			}
+
+			return ["errno" => 404, "error" => "No se encontro escuela para el usuario"];
 		}
 
 		/* registra un nuevo usuario, valida si el email ya esta registrado*/
@@ -96,6 +120,13 @@
 			/* correo electronico encontrado y password correcto*/
 
 			$this->email = $form["txt_email"];
+			$this->id = $response[0]["id"];
+			$this->nombre_completo = $response[0]["nombre_completo"];
+			$this->esta_activo = $response[0]["esta_activo"];
+			$this->correo_verificado_en = $response[0]["correo_verificado_en"];
+			$this->creado_en = $response[0]["creado_en"];
+			$this->actualizado_en = $response[0]["actualizado_en"];
+			$this->borrado_en = $response[0]["borrado_en"];
 
 			$_SESSION[APP_NAME]["user"] = $this;
 			

@@ -8,12 +8,11 @@
 
 	/* por defecto no va a tener msj error*/
 	$msg_error = "";
-
-	/* instancia la clase usuario en el objeto usuario*/
-	$usuario = new Usuarios();
-
+	
 	/* si se presiono el boton de login*/
 	if(isset($_POST["txt_password"])){
+			/* instancia la clase usuario en el objeto usuario*/
+			$usuario = new Usuarios();
 
 		$result = $usuario->login($_POST);
 

@@ -45,9 +45,12 @@
 					// code...
 					break;
 			}
-
-			
 		}
+
+		// Transacciones
+		public function begin(){ $this->db->begin_transaction(); }
+		public function commit(){ $this->db->commit(); }
+		public function rollback(){ $this->db->rollback(); }
 	}
 
 

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="views/static/css/general/formulario.css">
-    <link rel="stylesheet" href="views/static/css/login.css">
+    <link rel="stylesheet" href="views/static/css/register.css">
     <link rel="stylesheet" href="views/static/css/resetPasswordStyle.css">
     <link rel="icon" type="image/png" sizes="32x32" href="views/static/img/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="views/static/img/favicon/favicon-16x16.png">
@@ -24,8 +24,6 @@
             <form method="post" id="formulario">
                 <input type="email" id="email" class="campo poppins-semibold" placeholder="Correo electrónico">
                 <input id="sendCodeBtn" type="submit" value="Enviar código" class="btn poppins-semibold">
-                <div class="fraseLink">
-                </div>
                 <div class="errorMsg" id="errorGeneral"></div>
             </form>
         </section>

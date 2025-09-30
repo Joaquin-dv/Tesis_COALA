@@ -9,6 +9,6 @@ btn_abrir.addEventListener("click",()=>{
 btn_cerrar.addEventListener("click",()=>{
     modal.close();
 })
-subir_apunte.addEventListener("click",()=>{
-    modal.close();
-})
+// subir_apunte.addEventListener("click",()=>{
+//     modal.close();
+// })

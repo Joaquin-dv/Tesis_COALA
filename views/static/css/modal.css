@@ -1,59 +1,145 @@
 dialog#modal {
-    max-width: 600px;
-  width: 100%;
-  max-height: 570px;
-  height: 100%;
-  border: none;
-  border-radius: 20px;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: white;
-  z-index: 1000; 
-    
+    max-width: 660px;
+    width: 100%;
+    max-height: 570px;
+    height: 100%;
+    border: none;
+    border-radius: 20px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    z-index: 1000;
+
 }
 
 section.contenido_modal {
     display: flex;
-    flex-direction: column;
     width: 100%;
     height: 100%;
-    justify-content: center;
-    padding: 1em 3em;
-    gap: .5em;
+}
+
+form#formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    margin-top: .8em;
+    align-items: center;
 }
 
 i#cerrar_modal {
     position: absolute;
-    top: 6%;
-    left: 6%;
+    top: 4.5%;
+    right: 5%;
+    color: var(--txt-form-titulo);
 }
+
 .campo_modal {
-    padding: 12px 16px;
-    border-radius: 10px;
-    border: 2px solid #ccc;
-}
-button {
-    background-color: var(--bg-boton-verde);
+    padding: 12px 13px;
+    border-radius: 8px;
     border: none;
-    padding: 12px;
-    border-radius: 50px;
-    color: white;
+    width: 100%;
 }
-
-label {
-    font-size: 18px;
-}
-.btn_modal:hover{
- background-color: #92b723;
-}
-
-#curso, #materia, #division {
-    width: 11.8em;
-}
-
-.input_label {
+.datos_apunte {
     display: flex;
-    flex-direction: column;
+    gap: 1em;
+    justify-content: center;
+    padding: .8em 0em;
+}
+
+#curso{
+    width: 100%;
+}
+#division {
+    width: 100%;
+}
+
+section.contenido_formulario {
+    width: 53%;
+    padding: 1em;
+    background: var(--modal-bg);
+    height: 100%;
+}
+section.imagen{
+    width: 48%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+section.curso_division {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    gap: 10px;
+}
+span.form_titulo {
+    font-size: 22px;
+    color: var(--txt-form-titulo);
+}
+#koala_modal{
+    width: 100%;
+}
+textarea{
+    display: flex;
+    justify-content: start;
+}
+button#subir_apunte {
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    font-size: 13px;
+    background: var(--btn-modal);
+}
+
+#btn_subir_arch{
+    display: none;
+}
+.btn_label{
+    width: 100%;
+    background-color: var(--btn-modal);
+    padding: 10px 20px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    gap: 1em;
+}
+
+#subir_apunte:hover{
+      filter: brightness(0.85);
+      transition: 0.3s;
+}
+.btn_label:hover{
+      filter: brightness(0.85);
+      transition: 0.3s;
+}
+.remarcadoError {
+    outline: 1px solid #FF5656;
+}
+
+.errorMsg {
+    font-weight: 500;
+    color: #FF5656;
+    font-size: 14px;
+    font-family: 'Poppins';
+    text-align: center;
+    min-height: 21px;
+    margin-top: -.3em;
+}
+.campo_modal:focus {
+    outline: 2px solid var(--color-accion);
+    transition: 0.3s;
+}
+@media screen and (max-width: 750px) {
+    .imagen{
+        display: none !important;
+    }
+    .contenido_formulario{
+        width: 100% !important;
+    }
+    #modal{
+        width: 85% !important;
+    }
 }
