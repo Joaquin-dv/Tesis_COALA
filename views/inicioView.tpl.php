@@ -61,6 +61,8 @@
         <!-- @extends(modalSubirApunte) -->
         {{ MODAL_SUBIR_APUNTE }}
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="views/static/js/toast.js"></script>
     <script src="views/static/js/modal.js"></script>
     <script src="views/static/js/validacionFormulario.js"></script>
     <script src="views/static/js/temp_perfil.js"></script>
