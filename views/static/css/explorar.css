@@ -76,3 +76,63 @@ main .buscador_subir_apunte{
     gap: 10px;
     justify-content: center;
 }
+
+
+
+
+/* nuevos */
+.filtros {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    background-color: var(--bg-boton-verde);
+    color: white;
+    padding: 5px 9px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.dropbtn:hover {
+    background-color: var(--bg-boton-verde-hover);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 120px;
+    border-radius: 8px;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    z-index: 100;
+    margin-top: 5px;
+}
+
+.dropdown-content a {
+    color: #333;
+    padding: 10px 14px;
+    text-decoration: none;
+    display: block;
+    transition: background 0.2s;
+}
+
+.dropdown-content a:hover {
+    background-color: #f2f2f2;
+    border-radius: 8px;
+}
+
+
+.dropdown:focus-within .dropdown-content {
+    display: block;
+}

@@ -22,7 +22,9 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: var(--bg-header);
     padding: 1em;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.07);
 
     .contenedor_logo_secundario {
         width: 110px;

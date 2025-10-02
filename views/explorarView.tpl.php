@@ -59,12 +59,15 @@
                         <input type="text" placeholder="Buscar..." class="input_buscador">
                     </div>
                 </section>
+                <section class="filtros">
+                    @extends(botonesFiltro)
+                </section>
             </section>
             <section class="contenedor_apuntes">
                 {{ EXPLORAR }}
             </section>
     </main>
-    
+    <script src="views/static/js/botonFiltro.js"></script>
 </body>
 
 </html>
