@@ -51,10 +51,10 @@ class Usuarios extends DBAbstract
 
     public function getSchoolID()
     {
-        $response = $this->query("SELECT `id` FROM `roles_usuario` WHERE `usuario_id` = " . $this->id);
+        $response = $this->query("SELECT `escuela_id` FROM `roles_usuario` WHERE `usuario_id` = " . $this->id);
 
         if (count($response) > 0) {
-            return $response[0]["id"];
+            return $response[0]["escuela_id"];
         }
 
         return ["errno" => 404, "error" => "No se encontro escuela para el usuario"];
