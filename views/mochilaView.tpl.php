@@ -15,23 +15,7 @@
 </head>
 
 <body class="josefin-sans-normal">
-    <header>
-        <div class="contenedor_logo_secundario">
-            <img src="/views/static/img/branding/logo_secundario.png" alt="">
-        </div>
-
-        <nav class="barra_navegacion">
-            <a href="?slug=inicio">Inicio</a>
-            <a href="?slug=explorar">Explorar</a>
-            <a href="?slug=mochila">Mochila</a>
-            <a href="?slug=clases">Clases</a>
-        </nav>
-
-
-        <section class="perfil">
-            <img src="/views/static/img/inicio/foto_perfil.jpg" alt="foto de perfil">
-        </section>
-    </header>
+    @extends(appHeader)
 
     <main>
         <section class="buscador_subir_apunte">

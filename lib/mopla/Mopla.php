@@ -40,9 +40,9 @@ class Mopla
 		$this->buffer_tpl  = file_get_contents('views/' . $this->name_tpl . 'View.tpl.php');
 
 		/*****************************/
-		/* para levantar los extends de forma hardcodeada */
+		/* Para levantar los extends por defecto (Sistema probablemente temporal) */
 
-		$array_extends_default = ["head", "footer"];
+		$array_extends_default = ["appHeader"];
 
 		/* recorro el arreglo que tiene los extends por defecto*/
 		foreach ($array_extends_default as $key => $value) {
@@ -53,9 +53,6 @@ class Mopla
 			$this->buffer_tpl = str_replace("@extends(" . $value . ")", $buffer_extends, $this->buffer_tpl);
 		}
 
-
-
-		/* fin levantar extends*/
 		/*******************************/
 
 
