@@ -42,7 +42,7 @@ class Mopla
 		/*****************************/
 		/* Para levantar los extends por defecto (Sistema probablemente temporal) */
 
-		$array_extends_default = ["appHeader"];
+		$array_extends_default = ["htmlHead", "appHeader"];
 
 		/* recorro el arreglo que tiene los extends por defecto*/
 		foreach ($array_extends_default as $key => $value) {
@@ -75,7 +75,9 @@ class Mopla
 			"APP_NAME",
 			"APP_DESCRIPTION",
 			"APP_AUTHOR",
-			"APP_SLOGAN"
+			"APP_SLOGAN",
+			"APP_SECTION",
+			"APP_URL"
 		];
 
 		foreach ($environment_vars as $key => $var) {
