@@ -1,242 +1,215 @@
 <?php
 
 /**
- * 
+ *
  * Usuarios.php esta clase es para gestionar los usuarios
- * 
+ *
  * */
 class Usuarios extends DBAbstract
 {
-	public $id;
-	public $nombre_completo;
-	public $email;
-	public $id_escuela;
-	public $id_anio_lectivo;
-	public $esta_activo;
-	public $correo_verificado_en;
-	public $creado_en;
-	public $actualizado_en;
-	public $borrado_en;
+    public $id;
+    public $nombre_completo;
+    public $email;
+    public $id_escuela;
+    public $id_anio_lectivo;
+    public $esta_activo;
+    public $correo_verificado_en;
+    public $creado_en;
+    public $actualizado_en;
+    public $borrado_en;
 
 
-	function __construct()
-	{
-		/* se debe invocar al constructor de la clase padre */
-		parent::__construct();
+    public function __construct()
+    {
+        /* se debe invocar al constructor de la clase padre */
+        parent::__construct();
 
-		$this->id = null;
-		$this->nombre_completo = "";
-		$this->email = "";
-		$this->id_escuela = null;
-		$this->id_anio_lectivo = null;
-		$this->esta_activo = null;
-		$this->correo_verificado_en = null;
-		$this->creado_en = "";
-		$this->actualizado_en = "";
-		$this->borrado_en = null;
-	}
+        $this->id = null;
+        $this->nombre_completo = "";
+        $this->email = "";
+        $this->id_escuela = null;
+        $this->id_anio_lectivo = null;
+        $this->esta_activo = null;
+        $this->correo_verificado_en = null;
+        $this->creado_en = "";
+        $this->actualizado_en = "";
+        $this->borrado_en = null;
+    }
 
-	/**
-	 * 
-	 * Retorna la cantidad de usuarios
-	 * 
-	 * */
-	public function getCant()
-	{
+    /**
+     *
+     * Retorna la cantidad de usuarios
+     *
+     * */
+    public function getCant()
+    {
 
-		// query("CALL getCant()");
+        // query("CALL getCant()");
 
-		return count($this->query("SELECT * FROM `usuarios`"));
-	}
+        return count($this->query("SELECT * FROM `usuarios`"));
+    }
 
-	public function getSchoolID()
-	{
-		$response = $this->query("SELECT `id` FROM `roles_usuario` WHERE `usuario_id` = " . $this->id);
+    public function getSchoolID()
+    {
+        $response = $this->query("SELECT `id` FROM `roles_usuario` WHERE `usuario_id` = " . $this->id);
 
-		if (count($response) > 0) {
-			return $response[0]["id"];
-		}
+        if (count($response) > 0) {
+            return $response[0]["id"];
+        }
 
-		return ["errno" => 404, "error" => "No se encontro escuela para el usuario"];
-	}
+        return ["errno" => 404, "error" => "No se encontro escuela para el usuario"];
+    }
 
-	public function getYearID($id_escuela)
-	{
-		$sql = "SELECT anios_lectivos.id FROM `anios_lectivos` INNER JOIN escuelas ON escuelas.id = anios_lectivos.escuela_id WHERE anios_lectivos.escuela_id = " . $id_escuela . ";";
+    public function getYearID($id_escuela)
+    {
+        $sql = "SELECT anios_lectivos.id FROM `anios_lectivos` INNER JOIN escuelas ON escuelas.id = anios_lectivos.escuela_id WHERE anios_lectivos.escuela_id = " . $id_escuela . ";";
 
-		$response = $this->query($sql);
+        $response = $this->query($sql);
 
-		if (count($response) > 0) {
-			return $response[0]["id"];
-		}
+        if (count($response) > 0) {
+            return $response[0]["id"];
+        }
 
-		return ["errno" => 404, "error" => "No se encontro escuela para el usuario"];
-	}
+        return ["errno" => 404, "error" => "No se encontro escuela para el usuario"];
+    }
 
-	/* registra un nuevo usuario, valida si el email ya esta registrado*/
-	public function register($form)
-	{
+    /**
+     *
+     * Funcion de registro de usuario
+     *
+     * 202 = Se creo el usuario
+     * 400 = email vacio y/o pass vacio y/o pass < 8 caracteres
+	 * 409 = email ya registrado
+	 * 500 = error al crear usuario
+     *
+     * */
+    public function register($form)
+    {
 
-		/* si el email esta vacio*/
-		if ($form["txt_email"] == "") {
-			return ["errno" => 400, "error" => "Falta email"];
-		}
+        /* si el email esta vacio*/
+        if ($form["txt_email"] == "") {
+            return ["errno" => 400, "error" => "Falta email"];
+        }
 
-		/* si el password esta vacio*/
-		if ($form["txt_password"] == "") {
-			return ["errno" => 400, "error" => "Falta contraseña"];
-		}
+        /* si el password esta vacio*/
+        if ($form["txt_password"] == "") {
+            return ["errno" => 400, "error" => "Falta contraseña"];
+        }
 
-		if ($this->login($form)["errno"] == 404) {
+        if (strlen($form["txt_password"]) < 8) {
+            return ["errno" => 400, "error" => "La contraseña debe tener al menos 8 caracteres"];
+        }
 
-			$password_encripted = password_hash($form["txt_password"], PASSWORD_DEFAULT);
+        if ($this->login($form)["errno"] == 404) {
 
-			$sql = "INSERT INTO `usuarios` (`id`, `nombre_completo`, `correo_electronico`, `contrasena_hash`, `esta_activo`, `correo_verificado_en`, `creado_en`, `actualizado_en`, `borrado_en`) VALUES (NULL, '', '" . $form["txt_email"] . "', '" . $password_encripted . "', '1', NULL, current_timestamp(), current_timestamp(), '2025-09-09 20:50:08.000000');";
+            $password_encripted = password_hash($form["txt_password"], PASSWORD_DEFAULT);
+			
+            // $sql = "INSERT INTO `usuarios` (`id`, `nombre_completo`, `correo_electronico`, `contrasena_hash`, `esta_activo`, `correo_verificado_en`, `creado_en`, `actualizado_en`, `borrado_en`) VALUES (NULL, '', '" . $form["txt_email"] . "', '" . $password_encripted . "', '1', NULL, current_timestamp(), current_timestamp(), NULL);";
+			
+            // $response = $this->query($sql);
+            
+			// Datos opcionales (ajustá si querés asignar rol/escuela/actor)
+            $nombreCompleto = $form['txt_nombre'] . " " . $form['txt_apellido'];   // si no tenés el nombre en el formulario
+			$email = strtolower(trim($form["txt_email"]));
+            $estaActivo     = 1;
+            $rolCodigo      = 'student'; // p.ej: 'student' | 'teacher' | 'admin'
+            $escuelaId      = 1; // alcance de rol (si aplica)
+            $actorId        = null; // auditoría: quién lo creó (si aplica)
 
-			$response = $this->query($sql);
+            $this->callSP(
+                "CALL sp_crear_usuario(?,?,?,?,?,?,?, @nuevo_id)",
+                [
+                    $nombreCompleto, // p_nombre_completo
+                    $email,          // p_correo_electronico
+                    $password_encripted,           // p_contrasena_hash (ya hasheada)
+                    $estaActivo,     // p_esta_activo
+                    $rolCodigo,      // p_rol_codigo (NULL si no asignás rol)
+                    $escuelaId,      // p_escuela_id (NULL si no aplica)
+                    $actorId         // p_actor_id (NULL si no hay auditoría)
+                ]
+                // ["@nuevo_id"]
+            );
 
-			return ["errno" => 202, "error" => "Se creo el usuario correctamente"];
-		}
+            // Leer OUT
+            // $row = $this->query("SELECT @nuevo_id AS id");
 
-		return ["errno" => 409, "error" => "El email ingresado ya se encuentra registrado"];
-	}
+			// var_dump($row); // DEBUG
 
-	// ===== REGISTER CON STORED PROCEDURE =====
-	// /* registra un nuevo usuario usando SP; valida email y password */
-	// public function register($form)
-	// {
-	// 	// Validaciones básicas
-	// 	if (empty($form["txt_email"])) {
-	// 		return ["errno" => 400, "error" => "Falta email"];
-	// 	}
-	// 	if (empty($form["txt_password"])) {
-	// 		return ["errno" => 400, "error" => "Falta contraseña"];
-	// 	}
+            // if (!isset($row[0]["id"])) {
+            //     return ["errno" => 500, "error" => "Hubo un error al crear el usuario, intente nuevamente mas tarde"];
+            // }
 
-	// 	$email = strtolower(trim($form["txt_email"]));
-	// 	if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-	// 		return ["errno" => 400, "error" => "Email inválido"];
-	// 	}
+            return ["errno" => 202, "error" => "Se creo el usuario correctamente"];
+        }
 
-	// 	// Hash de la contraseña (PHP)
-	// 	$hash = password_hash($form["txt_password"], PASSWORD_DEFAULT);
+        return ["errno" => 409, "error" => "El email ingresado ya se encuentra registrado"];
+    }
 
-	// 	// Datos opcionales (ajustá si querés asignar rol/escuela/actor)
-	// 	$nombreCompleto = '';   // si no tenés el nombre en el formulario
-	// 	$estaActivo     = 1;
-	// 	$rolCodigo      = null; // p.ej: 'student' | 'teacher' | 'admin'
-	// 	$escuelaId      = null; // alcance de rol (si aplica)
-	// 	$actorId        = null; // auditoría: quién lo creó (si aplica)
+    /**
+     *
+     * Funcion de logueo de usuario
+     *
+     * 202 = usuario valido
+     * 400 = email vacio y/o pass vacio
+     * 404 = usuario invalido
+     * 402 = usuario valido contraseña incorrecto
+     *
+     * */
+    public function login($form)
+    {
 
-	// 	$this->begin();
-	// 	try {
-	// 		// Preparar OUT param
-	// 		$this->query("SET @nuevo_id := 0");
+        /* si el email esta vacio*/
+        if ($form["txt_email"] == "") {
+            return ["errno" => 400, "error" => "Falta email"];
+        }
 
-	// 		// Llamada al SP
-	// 		$this->callSP(
-	// 			"CALL sp_crear_usuario(?,?,?,?,?,?,?, @nuevo_id)",
-	// 			[
-	// 				$nombreCompleto, // p_nombre_completo
-	// 				$email,          // p_correo_electronico
-	// 				$hash,           // p_contrasena_hash (ya hasheada)
-	// 				$estaActivo,     // p_esta_activo
-	// 				$rolCodigo,      // p_rol_codigo (NULL si no asignás rol)
-	// 				$escuelaId,      // p_escuela_id (NULL si no aplica)
-	// 				$actorId         // p_actor_id (NULL si no hay auditoría)
-	// 			],
-	// 			["@nuevo_id"]
-	// 		);
+        /* si el password esta vacio*/
+        if ($form["txt_password"] == "") {
+            return ["errno" => 400, "error" => "Falta contraseña"];
+        }
 
-	// 		// Leer OUT
-	// 		$row = $this->query("SELECT @nuevo_id AS id");
-	// 		$nuevoId = isset($row[0]["id"]) ? (int)$row[0]["id"] : 0;
-	// 		if ($nuevoId <= 0) {
-	// 			throw new Exception("No se obtuvo el ID del usuario");
-	// 		}
+        /* busca el correo electronico en la tabla usuarios */
+        // $response = $this->query("SELECT * FROM `usuarios` WHERE `correo_electronico` LIKE '" . $form["txt_email"] . "'");
 
-	// 		$this->commit();
-	// 		return ["errno" => 202, "error" => "Se creó el usuario correctamente", "usuario_id" => $nuevoId];
-	// 	} catch (Throwable $e) {
-	// 		$this->rollback();
+        $response = $this->callSP(
+            "CALL sp_obtener_usuario(?)",
+            [$form["txt_email"]]
+        );
 
-	// 		// Mapear mensajes comunes a tus códigos
-	// 		$msg = $e->getMessage();
-	// 		if (stripos($msg, 'correo ya está registrado') !== false || stripos($msg, 'duplicate') !== false) {
-	// 			return ["errno" => 409, "error" => "El email ingresado ya se encuentra registrado"];
-	// 		}
-	// 		if (stripos($msg, 'Formato de correo inválido') !== false) {
-	// 			return ["errno" => 400, "error" => "Email inválido"];
-	// 		}
-	// 		if (stripos($msg, 'Falta la contraseña') !== false) {
-	// 			return ["errno" => 400, "error" => "Falta contraseña"];
-	// 		}
+        /*si la cantidad de filas es 0 no se encontro email en usuarios*/
+        if (empty($response['result_sets'][0])) {
+            return ["errno" => 404, "error" => "Correo no encontrado"];
+        }
 
-	// 		return ["errno" => 500, "error" => "DB error: " . $msg];
-	// 	}
-	// }
+        /* si se encontro el correo, obtiene la primera fila */
+        $usuario = $response['result_sets'][0][0];
 
-	/**
-	 * 
-	 * intenta loguear
-	 * 
-	 * 202 = usuario valido
-	 * 400 = email vacio y/o pass vacio
-	 * 404 = usuario invalido
-	 * 402 = usuario valido contraseña incorrecto
-	 * 
-	 * */
-	public function login($form)
-	{
+        /* correo encontrado pero contraseña incorrecta */
+        if (!password_verify($form["txt_password"], $usuario["contrasena_hash"])) {
+            return ["errno" => 403, "error" => "Contraseña incorrecta"];
+        }
 
-		/* si el email esta vacio*/
-		if ($form["txt_email"] == "") {
-			return ["errno" => 400, "error" => "Falta email"];
-		}
+        /* correo electrónico encontrado y password correcto */
+        $this->id                 = $usuario["id"];
+        $this->nombre_completo    = $usuario["nombre_completo"];
+        $this->email              = $form["txt_email"]; // o $usuario["correo_electronico"]
+        $this->id_escuela         = $this->getSchoolID();
+        $this->id_anio_lectivo    = $this->getYearID($this->id_escuela);
+        $this->esta_activo        = $usuario["esta_activo"];
+        $this->correo_verificado_en = $usuario["correo_verificado_en"];
+        $this->creado_en          = $usuario["creado_en"];
+        $this->actualizado_en     = $usuario["actualizado_en"];
+        $this->borrado_en         = $usuario["borrado_en"];
 
-		/* si el password esta vacio*/
-		if ($form["txt_password"] == "") {
-			return ["errno" => 400, "error" => "Falta contraseña"];
-		}
+        $_SESSION[APP_NAME]['user'] = [
+            'id'              => $this->id,
+            'nombre_completo' => $this->nombre_completo,
+            'email'           => $this->email,
+            'esta_activo'     => $this->esta_activo,
+            'escuela_id'	  => $this->id_escuela,
+            'id_anio_lectivo' => $this->id_anio_lectivo
+        ];
 
-		/* busca el correo electronico en la tabla usuarios */
-		$response = $this->query("SELECT * FROM `usuarios` WHERE `correo_electronico` LIKE '" . $form["txt_email"] . "'");
-
-		/*si la cantidad de filas es 0 no se encontro email en usuarios*/
-		if (count($response) == 0) {
-			return ["errno" => 404, "error" => "Correo no encontrado"];
-		}
-
-		/*correo encontrado pero contraseña incorrecta*/
-		if (!password_verify($form["txt_password"], $response[0]["contrasena_hash"])) {
-			return ["errno" => 403, "error" => "Contraseña incorrecta"];
-		}
-
-
-		/* correo electronico encontrado y password correcto*/
-
-		$this->id = $response[0]["id"];
-		$this->nombre_completo = $response[0]["nombre_completo"];
-		$this->email = $form["txt_email"];
-		$this->id_escuela = $this->getSchoolID();
-		$this->id_anio_lectivo = $this->getYearID($this->id_escuela);
-		$this->esta_activo = $response[0]["esta_activo"];
-		$this->correo_verificado_en = $response[0]["correo_verificado_en"];
-		$this->creado_en = $response[0]["creado_en"];
-		$this->actualizado_en = $response[0]["actualizado_en"];
-		$this->borrado_en = $response[0]["borrado_en"];
-
-		// $_SESSION[APP_NAME]["user"] = $this;
-
-		$_SESSION[APP_NAME]['user'] = [
-			'id'              => $this->id,
-			'nombre_completo' => $this->nombre_completo,
-			'email'           => $this->email,
-			'esta_activo'     => $this->esta_activo,
-			'escuela_id'	  => $this->id_escuela,
-			'id_anio_lectivo' => $this->id_anio_lectivo
-		];
-
-		return ["errno" => 202, "error" => "Acceso valido"];
-	}
+        return ["errno" => 202, "error" => "Acceso valido"];
+    }
 }
