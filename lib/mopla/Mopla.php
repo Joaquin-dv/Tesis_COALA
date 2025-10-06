@@ -76,7 +76,6 @@ class Mopla
 			"APP_DESCRIPTION",
 			"APP_AUTHOR",
 			"APP_SLOGAN",
-			"APP_SECTION",
 			"APP_URL"
 		];
 
