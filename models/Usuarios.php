@@ -10,6 +10,7 @@ class Usuarios extends DBAbstract
     public $id;
     public $nombre_completo;
     public $email;
+    public $rol;
     public $id_escuela;
     public $id_anio_lectivo;
     public $esta_activo;
@@ -27,6 +28,7 @@ class Usuarios extends DBAbstract
         $this->id = null;
         $this->nombre_completo = "";
         $this->email = "";
+        $this->rol = null;
         $this->id_escuela = null;
         $this->id_anio_lectivo = null;
         $this->esta_activo = null;
@@ -47,6 +49,17 @@ class Usuarios extends DBAbstract
         // query("CALL getCant()");
 
         return count($this->query("SELECT * FROM `usuarios`"));
+    }
+
+    public function getUserRole($user_id)
+    {
+        $response = $this->query("SELECT roles.codigo FROM `roles_usuario` INNER JOIN roles ON roles.id = roles_usuario.rol_id WHERE roles_usuario.usuario_id = " . $user_id);
+
+        if (count($response) > 0) {
+            return $response[0]["codigo"];
+        }
+
+        return ["errno" => 404, "error" => "No se encontro rol para el usuario"];
     }
 
     public function getSchoolID()
@@ -193,6 +206,7 @@ class Usuarios extends DBAbstract
         $this->id                 = $usuario["id"];
         $this->nombre_completo    = $usuario["nombre_completo"];
         $this->email              = $form["txt_email"]; // o $usuario["correo_electronico"]
+        $this->rol                = $this->getUserRole($this->id);
         $this->id_escuela         = $this->getSchoolID();
         $this->id_anio_lectivo    = $this->getYearID($this->id_escuela);
         $this->esta_activo        = $usuario["esta_activo"];
@@ -205,6 +219,7 @@ class Usuarios extends DBAbstract
             'id'              => $this->id,
             'nombre_completo' => $this->nombre_completo,
             'email'           => $this->email,
+            'rol'             => $this->rol,
             'esta_activo'     => $this->esta_activo,
             'escuela_id'	  => $this->id_escuela,
             'id_anio_lectivo' => $this->id_anio_lectivo
