@@ -1,330 +1,438 @@
 <?php
+
+/**
+ * 
+ * Apuntes.php esta clase es para gestionar los apuntes
+ * 
+ * */
+class Apuntes extends DBAbstract
+{
+    // === Atributos principales (coinciden con columnas) ===
+    private $id;
+    private $titulo;
+    private $descripcion;
+    private $usuario_cargador_id;
+    private $escuela_id;
+    private $materia;
+    private $anio_lectivo_id;
+    private $curso_id;                  // NULL permitido
+    private $nivel;                     // NULL permitido (tinyint unsigned)
+    private $division;                  // NULL permitido (varchar 16)
+    private $visibilidad;               // 'publico' | 'curso'
+    private $estado;                    // 'pendiente' | 'en_revision' | 'aprobado' | 'rechazado'
+    private $verificado_por_docente;    // tinyint(1) 0/1
+    private $verificado_por_usuario_id; // NULL permitido
+    private $verificado_en;             // datetime NULL
+    private $estado_ia;                 // 'no_escaneado' | 'aprobado' | 'marcado' | 'bloqueado'
+    private $motivo_rechazo;            // varchar(255) NULL
+
+    function __construct()
+    {
+        /* se debe invocar al constructor de la clase padre */
+        parent::__construct();
+
+        $this->id = 0;
+        $this->titulo = "";
+        $this->descripcion = "";
+        $this->usuario_cargador_id = 0;
+        $this->escuela_id = 0;
+        $this->materia = 0;
+        $this->anio_lectivo_id = 0;
+        $this->curso_id = null;
+        $this->nivel = null;
+        $this->division = null;
+        $this->visibilidad = "publico";
+        $this->estado = "pendiente";
+        $this->verificado_por_docente = 0;
+        $this->verificado_por_usuario_id = null;
+        $this->verificado_en = null;
+        $this->estado_ia = "no_escaneado";
+        $this->motivo_rechazo = null;
+    }
+
     /**
      * 
-     * Apuntes.php esta clase es para gestionar los apuntes
+     * Retorna la cantidad de apuntes
      * 
      * */
-    class Apuntes extends DBAbstract
+    public function getCant()
     {
-        // === Atributos principales (coinciden con columnas) ===
-        private $id;
-        private $titulo;
-        private $descripcion;
-        private $usuario_cargador_id;
-        private $escuela_id;
-        private $materia_id;
-        private $anio_lectivo_id;
-        private $curso_id;                  // NULL permitido
-        private $nivel;                     // NULL permitido (tinyint unsigned)
-        private $division;                  // NULL permitido (varchar 16)
-        private $visibilidad;               // 'publico' | 'curso'
-        private $estado;                    // 'pendiente' | 'en_revision' | 'aprobado' | 'rechazado'
-        private $verificado_por_docente;    // tinyint(1) 0/1
-        private $verificado_por_usuario_id; // NULL permitido
-        private $verificado_en;             // datetime NULL
-        private $estado_ia;                 // 'no_escaneado' | 'aprobado' | 'marcado' | 'bloqueado'
-        private $motivo_rechazo;            // varchar(255) NULL
-    
-        function __construct()
-        {
-            /* se debe invocar al constructor de la clase padre */
-            parent::__construct();
+        $row = $this->query("SELECT COUNT(*) AS c FROM apuntes WHERE borrado_en IS NULL");
+        return (int) $row[0]['c'];
+    }
 
-            $this->id = 0;
-            $this->titulo = "";
-            $this->descripcion = "";
-            $this->usuario_cargador_id = 0;
-            $this->escuela_id = 0;
-            $this->materia_id = 0;
-            $this->anio_lectivo_id = 0;
-            $this->curso_id = null;
-            $this->nivel = null;
-            $this->division = null;
-            $this->visibilidad = "publico";
-            $this->estado = "pendiente";
-            $this->verificado_por_docente = 0;
-            $this->verificado_por_usuario_id = null;
-            $this->verificado_en = null;
-            $this->estado_ia = "no_escaneado";
-            $this->motivo_rechazo = null;
+
+    public function getApuntes($limit = 100, bool $formated = false)
+    {
+        // Evitá inyección por si llega algo raro en $limit
+        $limit = (int) $limit;
+
+        $sql = "SELECT a.id, a.titulo AS TITULO, m.nombre AS MATERIA, e.nombre AS ESCUELA, al.anio AS AÑO, ea.promedio_calificacion AS PUNTUACION FROM apuntes a INNER JOIN materias m ON m.id = a.materia_id INNER JOIN escuelas e ON e.id = a.escuela_id INNER JOIN anios_lectivos al ON al.id = a.anio_lectivo_id LEFT JOIN estadisticas_apunte ea ON ea.apunte_id = a.id LEFT JOIN archivos_apunte aa ON aa.apunte_id = a.id AND aa.es_principal = 1 WHERE a.borrado_en IS NULL ORDER BY a.creado_en DESC LIMIT " . $limit . "; ";
+
+        $result = $this->query($sql);
+
+        if ($formated === true) {
+            $temp_array = [];
+            foreach ($result as $row) {
+                $temp_array[] = [
+                    "TITULO" => $row["TITULO"],
+                    "MATERIA" => $row["MATERIA"],
+                    "ESCUELA" => $row["ESCUELA"],
+                    "AÑO" => $row["AÑO"],
+                    "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : null,
+                    "IMAGEN" => "",
+                ];
+            }
+            return $temp_array;
         }
 
-        /**
-         * 
-         * Retorna la cantidad de apuntes
-         * 
-         * */
-        public function getCant(){
-            
-            // query("CALL getCant()");
+        // Si no querés formateo, devolvés el resultset crudo
+        return $result;
+    }
 
-            return count($this->query("SELECT * FROM `apuntes`"));
-        }
-        
-        
-        /* registra un nuevo apunte */
-        public function create($form){
+    public function getPromedioByIDApunte($apunte_id)
+    {
+        $sql = "SELECT promedio_calificacion FROM `estadisticas_apunte` WHERE apunte_id = " . $apunte_id . ";";
 
-            if(!isset($_SESSION[APP_NAME])){
-                return ["errno" => 403, "error" => "No autorizado"];
-            }
+        $result = $this->query($sql);
 
-            $usuario = $_SESSION[APP_NAME]["user"];
-            // var_dump($usuario);
-            // Validaciones
-            if($form["titulo"] == ""){
-                return ["errno" => 400, "error" => "Falta el título"];
-            }
-            if($form["descripcion"] == ""){
-                return ["errno" => 400, "error" => "Falta la descripción"];
-            }
-
-            $form["usuario_cargador_id"] = $usuario->email;
-            
-            $form["escuela_id"] = $usuario->getSchoolID();
-            
-            if($form["materia_id"] == "" || !is_numeric($form["materia_id"])){
-                return ["errno" => 400, "error" => "Falta el ID de la materia"];
-            }
-            if($form["anio_lectivo_id"] == "" || !is_numeric($form["anio_lectivo_id"])){
-                return ["errno" => 400, "error" => "Falta el ID del año lectivo"];
-            }
-            if(!in_array($form["visibilidad"], ["publico", "curso"])){
-                return ["errno" => 400, "error" => "Visibilidad inválida"];
-            }
-
-            // Campos opcionales
-            $curso_id = is_numeric($form["curso_id"]) ? $form["curso_id"] : "NULL";
-            $nivel = is_numeric($form["nivel"]) ? $form["nivel"] : "NULL";
-            $division = ($form["division"] != "") ? "'".$form["division"]."'" : "NULL";
-
-            // Insertar en la base de datos
-            $sql = "INSERT INTO `apuntes` (`id`, `titulo`, `descripcion`, `usuario_cargador_id`, `escuela_id`, `materia_id`, `anio_lectivo_id`, `curso_id`, `nivel`, `division`, `visibilidad`, `estado`, `verificado_por_docente`, `verificado_por_usuario_id`, `verificado_en`, `estado_ia`, `motivo_rechazo`, `creado_en`, `actualizado_en`, `borrado_en`) 
-                    VALUES (NULL, '".$form["titulo"]."', '".$form["descripcion"]."', ".$form["usuario_cargador_id"].", ".$form["escuela_id"].", ".$form["materia_id"].", ".$form["anio_lectivo_id"].", ".$curso_id.", ".$nivel.", ".$division.", '".$form["visibilidad"]."', 'pendiente', 0, NULL, NULL, 'no_escaneado', NULL, current_timestamp(), current_timestamp(), NULL);";
-            
-            $response = $this->query($sql);
-
-            if($response > 0){
-                return ["errno" => 202, "error" => "Apunte creado correctamente", "apunte_id" => $response];
-            } else {
-                return ["errno" => 500, "error" => "Error al crear el apunte"];
-            }
-        }
-
-        public function update($apunte_id, $form){
-            // Validaciones
-            if(!is_numeric($apunte_id) || $apunte_id <= 0){
-                return ["errno" => 400, "error" => "ID de apunte inválido"];
-            }
-            if(isset($form["titulo"]) && $form["titulo"] == ""){
-                return ["errno" => 400, "error" => "Falta el título"];
-            }
-            if(isset($form["descripcion"]) && $form["descripcion"] == ""){
-                return ["errno" => 400, "error" => "Falta la descripción"];
-            }
-            if(isset($form["escuela_id"]) && (!is_numeric($form["escuela_id"]) || $form["escuela_id"] <= 0)){
-                return ["errno" => 400, "error" => "ID de escuela inválido"];
-            }
-            if(isset($form["materia_id"]) && (!is_numeric($form["materia_id"]) || $form["materia_id"] <= 0)){
-                return ["errno" => 400, "error" => "ID de materia inválido"];
-            }
-            if(isset($form["anio_lectivo_id"]) && (!is_numeric($form["anio_lectivo_id"]) || $form["anio_lectivo_id"] <= 0)){
-                return ["errno" => 400, "error" => "ID de año lectivo inválido"];
-            }
-            if(isset($form["visibilidad"]) && !in_array($form["visibilidad"], ["publico", "curso"])){
-                return ["errno" => 400, "error" => "Visibilidad inválida"];
-            }
-
-            // Campos opcionales
-            $updates = [];
-        }
-
-        public function delete($apunte_id){
-            if(!is_numeric($apunte_id) || $apunte_id <= 0){
-                return ["errno" => 400, "error" => "ID de apunte inválido"];
-            }
-
-            $sql = "UPDATE `apuntes` SET `borrado_en` = current_timestamp() WHERE `id` = ".$apunte_id." AND `borrado_en` IS NULL;";
-            $this->query($sql);
-
-            return ["errno" => 202, "error" => "Apunte eliminado correctamente"];
-        }
-
-        /**
-         * Obtiene una lista de apuntes con paginación y filtros opcionales
-         * 
-         * @param int $page Página actual (por defecto 1)
-         * @param int $limit Límite de apuntes por página (por defecto 10)
-         * @param array $filters Filtros opcionales (materia_id, escuela_id, anio_lectivo_id, etc.)
-         * @return array Lista de apuntes con información de paginación
-         */
-        public function getApuntes($page = 1, $limit = 10, $filters = []){
-            // Validar parámetros
-            $page = max(1, intval($page));
-            $limit = max(1, min(50, intval($limit))); // Máximo 50 por página
-            $offset = ($page - 1) * $limit;
-
-            // Construir la consulta base
-            $sql = "SELECT a.*, 
-                           m.nombre as materia_nombre,
-                           e.nombre as escuela_nombre,
-                           al.anio as anio_lectivo,
-                           u.nombre as usuario_nombre
-                    FROM `apuntes` a
-                    LEFT JOIN `materias` m ON a.materia_id = m.id
-                    LEFT JOIN `escuelas` e ON a.escuela_id = e.id
-                    LEFT JOIN `anios_lectivos` al ON a.anio_lectivo_id = al.id
-                    LEFT JOIN `usuarios` u ON a.usuario_cargador_id = u.id
-                    WHERE a.`borrado_en` IS NULL 
-                    AND a.`estado` = 'aprobado'";
-
-            // Aplicar filtros de forma segura
-            if(isset($filters['materia_id']) && is_numeric($filters['materia_id'])){
-                $sql .= " AND a.materia_id = " . intval($filters['materia_id']);
-            }
-            if(isset($filters['escuela_id']) && is_numeric($filters['escuela_id'])){
-                $sql .= " AND a.escuela_id = " . intval($filters['escuela_id']);
-            }
-            if(isset($filters['anio_lectivo_id']) && is_numeric($filters['anio_lectivo_id'])){
-                $sql .= " AND a.anio_lectivo_id = " . intval($filters['anio_lectivo_id']);
-            }
-            if(isset($filters['busqueda']) && !empty($filters['busqueda'])){
-                $busqueda = addslashes($filters['busqueda']);
-                $sql .= " AND (a.titulo LIKE '%" . $busqueda . "%' OR a.descripcion LIKE '%" . $busqueda . "%')";
-            }
-
-            // Ordenar por fecha de creación (más recientes primero)
-            $sql .= " ORDER BY a.creado_en DESC";
-
-            // Agregar paginación
-            $sql .= " LIMIT " . $limit . " OFFSET " . $offset;
-
-            // Ejecutar consulta
-            $apuntes = $this->query($sql);
-
-            // Obtener el total de registros para la paginación
-            $countSql = "SELECT COUNT(*) as total FROM `apuntes` a WHERE a.`borrado_en` IS NULL AND a.`estado` = 'aprobado'";
-            
-            // Aplicar los mismos filtros para el conteo
-            if(isset($filters['materia_id']) && is_numeric($filters['materia_id'])){
-                $countSql .= " AND a.materia_id = " . intval($filters['materia_id']);
-            }
-            if(isset($filters['escuela_id']) && is_numeric($filters['escuela_id'])){
-                $countSql .= " AND a.escuela_id = " . intval($filters['escuela_id']);
-            }
-            if(isset($filters['anio_lectivo_id']) && is_numeric($filters['anio_lectivo_id'])){
-                $countSql .= " AND a.anio_lectivo_id = " . intval($filters['anio_lectivo_id']);
-            }
-            if(isset($filters['busqueda']) && !empty($filters['busqueda'])){
-                $busqueda = addslashes($filters['busqueda']);
-                $countSql .= " AND (a.titulo LIKE '%" . $busqueda . "%' OR a.descripcion LIKE '%" . $busqueda . "%')";
-            }
-
-            $totalResult = $this->query($countSql);
-            $total = $totalResult[0]['total'] ?? 0;
-
-            // Calcular información de paginación
-            $totalPages = ceil($total / $limit);
-            $hasNext = $page < $totalPages;
-            $hasPrev = $page > 1;
-
-            return [
-                'apuntes' => $apuntes,
-                'pagination' => [
-                    'current_page' => $page,
-                    'total_pages' => $totalPages,
-                    'total_items' => $total,
-                    'items_per_page' => $limit,
-                    'has_next' => $hasNext,
-                    'has_prev' => $hasPrev,
-                    'next_page' => $hasNext ? $page + 1 : null,
-                    'prev_page' => $hasPrev ? $page - 1 : null
-                ]
-            ];
-        }
-
-        /**
-         * Obtiene un apunte específico por ID
-         * 
-         * @param int $apunte_id ID del apunte
-         * @return array|null Datos del apunte o null si no existe
-         */
-        public function getApunteById($apunte_id){
-            if(!is_numeric($apunte_id) || $apunte_id <= 0){
-                return null;
-            }
-
-            $apunte_id = intval($apunte_id);
-            $sql = "SELECT a.*, 
-                           m.nombre as materia_nombre,
-                           e.nombre as escuela_nombre,
-                           al.anio as anio_lectivo,
-                           u.nombre as usuario_nombre
-                    FROM `apuntes` a
-                    LEFT JOIN `materias` m ON a.materia_id = m.id
-                    LEFT JOIN `escuelas` e ON a.escuela_id = e.id
-                    LEFT JOIN `anios_lectivos` al ON a.anio_lectivo_id = al.id
-                    LEFT JOIN `usuarios` u ON a.usuario_cargador_id = u.id
-                    WHERE a.id = " . $apunte_id . " AND a.`borrado_en` IS NULL";
-
-            $result = $this->query($sql);
-            return $result[0] ?? null;
-        }
-
-        /**
-         * Obtiene los apuntes más recientes para la página de inicio
-         * 
-         * @param int $limit Límite de apuntes a obtener (por defecto 6)
-         * @return array Lista de apuntes recientes
-         */
-        public function getApuntesRecientes($limit = 6){
-            $limit = max(1, min(20, intval($limit))); // Máximo 20 para la página de inicio
-
-            $sql = "SELECT a.*, 
-                           m.nombre as materia_nombre,
-                           e.nombre as escuela_nombre,
-                           al.anio as anio_lectivo,
-                           u.nombre_completo as usuario_nombre
-                    FROM `apuntes` a
-                    LEFT JOIN `materias` m ON a.materia_id = m.id
-                    LEFT JOIN `escuelas` e ON a.escuela_id = e.id
-                    LEFT JOIN `anios_lectivos` al ON a.anio_lectivo_id = al.id
-                    LEFT JOIN `usuarios` u ON a.usuario_cargador_id = u.id
-                    WHERE a.`borrado_en` IS NULL 
-                    AND a.`estado` = 'aprobado'
-                    ORDER BY a.creado_en DESC
-                    LIMIT " . $limit;
-
-            return $this->query($sql);
-        }
-
-        /**
-         * Obtiene apuntes destacados para la página de inicio
-         * Por ahora, obtiene los más antiguos aprobados como "destacados"
-         * En el futuro se podría implementar lógica de recomendaciones
-         * 
-         * @param int $limit Límite de apuntes a obtener (por defecto 8)
-         * @return array Lista de apuntes destacados
-         */
-        public function getApuntesDestacados($limit = 8){
-            $limit = max(1, min(20, intval($limit))); // Máximo 20 para la página de inicio
-
-            $sql = "SELECT a.*, 
-                           m.nombre as materia_nombre,
-                           e.nombre as escuela_nombre,
-                           al.anio as anio_lectivo,
-                           u.nombre_completo as usuario_nombre
-                    FROM `apuntes` a
-                    LEFT JOIN `materias` m ON a.materia_id = m.id
-                    LEFT JOIN `escuelas` e ON a.escuela_id = e.id
-                    LEFT JOIN `anios_lectivos` al ON a.anio_lectivo_id = al.id
-                    LEFT JOIN `usuarios` u ON a.usuario_cargador_id = u.id
-                    WHERE a.`borrado_en` IS NULL 
-                    AND a.`estado` = 'aprobado'
-                    ORDER BY a.creado_en ASC
-                    LIMIT " . $limit;
-
-            return $this->query($sql);
+        if (count($result) > 0) {
+            return (float) $result[0]["promedio_calificacion"];
+        } else {
+            return 0;
         }
     }
-?>
+
+    public function getApuntesPorId($id)
+    {
+    }
+    /* registra un nuevo apunte */
+    // Create viejo (Guardado temporalmente)
+    // public function create($form)
+    // {
+    //     if (!isset($_SESSION[APP_NAME])) {
+    //         return ["errno" => 403, "error" => "No autorizado"];
+    //     }
+
+    //     // Usuario logueado
+    //     $usuario = $_SESSION[APP_NAME]["user"];
+    //     $usuarioId = (int)$usuario["id"];
+
+    //     // Completar datos derivados de sesión
+    //     $form["usuario_cargador_id"] = $usuarioId;
+    //     $form["escuela_id"]          = (int)$usuario["escuela_id"];
+    //     $form["anio_lectivo_id"]     = (int)$usuario["id_anio_lectivo"];
+    //     $form["visibilidad"]         = "publico";
+
+    //     // Validaciones
+    //     if ($form["titulo"] == "") {return ["errno" => 400, "error" => "Falta el título"];}
+    //     if ($form["descripcion"] == "") {return ["errno" => 400, "error" => "Falta la descripción"];}
+    //     if ($form["materia"] == "" || !is_numeric($form["materia"])) {return ["errno" => 400, "error" => "Falta el ID de la materia"];}
+    //     if ($form["anio_lectivo_id"] == "" || !is_numeric($form["anio_lectivo_id"])) {return ["errno" => 400, "error" => "Falta el ID del año lectivo"];}
+    //     if (!in_array($form["visibilidad"], ["publico", "curso"])) {return ["errno" => 400, "error" => "Visibilidad inválida"];}
+    //     if (!isset($_FILES['btn_subir_archivo'])) {return ["errno" => 400, "error" => "Falta el archivo"];}
+
+    //     // Normalización de opcionales
+    //     $curso_id = (isset($form["curso"]) && is_numeric($form["curso"])) ? (int)$form["curso"] : null;
+    //     $nivel    = null; // según tu modelo actual
+    //     $division = (isset($form["division"]) && $form["division"] !== "") ? (string)$form["division"] : null;
+
+    //     // Archivos (nombres temporales)
+    //     $nombreArchivo = $_FILES['btn_subir_archivo']['name'];
+    //     $rutaTemporal  = $_FILES['btn_subir_archivo']['tmp_name'];
+
+    //     // Carpeta destino única por usuario
+    //     $hashUsuario     = hash("sha256", (string)$usuarioId);
+    //     $carpetaDestino  = "data/uploads/" . $hashUsuario . "/";
+    //     if (!file_exists($carpetaDestino)) {
+    //         mkdir($carpetaDestino, 0777, true);
+    //     }
+    //     $safeName  = preg_replace('/[^A-Za-z0-9._-]/', '_', $nombreArchivo);
+    //     $rutaFinal = $carpetaDestino . uniqid('', true) . '_' . $safeName;
+
+    //     // Metadatos
+    //     $finfo    = finfo_open(FILEINFO_MIME_TYPE);
+    //     $tipoMime = finfo_file($finfo, $rutaTemporal);
+    //     finfo_close($finfo);
+
+    //     $sha256 = hash_file('sha256', $rutaTemporal);
+    //     $bytes  = filesize($rutaTemporal);
+
+    //     // Transacción: DB sólo se confirma si el archivo se movió y ambos SPs ok
+    //     $this->begin();
+    //     try {
+    //         // OUT var
+    //         $this->query("SET @apunte_id := 0");
+
+    //         // SP: crear apunte
+    //         $this->callSP(
+    //             "CALL sp_crear_apunte(?,?,?,?,?,?,?,?,?,?, @apunte_id)",
+    //             [
+    //                 (string)$form["titulo"],
+    //                 (string)$form["descripcion"],
+    //                 (int)$form["usuario_cargador_id"],
+    //                 (int)$form["escuela_id"],
+    //                 (int)$form["materia"],
+    //                 (int)$form["anio_lectivo_id"],
+    //                 $curso_id,   // puede ser null
+    //                 $nivel,      // null
+    //                 $division,   // null o string
+    //                 (string)$form["visibilidad"]
+    //             ],
+    //             ["@apunte_id"]
+    //         );
+
+    //         $row = $this->query("SELECT @apunte_id AS id");
+    //         $apunte_id = isset($row[0]["id"]) ? (int)$row[0]["id"] : 0;
+    //         if ($apunte_id <= 0) {
+    //             $this->rollback();
+    //             return ["errno" => 500, "error" => "No se obtuvo el ID del apunte"];
+    //         }
+
+    //         // Mover el archivo físicamente
+    //         if (!move_uploaded_file($rutaTemporal, $rutaFinal)) {
+    //             $this->rollback();
+    //             return ["errno" => 500, "error" => "Error al mover el archivo al destino"];
+    //         }
+
+    //         // OUT var para archivo
+    //         $this->query("SET @archivo_id := 0");
+
+    //         // SP: insertar metadatos del archivo
+    //         $this->callSP(
+    //             "CALL sp_insert_archivo_apunte(?,?,?,?,?,?,?, @archivo_id)",
+    //             [
+    //                 (int)$apunte_id,
+    //                 (string)$rutaFinal,
+    //                 (string)$tipoMime,
+    //                 (int)$bytes,
+    //                 (string)$sha256,
+    //                 1,                // es_principal
+    //                 (int)$usuarioId
+    //             ],
+    //             ["@archivo_id"]
+    //         );
+
+    //         $row2 = $this->query("SELECT @archivo_id AS id");
+    //         $archivo_id = isset($row2[0]["id"]) ? (int)$row2[0]["id"] : 0;
+    //         if ($archivo_id <= 0) {
+    //             $this->rollback();
+    //             return ["errno" => 500, "error" => "No se obtuvo el ID del archivo"];
+    //         }
+
+    //         // OK
+    //         $this->commit();
+    //         return [
+    //             "errno"      => 202,
+    //             "error"      => "El archivo se subió correctamente",
+    //             "apunte_id"  => $apunte_id,
+    //             "archivo_id" => $archivo_id
+    //         ];
+    //     } catch (Throwable $e) {
+    //         $this->rollback();
+    //         return ["errno" => 500, "error" => "DB error: " . $e->getMessage()];
+    //     }
+    // }
+
+
+    public function create(
+        $titulo,
+        $descripcion,
+        $materia,
+        $archivo,           // array estilo $_FILES: ['name' => ..., 'tmp_name' => ...]
+        $curso = null,
+        $division = null,
+        $visibilidad = 'publico'
+    ) {
+        if (!isset($_SESSION[APP_NAME])) {
+            return ["errno" => 403, "error" => "No autorizado"];
+        }
+
+        // Usuario logueado
+        $usuario = $_SESSION[APP_NAME]["user"];
+        $usuarioId = (int) $usuario["id"];
+
+        // Completar datos derivados de sesión
+        $usuario_cargador_id = $usuarioId;
+        $escuela_id = (int) $usuario["escuela_id"];
+        $anio_lectivo_id = (int) $usuario["id_anio_lectivo"];
+
+        // Validaciones
+        if ($titulo == "") {
+            return ["errno" => 400, "error" => "Falta el título"];
+        }
+        if ($descripcion == "") {
+            return ["errno" => 400, "error" => "Falta la descripción"];
+        }
+        if ($materia == "" || !is_numeric($materia)) {
+            return ["errno" => 400, "error" => "Falta el ID de la materia"];
+        }
+        if ($anio_lectivo_id == "" || !is_numeric($anio_lectivo_id)) {
+            return ["errno" => 400, "error" => "Falta el ID del año lectivo"];
+        }
+        if (!in_array($visibilidad, ["publico", "curso"])) {
+            return ["errno" => 400, "error" => "Visibilidad inválida"];
+        }
+        if (!is_array($archivo) || !isset($archivo['name'], $archivo['tmp_name'])) {
+            return ["errno" => 400, "error" => "Falta el archivo"];
+        }
+
+        // Archivos (nombres temporales)
+        $nombreArchivo = $archivo['name'];
+        $rutaTemporal = $archivo['tmp_name'];
+
+        // Metadatos: MIME
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $tipoMime = finfo_file($finfo, $rutaTemporal);
+        finfo_close($finfo);
+
+        // Verificar tipo permitido (PDF o imagen)
+        $tiposPermitidos = [
+            'application/pdf',
+            'image/jpeg',
+            'image/png'
+            // 'image/gif'
+        ];
+        if (!in_array($tipoMime, $tiposPermitidos)) {
+            return ["errno" => 400, "error" => "Tipo de archivo no permitido. Solo se aceptan PDF o imágenes."];
+        }
+
+        // Normalización de opcionales
+        $curso_id = (isset($curso) && is_numeric($curso)) ? (int) $curso : null;
+        $nivel = null; // según tu modelo actual
+        $division = (isset($division) && $division !== "") ? (string) $division : null;
+
+        // Carpeta destino única por usuario
+        $hashUsuario = hash("sha256", (string) $usuarioId);
+        $carpetaDestino = "data/uploads/" . $hashUsuario . "/";
+        if (!file_exists($carpetaDestino)) {
+            mkdir($carpetaDestino, 0777, true);
+        }
+        $safeName = preg_replace('/[^A-Za-z0-9._-]/', '_', $nombreArchivo);
+        $rutaFinal = $carpetaDestino . uniqid('', true) . '_' . $safeName;
+
+        $sha256 = hash_file('sha256', $rutaTemporal);
+        $bytes = filesize($rutaTemporal);
+
+        // Transacción
+        $this->begin();
+        try {
+            $this->query("SET @apunte_id := 0");
+            $this->callSP(
+                "CALL sp_crear_apunte(?,?,?,?,?,?,?,?,?,?, @apunte_id)",
+                [
+                    (string) $titulo,
+                    (string) $descripcion,
+                    (int) $usuario_cargador_id,
+                    (int) $escuela_id,
+                    (int) $materia,
+                    (int) $anio_lectivo_id,
+                    $curso_id,
+                    $nivel,
+                    $division,
+                    (string) $visibilidad
+                ],
+                ["@apunte_id"]
+            );
+
+            $row = $this->query("SELECT @apunte_id AS id");
+            $apunte_id = isset($row[0]["id"]) ? (int) $row[0]["id"] : 0;
+            if ($apunte_id <= 0) {
+                $this->rollback();
+                return ["errno" => 500, "error" => "No se obtuvo el ID del apunte"];
+            }
+
+            if (!move_uploaded_file($rutaTemporal, $rutaFinal)) {
+                $this->rollback();
+                return ["errno" => 500, "error" => "Error al mover el archivo al destino"];
+            }
+
+            $this->query("SET @archivo_id := 0");
+            $this->callSP(
+                "CALL sp_insert_archivo_apunte(?,?,?,?,?,?,?, @archivo_id)",
+                [
+                    (int) $apunte_id,
+                    (string) $rutaFinal,
+                    (string) $tipoMime,
+                    (int) $bytes,
+                    (string) $sha256,
+                    1,
+                    (int) $usuarioId
+                ],
+                ["@archivo_id"]
+            );
+
+            $row2 = $this->query("SELECT @archivo_id AS id");
+            $archivo_id = isset($row2[0]["id"]) ? (int) $row2[0]["id"] : 0;
+            if ($archivo_id <= 0) {
+                $this->rollback();
+                return ["errno" => 500, "error" => "No se obtuvo el ID del archivo"];
+            }
+
+            $this->commit();
+            return [
+                "errno" => 202,
+                "error" => "El archivo se subió correctamente",
+                "apunte_id" => $apunte_id,
+                "archivo_id" => $archivo_id
+            ];
+        } catch (Throwable $e) {
+            $this->rollback();
+            return ["errno" => 500, "error" => "DB error: " . $e->getMessage()];
+        }
+    }
+
+    public function update($apunte_id, $form)
+    {
+
+        $usuario = $_SESSION[APP_NAME]["user"];
+
+        // Validaciones
+        if (!is_numeric($apunte_id) || $apunte_id <= 0) {
+            return ["errno" => 400, "error" => "ID de apunte inválido"];
+        }
+        if (isset($form["titulo"]) && $form["titulo"] == "") {
+            return ["errno" => 400, "error" => "Falta el título"];
+        }
+        if (isset($form["descripcion"]) && $form["descripcion"] == "") {
+            return ["errno" => 400, "error" => "Falta la descripción"];
+        }
+        // if(isset($form["escuela_id"]) && (!is_numeric($form["escuela_id"]) || $form["escuela_id"] <= 0)){
+        //     return ["errno" => 400, "error" => "ID de escuela inválido"];
+        // }
+        if (isset($form["materia"]) && (!is_numeric($form["materia"]) || $form["materia"] <= 0)) {
+            return ["errno" => 400, "error" => "ID de materia inválido"];
+        }
+        if (isset($form["anio_lectivo_id"]) && (!is_numeric($form["anio_lectivo_id"]) || $form["anio_lectivo_id"] <= 0)) {
+            return ["errno" => 400, "error" => "ID de año lectivo inválido"];
+        }
+        // if(isset($form["visibilidad"]) && !in_array($form["visibilidad"], ["publico", "curso"])){
+        //     return ["errno" => 400, "error" => "Visibilidad inválida"];
+        // }
+
+        // Campos opcionales
+        $updates = [];
+
+        $sql = "UPDATE `apuntes` SET `titulo` = '" . $form["titulo"] . "', `descripcion` = '" . $form["descripcion"] . "', `verificado_por_docente` = '0', `verificado_por_usuario_id` = 'null' WHERE `apuntes`.`id` = " . $apunte_id . ";";
+
+        $response = $this->query($sql);
+        // var_dump($response);
+        if ($response > 0) {
+            return ["errno" => 200, "error" => "Apunte actualizado correctamente"];
+        } else {
+            return ["errno" => 500, "error" => "Error al crear el apunte"];
+        }
+    }
+
+    public function delete($apunte_id)
+    {
+        if (!is_numeric($apunte_id) || $apunte_id <= 0) {
+            return ["errno" => 400, "error" => "ID de apunte inválido"];
+        }
+
+        $sql = "UPDATE `apuntes` SET `borrado_en` = current_timestamp() WHERE `id` = " . $apunte_id . " AND `borrado_en` IS NULL;";
+        $this->query($sql);
+
+        return ["errno" => 202, "error" => "Apunte eliminado correctamente"];
+    }
+}

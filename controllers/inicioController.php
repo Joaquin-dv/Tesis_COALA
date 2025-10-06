@@ -1,48 +1,62 @@
 <?php
 
-    // Incluir el modelo de Apuntes y helpers
-    require_once "models/Apuntes.php";
-    require_once "lib/helpers/apunteHelpers.php";
 
-	/* Se instancia a la clase del motor de plantillas */
+	// Se carga la plantilla
 	$tpl = new Mopla("inicio");
 
-	$tpl->printExtends(["apunte", "modalSubirApunte"]);
+	// Se carga el componente
+	$apunteExtend = new Extend("apunte");
 
-    // Instanciar el modelo de Apuntes
-    $apuntesModel = new Apuntes();
+	$modalSubirApunteExtend = new Extend("modalSubirApunte");
 
-    try {
-        // Obtener apuntes recientes (últimos 6 apuntes aprobados)
-        $apuntesRecientes = $apuntesModel->getApuntesRecientes(6);
-        $apuntesRecientesHTML = generarHTMLApuntes($apuntesRecientes, 'No hay apuntes recientes disponibles.');
+	// Se carga el modelo de apuntes
+	$apunte = new Apuntes();
 
-        // Obtener apuntes destacados (los más antiguos aprobados como "destacados")
-        $apuntesDestacados = $apuntesModel->getApuntesDestacados(8);
-        $apuntesDestacadosHTML = generarHTMLApuntes($apuntesDestacados, 'No hay apuntes destacados disponibles.');
+	// ========================= CARGA DE COMPONENTE VISTO RECIENTEMENTE =========================
 
-        // Asignar variables a la plantilla
-        $tpl->assignVar([
-            'APUNTES_RECIENTES' => $apuntesRecientesHTML,
-            'APUNTES_DESTACADOS' => $apuntesDestacadosHTML,
-            'TOTAL_RECIENTES' => count($apuntesRecientes),
-            'TOTAL_DESTACADOS' => count($apuntesDestacados),
-            'SIN_APUNTES_RECIENTES' => empty($apuntesRecientes) ? 'true' : 'false',
-            'SIN_APUNTES_DESTACADOS' => empty($apuntesDestacados) ? 'true' : 'false'
-        ]);
+	// Array para guardar el componente con la informacion cargada
+	$lista_vistos_recientemente = "";
 
-    } catch (Exception $e) {
-        // En caso de error, mostrar mensaje de error
-        $errorHTML = generarHTMLError('Error al cargar los apuntes: ' . $e->getMessage());
-        $tpl->assignVar([
-            'ERROR' => 'true',
-            'MENSAJE_ERROR' => 'Error al cargar los apuntes: ' . htmlspecialchars($e->getMessage()),
-            'APUNTES_RECIENTES' => $errorHTML,
-            'APUNTES_DESTACADOS' => $errorHTML,
-            'SIN_APUNTES_RECIENTES' => 'true',
-            'SIN_APUNTES_DESTACADOS' => 'true'
-        ]);
-    }
+	//obtengo 5 apuntes
+	$lista_apuntes = $apunte->getApuntes(4, true);
+	
+	// Cargo la informacion en el componente
+	foreach ($lista_apuntes as $row) {	
+		$lista_vistos_recientemente .= $apunteExtend->assignVar($row);
+	}
+	
+	// Muestro los componentes con la info
+	$tpl->assignVar(["VISTOS_RECIENTEMENTE" => $lista_vistos_recientemente]);
+
+	// ============================== CARGA DE COMPONENTE PARA TI ==============================
+
+	// Array para guardar el componente con la informacion cargada
+	$lista_para_ti = "";
+
+	//obtengo 5 apuntes
+	$lista_componente_para_ti = $apunte->getApuntes(15, true);
+	
+	// Cargo la informacion en el componente
+	foreach ($lista_componente_para_ti as $row) {
+		$lista_para_ti .= $apunteExtend->assignVar($row);
+	}
+	
+	// Muestro los componentes con la info
+	$tpl->assignVar(["PARA_TI" => $lista_para_ti]);
+
+	// =========================================================================================
+
+	$modalCargado = $modalSubirApunteExtend->assignVar(["MSG_ERROR" => ""]);
+
+	$tpl->assignVar(["MODAL_SUBIR_APUNTE" => $modalCargado]);
+
+	// $tpl->printExtends(["modalSubirApunte"]);
+	
+	if(isset($_POST["titulo"])){
+		$result = $apunte->create($_POST);
+
+		header("Location: ?slug=inicio");
+	}
 
 	/* Imprime la plantilla en la página */
 	$tpl->printToScreen();
