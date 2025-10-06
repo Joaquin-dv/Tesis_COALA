@@ -58,7 +58,7 @@ class Apuntes extends DBAbstract
     public function getCant()
     {
         $row = $this->query("SELECT COUNT(*) AS c FROM apuntes WHERE borrado_en IS NULL");
-        return (int)$row[0]['c'];
+        return (int) $row[0]['c'];
     }
 
 
@@ -67,7 +67,7 @@ class Apuntes extends DBAbstract
         // Evitá inyección por si llega algo raro en $limit
         $limit = (int) $limit;
 
-        $sql = "SELECT a.id, a.titulo AS TITULO, m.nombre AS MATERIA, e.nombre AS ESCUELA, al.anio AS AÑO, ea.promedio_calificacion AS PUNTUACION FROM apuntes a INNER JOIN materias m ON m.id = a.materia_id INNER JOIN escuelas e ON e.id = a.escuela_id INNER JOIN anios_lectivos al ON al.id = a.anio_lectivo_id LEFT JOIN estadisticas_apunte ea ON ea.apunte_id = a.id LEFT JOIN archivos_apunte aa ON aa.apunte_id = a.id AND aa.es_principal = 1 WHERE a.borrado_en IS NULL ORDER BY a.creado_en DESC LIMIT ".$limit."; ";
+        $sql = "SELECT a.id, a.titulo AS TITULO, m.nombre AS MATERIA, e.nombre AS ESCUELA, al.anio AS AÑO, ea.promedio_calificacion AS PUNTUACION FROM apuntes a INNER JOIN materias m ON m.id = a.materia_id INNER JOIN escuelas e ON e.id = a.escuela_id INNER JOIN anios_lectivos al ON al.id = a.anio_lectivo_id LEFT JOIN estadisticas_apunte ea ON ea.apunte_id = a.id LEFT JOIN archivos_apunte aa ON aa.apunte_id = a.id AND aa.es_principal = 1 WHERE a.borrado_en IS NULL ORDER BY a.creado_en DESC LIMIT " . $limit . "; ";
 
         $result = $this->query($sql);
 
@@ -75,12 +75,12 @@ class Apuntes extends DBAbstract
             $temp_array = [];
             foreach ($result as $row) {
                 $temp_array[] = [
-                    "TITULO"     => $row["TITULO"],
-                    "MATERIA"    => $row["MATERIA"],
-                    "ESCUELA"    => $row["ESCUELA"],
-                    "AÑO"        => $row["AÑO"],
-                    "PUNTUACION" => isset($row["PUNTUACION"]) ? (float)$row["PUNTUACION"] : null,
-                    "IMAGEN"     => "",
+                    "TITULO" => $row["TITULO"],
+                    "MATERIA" => $row["MATERIA"],
+                    "ESCUELA" => $row["ESCUELA"],
+                    "AÑO" => $row["AÑO"],
+                    "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : null,
+                    "IMAGEN" => "",
                 ];
             }
             return $temp_array;
@@ -103,107 +103,282 @@ class Apuntes extends DBAbstract
         }
     }
 
-    public function getApuntesPorId($id) {}
-    /* registra un nuevo apunte */
-    public function create($form)
+    public function getApuntesPorId($id)
     {
+    }
+    /* registra un nuevo apunte */
+    // Create viejo (Guardado temporalmente)
+    // public function create($form)
+    // {
+    //     if (!isset($_SESSION[APP_NAME])) {
+    //         return ["errno" => 403, "error" => "No autorizado"];
+    //     }
 
+    //     // Usuario logueado
+    //     $usuario = $_SESSION[APP_NAME]["user"];
+    //     $usuarioId = (int)$usuario["id"];
+
+    //     // Completar datos derivados de sesión
+    //     $form["usuario_cargador_id"] = $usuarioId;
+    //     $form["escuela_id"]          = (int)$usuario["escuela_id"];
+    //     $form["anio_lectivo_id"]     = (int)$usuario["id_anio_lectivo"];
+    //     $form["visibilidad"]         = "publico";
+
+    //     // Validaciones
+    //     if ($form["titulo"] == "") {return ["errno" => 400, "error" => "Falta el título"];}
+    //     if ($form["descripcion"] == "") {return ["errno" => 400, "error" => "Falta la descripción"];}
+    //     if ($form["materia"] == "" || !is_numeric($form["materia"])) {return ["errno" => 400, "error" => "Falta el ID de la materia"];}
+    //     if ($form["anio_lectivo_id"] == "" || !is_numeric($form["anio_lectivo_id"])) {return ["errno" => 400, "error" => "Falta el ID del año lectivo"];}
+    //     if (!in_array($form["visibilidad"], ["publico", "curso"])) {return ["errno" => 400, "error" => "Visibilidad inválida"];}
+    //     if (!isset($_FILES['btn_subir_archivo'])) {return ["errno" => 400, "error" => "Falta el archivo"];}
+
+    //     // Normalización de opcionales
+    //     $curso_id = (isset($form["curso"]) && is_numeric($form["curso"])) ? (int)$form["curso"] : null;
+    //     $nivel    = null; // según tu modelo actual
+    //     $division = (isset($form["division"]) && $form["division"] !== "") ? (string)$form["division"] : null;
+
+    //     // Archivos (nombres temporales)
+    //     $nombreArchivo = $_FILES['btn_subir_archivo']['name'];
+    //     $rutaTemporal  = $_FILES['btn_subir_archivo']['tmp_name'];
+
+    //     // Carpeta destino única por usuario
+    //     $hashUsuario     = hash("sha256", (string)$usuarioId);
+    //     $carpetaDestino  = "data/uploads/" . $hashUsuario . "/";
+    //     if (!file_exists($carpetaDestino)) {
+    //         mkdir($carpetaDestino, 0777, true);
+    //     }
+    //     $safeName  = preg_replace('/[^A-Za-z0-9._-]/', '_', $nombreArchivo);
+    //     $rutaFinal = $carpetaDestino . uniqid('', true) . '_' . $safeName;
+
+    //     // Metadatos
+    //     $finfo    = finfo_open(FILEINFO_MIME_TYPE);
+    //     $tipoMime = finfo_file($finfo, $rutaTemporal);
+    //     finfo_close($finfo);
+
+    //     $sha256 = hash_file('sha256', $rutaTemporal);
+    //     $bytes  = filesize($rutaTemporal);
+
+    //     // Transacción: DB sólo se confirma si el archivo se movió y ambos SPs ok
+    //     $this->begin();
+    //     try {
+    //         // OUT var
+    //         $this->query("SET @apunte_id := 0");
+
+    //         // SP: crear apunte
+    //         $this->callSP(
+    //             "CALL sp_crear_apunte(?,?,?,?,?,?,?,?,?,?, @apunte_id)",
+    //             [
+    //                 (string)$form["titulo"],
+    //                 (string)$form["descripcion"],
+    //                 (int)$form["usuario_cargador_id"],
+    //                 (int)$form["escuela_id"],
+    //                 (int)$form["materia"],
+    //                 (int)$form["anio_lectivo_id"],
+    //                 $curso_id,   // puede ser null
+    //                 $nivel,      // null
+    //                 $division,   // null o string
+    //                 (string)$form["visibilidad"]
+    //             ],
+    //             ["@apunte_id"]
+    //         );
+
+    //         $row = $this->query("SELECT @apunte_id AS id");
+    //         $apunte_id = isset($row[0]["id"]) ? (int)$row[0]["id"] : 0;
+    //         if ($apunte_id <= 0) {
+    //             $this->rollback();
+    //             return ["errno" => 500, "error" => "No se obtuvo el ID del apunte"];
+    //         }
+
+    //         // Mover el archivo físicamente
+    //         if (!move_uploaded_file($rutaTemporal, $rutaFinal)) {
+    //             $this->rollback();
+    //             return ["errno" => 500, "error" => "Error al mover el archivo al destino"];
+    //         }
+
+    //         // OUT var para archivo
+    //         $this->query("SET @archivo_id := 0");
+
+    //         // SP: insertar metadatos del archivo
+    //         $this->callSP(
+    //             "CALL sp_insert_archivo_apunte(?,?,?,?,?,?,?, @archivo_id)",
+    //             [
+    //                 (int)$apunte_id,
+    //                 (string)$rutaFinal,
+    //                 (string)$tipoMime,
+    //                 (int)$bytes,
+    //                 (string)$sha256,
+    //                 1,                // es_principal
+    //                 (int)$usuarioId
+    //             ],
+    //             ["@archivo_id"]
+    //         );
+
+    //         $row2 = $this->query("SELECT @archivo_id AS id");
+    //         $archivo_id = isset($row2[0]["id"]) ? (int)$row2[0]["id"] : 0;
+    //         if ($archivo_id <= 0) {
+    //             $this->rollback();
+    //             return ["errno" => 500, "error" => "No se obtuvo el ID del archivo"];
+    //         }
+
+    //         // OK
+    //         $this->commit();
+    //         return [
+    //             "errno"      => 202,
+    //             "error"      => "El archivo se subió correctamente",
+    //             "apunte_id"  => $apunte_id,
+    //             "archivo_id" => $archivo_id
+    //         ];
+    //     } catch (Throwable $e) {
+    //         $this->rollback();
+    //         return ["errno" => 500, "error" => "DB error: " . $e->getMessage()];
+    //     }
+    // }
+
+
+    public function create(
+        $titulo,
+        $descripcion,
+        $materia,
+        $archivo,           // array estilo $_FILES: ['name' => ..., 'tmp_name' => ...]
+        $curso = null,
+        $division = null,
+        $visibilidad = 'publico'
+    ) {
         if (!isset($_SESSION[APP_NAME])) {
             return ["errno" => 403, "error" => "No autorizado"];
         }
 
-        // Guardamos la info del usuario
+        // Usuario logueado
         $usuario = $_SESSION[APP_NAME]["user"];
+        $usuarioId = (int) $usuario["id"];
+
+        // Completar datos derivados de sesión
+        $usuario_cargador_id = $usuarioId;
+        $escuela_id = (int) $usuario["escuela_id"];
+        $anio_lectivo_id = (int) $usuario["id_anio_lectivo"];
 
         // Validaciones
-        if ($form["titulo"] == "") {
+        if ($titulo == "") {
             return ["errno" => 400, "error" => "Falta el título"];
         }
-        if ($form["descripcion"] == "") {
+        if ($descripcion == "") {
             return ["errno" => 400, "error" => "Falta la descripción"];
         }
-
-        $form["usuario_cargador_id"] = $usuario["id"];
-
-        $form["escuela_id"] = $usuario["escuela_id"];
-
-        if ($form["materia"] == "" || !is_numeric($form["materia"])) {
+        if ($materia == "" || !is_numeric($materia)) {
             return ["errno" => 400, "error" => "Falta el ID de la materia"];
         }
-
-        $form["anio_lectivo_id"] = $usuario["id_anio_lectivo"];
-
-        if ($form["anio_lectivo_id"] == "" || !is_numeric($form["anio_lectivo_id"])) {
+        if ($anio_lectivo_id == "" || !is_numeric($anio_lectivo_id)) {
             return ["errno" => 400, "error" => "Falta el ID del año lectivo"];
         }
-
-        $form["visibilidad"] = "publico";
-
-        if (!in_array($form["visibilidad"], ["publico", "curso"])) {
+        if (!in_array($visibilidad, ["publico", "curso"])) {
             return ["errno" => 400, "error" => "Visibilidad inválida"];
         }
+        if (!is_array($archivo) || !isset($archivo['name'], $archivo['tmp_name'])) {
+            return ["errno" => 400, "error" => "Falta el archivo"];
+        }
 
-        // Campos opcionales
-        $curso_id = is_numeric($form["curso"]) ? $form["curso"] : "NULL";
-        $nivel = "NULL";
-        $division = ($form["division"] != "") ? "'" . $form["division"] . "'" : "NULL";
+        // Archivos (nombres temporales)
+        $nombreArchivo = $archivo['name'];
+        $rutaTemporal = $archivo['tmp_name'];
 
-        // Insertar en la base de datos
-        $sql = "INSERT INTO `apuntes` (`id`, `titulo`, `descripcion`, `usuario_cargador_id`, `escuela_id`, `materia_id`, `anio_lectivo_id`, `curso_id`, `nivel`, `division`, `visibilidad`, `estado`, `verificado_por_docente`, `verificado_por_usuario_id`, `verificado_en`, `estado_ia`, `motivo_rechazo`, `creado_en`, `actualizado_en`, `borrado_en`) 
-                    VALUES (NULL, '" . $form["titulo"] . "', '" . $form["descripcion"] . "', " . $form["usuario_cargador_id"] . ", " . $form["escuela_id"] . ", " . $form["materia"] . ", " . $form["anio_lectivo_id"] . ", " . $curso_id . ", " . $nivel . ", " . $division . ", '" . $form["visibilidad"] . "', 'pendiente', 0, NULL, NULL, 'no_escaneado', NULL, current_timestamp(), current_timestamp(), NULL);";
+        // Metadatos: MIME
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $tipoMime = finfo_file($finfo, $rutaTemporal);
+        finfo_close($finfo);
 
-        $response = $this->query($sql);
+        // Verificar tipo permitido (PDF o imagen)
+        $tiposPermitidos = [
+            'application/pdf',
+            'image/jpeg',
+            'image/png'
+            // 'image/gif'
+        ];
+        if (!in_array($tipoMime, $tiposPermitidos)) {
+            return ["errno" => 400, "error" => "Tipo de archivo no permitido. Solo se aceptan PDF o imágenes."];
+        }
 
-        // Se creo el apunte
-        if ($response > 0) {
-            if (isset($_FILES['btn_subir_archivo'])) {
+        // Normalización de opcionales
+        $curso_id = (isset($curso) && is_numeric($curso)) ? (int) $curso : null;
+        $nivel = null; // según tu modelo actual
+        $division = (isset($division) && $division !== "") ? (string) $division : null;
 
-                $nombreArchivo = $_FILES['btn_subir_archivo']['name'];
-                $rutaTemporal  = $_FILES['btn_subir_archivo']['tmp_name'];
+        // Carpeta destino única por usuario
+        $hashUsuario = hash("sha256", (string) $usuarioId);
+        $carpetaDestino = "data/uploads/" . $hashUsuario . "/";
+        if (!file_exists($carpetaDestino)) {
+            mkdir($carpetaDestino, 0777, true);
+        }
+        $safeName = preg_replace('/[^A-Za-z0-9._-]/', '_', $nombreArchivo);
+        $rutaFinal = $carpetaDestino . uniqid('', true) . '_' . $safeName;
 
-                // Hashear ID del usuario
-                $usuarioId = $usuario["id"];
-                $hashUsuario = hash("sha256", $usuarioId);
+        $sha256 = hash_file('sha256', $rutaTemporal);
+        $bytes = filesize($rutaTemporal);
 
-                // Carpeta destino única por usuario
-                $carpetaDestino = "data/uploads/" . $hashUsuario . "/";
+        // Transacción
+        $this->begin();
+        try {
+            $this->query("SET @apunte_id := 0");
+            $this->callSP(
+                "CALL sp_crear_apunte(?,?,?,?,?,?,?,?,?,?, @apunte_id)",
+                [
+                    (string) $titulo,
+                    (string) $descripcion,
+                    (int) $usuario_cargador_id,
+                    (int) $escuela_id,
+                    (int) $materia,
+                    (int) $anio_lectivo_id,
+                    $curso_id,
+                    $nivel,
+                    $division,
+                    (string) $visibilidad
+                ],
+                ["@apunte_id"]
+            );
 
-                // Sanitizar nombre y generar uno único
-                $safeName = preg_replace('/[^A-Za-z0-9._-]/', '_', $nombreArchivo);
-                $rutaFinal = $carpetaDestino . uniqid('', true) . '_' . $safeName;
-                // var_dump($rutaFinal);
-
-                // Crear la carpeta si no existe
-                if (!file_exists($carpetaDestino)) {
-                    mkdir($carpetaDestino, 0777, true);
-                }
-
-                // === Metadatos ===
-                $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                $tipoMime = finfo_file($finfo, $rutaTemporal);
-                finfo_close($finfo);
-
-                $sha256 = hash_file('sha256', $rutaTemporal);
-                $bytes  = filesize($rutaTemporal);
-
-                if (move_uploaded_file($rutaTemporal, $rutaFinal)) {
-                    $sql_file = "
-                INSERT INTO `archivos_apunte`
-                    (`id`, `apunte_id`, `ruta_archivo`, `tipo_mime`, `bytes`, `sha256`, `es_principal`, `cargado_por_usuario_id`, `cargado_en`)
-                VALUES
-                    (NULL, '" . $response . "', '" . $rutaFinal . "', '" . $tipoMime . "', '" . $bytes . "', '" . $sha256 . "', '1', '" . $usuarioId . "', current_timestamp());
-            ";
-                    $response_file = $this->query($sql_file);
-                } else {
-                    return ["errno" => 500, "error" => "Error al mover el archivo al destino"];
-                }
+            $row = $this->query("SELECT @apunte_id AS id");
+            $apunte_id = isset($row[0]["id"]) ? (int) $row[0]["id"] : 0;
+            if ($apunte_id <= 0) {
+                $this->rollback();
+                return ["errno" => 500, "error" => "No se obtuvo el ID del apunte"];
             }
 
-            // var_dump($response_file);
+            if (!move_uploaded_file($rutaTemporal, $rutaFinal)) {
+                $this->rollback();
+                return ["errno" => 500, "error" => "Error al mover el archivo al destino"];
+            }
 
-            return ["errno" => 202, "error" => "Apunte creado correctamente", "apunte_id" => $response];
-        } else {
-            return ["errno" => 500, "error" => "Error al crear el apunte"];
+            $this->query("SET @archivo_id := 0");
+            $this->callSP(
+                "CALL sp_insert_archivo_apunte(?,?,?,?,?,?,?, @archivo_id)",
+                [
+                    (int) $apunte_id,
+                    (string) $rutaFinal,
+                    (string) $tipoMime,
+                    (int) $bytes,
+                    (string) $sha256,
+                    1,
+                    (int) $usuarioId
+                ],
+                ["@archivo_id"]
+            );
+
+            $row2 = $this->query("SELECT @archivo_id AS id");
+            $archivo_id = isset($row2[0]["id"]) ? (int) $row2[0]["id"] : 0;
+            if ($archivo_id <= 0) {
+                $this->rollback();
+                return ["errno" => 500, "error" => "No se obtuvo el ID del archivo"];
+            }
+
+            $this->commit();
+            return [
+                "errno" => 202,
+                "error" => "El archivo se subió correctamente",
+                "apunte_id" => $apunte_id,
+                "archivo_id" => $archivo_id
+            ];
+        } catch (Throwable $e) {
+            $this->rollback();
+            return ["errno" => 500, "error" => "DB error: " . $e->getMessage()];
         }
     }
 
