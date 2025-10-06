@@ -57,7 +57,6 @@
 
 		header("Location: ?slug=inicio");
 	}
-
 	/* Imprime la plantilla en la página */
 	$tpl->printToScreen();
 	
