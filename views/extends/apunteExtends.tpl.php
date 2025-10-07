@@ -1,6 +1,6 @@
 <article class="apunte">
     <figure>
-        {{ IMAGEN }}
+        <img class="imagen_apunte" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvhxLMRUJm6WP5tRsTPhSPKfBeKsoJebAwnQ&s" alt="Imagen de apunte">
     </figure>
     <section class="informacion">
         <h2>{{ TITULO }}</h2>
@@ -19,6 +19,6 @@
         </section>
         <!-- <h2>{{ TITULO }}</h2>
         <p>{{ MATERIA }} - {{ ESCUELA }}</p>
-        <p>{{ AÑO }} - {{ PUNTUACION }}</p>
+        <p>{{ AÑO }} - {{ PUNTUACION }}</p> -->
     </section>
 </article>
