@@ -20,6 +20,17 @@
     width: 100vw;
 }
 
+.successMsg {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    border-radius: 4px;
+    padding: 0.75rem;
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
 @media screen and (max-width: 750px) {
     .main{
         justify-content: center;
