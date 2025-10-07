@@ -1,5 +1,6 @@
 <?php
 
+
 	// Se carga la plantilla
 	$tpl = new Mopla("inicio");
 
@@ -56,7 +57,6 @@
 
 		header("Location: ?slug=inicio");
 	}
-
 	/* Imprime la plantilla en la página */
 	$tpl->printToScreen();
 	

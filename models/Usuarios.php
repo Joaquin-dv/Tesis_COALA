@@ -15,6 +15,7 @@ class Usuarios extends DBAbstract
     public $id_anio_lectivo;
     public $esta_activo;
     public $correo_verificado_en;
+    public $email_token;
     public $creado_en;
     public $actualizado_en;
     public $borrado_en;
@@ -33,6 +34,7 @@ class Usuarios extends DBAbstract
         $this->id_anio_lectivo = null;
         $this->esta_activo = null;
         $this->correo_verificado_en = null;
+        $this->email_token = null;
         $this->creado_en = "";
         $this->actualizado_en = "";
         $this->borrado_en = null;
@@ -203,6 +205,10 @@ class Usuarios extends DBAbstract
         }
 
         /* correo electrónico encontrado y password correcto */
+        if ((int)$usuario["esta_activo"] === 0) {
+            return ["errno" => 423, "error" => "Tu email aún no fue verificado. Verifícalo para continuar.", "email" => $usuario["correo_electronico"] ?? $form["txt_email"]];
+        }
+
         $this->id                 = $usuario["id"];
         $this->nombre_completo    = $usuario["nombre_completo"];
         $this->email              = $form["txt_email"]; // o $usuario["correo_electronico"]
@@ -227,4 +233,162 @@ class Usuarios extends DBAbstract
 
         return ["errno" => 202, "error" => "Acceso valido"];
     }
+
+    /**
+     * Genera un código de verificación aleatorio de 6 dígitos
+     */
+    public function generarCodigoVerificacion()
+    {
+        return str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * Envía email con código de verificación
+     */
+    public function enviarCodigoVerificacion($email, $codigo, $nombre)
+    {
+        $asunto = "Código de verificación - COALA";
+        $mensaje = "
+        <html>
+        <head>
+            <title>Código de verificación</title>
+        </head>
+        <body>
+            <h2>¡Hola " . $nombre . "!</h2>
+            <p>Gracias por registrarte en COALA. Para completar tu registro, por favor ingresa el siguiente código de verificación:</p>
+            <h1 style='color: #007bff; font-size: 32px; text-align: center; letter-spacing: 5px;'>" . $codigo . "</h1>
+            <p>Este código expirará en 15 minutos.</p>
+            <p>Si no solicitaste este código, puedes ignorar este email.</p>
+            <br>
+            <p>Saludos,<br>El equipo de COALA</p>
+        </body>
+        </html>
+        ";
+
+        $headers = "MIME-Version: 1.0" . "\r\n";
+        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+        $headers .= "From: noreply@coala.com" . "\r\n";
+
+
+        $mail = new PHPMailer\PHPMailer\PHPMailer();
+
+        $mail->CharSet = 'UTF-8';
+        $mail->isSMTP();
+        $mail->SMTPDebug = 0 ;
+        $mail->Host = HOST;
+        $mail->Port = PORT;
+        $mail->SMTPAuth = SMTP_AUTH; //
+        $mail->SMTPSecure = SMTP_SECURE;
+        $mail->Username = REMITENTE;
+        $mail->Password = PASSWORD;
+
+        $mail->setFrom(REMITENTE, NOMBRE);
+        $mail->addAddress($email);
+
+        $mail->isHTML(true);
+
+        $mail->Subject = $asunto;
+        $mail->Body = $mensaje;
+
+        if(!$mail->send()){
+            error_log("Mailer no se pudo enviar el correo!" );
+			return array("errno" => 1, "error" => "No se pudo enviar.");
+        }else{
+			return array("errno" => 0, "error" => "Enviado con exito.");
+		}   
+         mail($email, $asunto, $mensaje, $headers);
+    }
+
+    /**
+     * Registra usuario con código de verificación guardado en email_token
+     */
+    public function registerConVerificacion($form)
+    {
+        /* si el email esta vacio*/
+        if ($form["txt_email"] == "") {
+            return ["errno" => 400, "error" => "Falta email"];
+        }
+
+        /* si el password esta vacio*/
+        if ($form["txt_password"] == "") {
+            return ["errno" => 400, "error" => "Falta contraseña"];
+        }
+
+        if (strlen($form["txt_password"]) < 8) {
+            return ["errno" => 400, "error" => "La contraseña debe tener al menos 8 caracteres"];
+        }
+
+        // Verificar si el email ya existe
+        $response = $this->callSP(
+            "CALL sp_obtener_usuario(?)",
+            [$form["txt_email"]]
+        );
+
+        if (!empty($response["result_sets"][0])) {
+            return ["errno" => 409, "error" => "El email ingresado ya se encuentra registrado"];
+        }
+
+        $password_encripted = password_hash($form["txt_password"], PASSWORD_DEFAULT);
+        $codigo_verificacion = $this->generarCodigoVerificacion();
+        $nombreCompleto = $form['txt_nombre'] . " " . $form['txt_apellido'];
+        $email = strtolower(trim($form["txt_email"]));
+        $estaActivo = 0; // Usuario inactivo hasta verificar email
+        $rolCodigo = 'student';
+        $escuelaId = 1;
+        $actorId = null;
+
+        // Crear usuario con código de verificación en email_token
+        $this->callSP(
+            "CALL sp_crear_usuario_con_token(?,?,?,?,?,?,?,?, @nuevo_id)",
+            [
+                $nombreCompleto,
+                $email,
+                $password_encripted,
+                $estaActivo,
+                $rolCodigo,
+                $escuelaId,
+                $actorId,
+                $codigo_verificacion
+            ]
+        );
+
+        // Enviar email con código
+        if ($this->enviarCodigoVerificacion($email, $codigo_verificacion, $form['txt_nombre'])) {
+            return ["errno" => 201, "error" => "Usuario creado. Se ha enviado un código de verificación a tu email.", "email" => $email];
+        } else {
+            return ["errno" => 500, "error" => "Error al enviar el código de verificación"];
+        }
+    }
+
+    /**
+     * Verifica el código de verificación y activa el usuario
+     */
+    public function verificarCodigo($email, $codigo)
+    {
+        if (empty($email) || empty($codigo)) {
+            return ["errno" => 400, "error" => "Email y código son requeridos"];
+        }
+
+        // Buscar usuario con el código en email_token
+        $response = $this->callSP(
+            "CALL sp_obtener_usuario_con_token(?,?)",
+            [$email, $codigo]
+        );
+
+
+        if (empty($response["result_sets"][0])) {
+            return ["errno" => 404, "error" => "Código de verificación inválido o expirado"];
+        }
+
+        $usuario = $response["result_sets"][0][0];
+
+        // Activar usuario y limpiar token
+        $this->callSP(
+            "CALL sp_activar_usuario(?)",
+            [$usuario['id']]
+        );
+
+        return ["errno" => 202, "error" => "Email verificado correctamente. Ya puedes iniciar sesión."];
+    }
+
 }

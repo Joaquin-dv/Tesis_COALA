@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="views/static/css/general/formulario.css">
-    <link rel="stylesheet" href="views/static/css/login.css">
+    <link rel="stylesheet" href="views/static/css/register.css">
     <link rel="icon" type="image/png" sizes="32x32" href="views/static/img/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="views/static/img/favicon/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="views/static/img/favicon/apple-touch-icon.png">
@@ -19,15 +19,14 @@
         </div>
         <section class="contenedorFormulario">
             <h1 class="poppins-bold">COALA</h1>
-            <h3 class="poppins-semibold">Iniciar Sesión</h3>
-            <form action="?slug=login" method="POST" id="formulario">
-                <input type="email" id="email" name="txt_email" class="campo poppins-semibold" placeholder="Correo electrónico">
-                <input type="password" id="contraseña" name="txt_password" class="campo poppins-semibold" placeholder="Contraseña">
-                <a href="?slug=reestablecer" class="poppins-regular">¿Olvidaste tu contraseña?</a>
-                <input type="submit" value="Entrar" name="btn_login" class="btn poppins-semibold">
+            <h3 class="poppins-semibold">Verificar Email</h3>
+            <p class="poppins-regular texto-verificacion">Hemos enviado un código de verificación de 6 dígitos a tu correo electrónico. Por favor, ingrésalo a continuación:</p>
+            <form action="?slug=registerConfirm" method="POST" id="formulario">
+                <input type="text" id="codigo" name="txt_codigo" class="campo poppins-semibold" placeholder="Código de verificación" maxlength="6" pattern="[0-9]{6}" required>
+                <input type="submit" value="Verificar" name="btn_verificar" class="btn poppins-semibold">
                 <div class="fraseLink">
-                    <span class="poppins-regular">¿No tienes cuenta?</span>
-                    <a href="?slug=register" class="link poppins-bold">Registrate</a>
+                    <span class="poppins-regular">¿No recibiste el código?</span><a href="?slug=register"
+                        class="link poppins-bold">Registrarse nuevamente</a>
                 </div>
                 <div class="errorMsg" id="errorGeneral">{{ MSG_ERROR }}</div>
                 <div class="successMsg" id="successGeneral">{{ MSG_SUCCESS }}</div>
