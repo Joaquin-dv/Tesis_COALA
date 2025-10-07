@@ -9,12 +9,14 @@
 		$usuario = new Usuarios();	
 
 		/* realiza el registro */
-		$response =$usuario->register($_POST);
-
+		$response = $usuario->registerConVerificacion($_POST);
 		
-		/* si se creo el usuario correctamente entonces va al login*/
-		if($response["errno"] == 202){
-			header("Location: ?slug=login");
+		/* si se creo el usuario correctamente entonces va al registerConfirm para verificar el email*/
+		if($response["errno"] == 201){
+			/* se guarda el email en la sesión */
+			$_SESSION['email_verificacion'] = $response["email"];
+			/* se redirige al registerConfirm */
+			header("Location: ?slug=registerConfirm");
 		}
 
 		$msg_error = $response["error"];
@@ -33,4 +35,5 @@
 
 	/* Imprime la plantilla en la página */
 	$tpl->printToScreen();
+
 ?>

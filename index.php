@@ -15,6 +15,10 @@
 	require_once "lib/mopla/Mopla.php"; /*Motor de plantillas*/
 	require_once "lib/mopla/Extends.php"; /*Motor de componentes*/
 
+	include 'lib/Mailer/src/PHPMailer.php';
+	include 'lib/Mailer/src/SMTP.php';
+	include 'lib/Mailer/src/Exception.php';
+
 	session_start();
 	
 	$section = "landing"; /*por defecto section es landing*/
@@ -24,7 +28,7 @@
 	}
 
 	$secciones_permitidas_logeado = array("inicio","explorar","mochila","clases");
-	$secciones_permitidas_deslogeado = array("landing","login","registro","error404");
+	$secciones_permitidas_deslogeado = array("landing","login","registro","registerConfirm","error404");
 
 	/* Se especifico una sección pero esta no existe */
 	if(!file_exists("controllers/".$section."Controller.php")){
