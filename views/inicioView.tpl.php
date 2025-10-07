@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/views/static/css/inicio.css">
     <link rel="stylesheet" href="/views/static/css/modal.css">
+    <link rel="stylesheet" href="/views/static/css/toast.css">
     <link rel="stylesheet" href="/views/static/css/style_apunte.css">
     <script src="https://kit.fontawesome.com/f63493d67a.js" crossorigin="anonymous"></script>
     <link rel="icon" type="image/png" sizes="32x32" href="views/static/img/favicon/favicon-32x32.png">
