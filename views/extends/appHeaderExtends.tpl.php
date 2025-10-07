@@ -12,7 +12,7 @@
 
 
     <section class="perfil">
-        <img id="perfil-img" src="/views/static/img/inicio/foto_perfil.jpg" alt="foto de perfil">
+        <img id="perfil-img" src="https://api.dicebear.com/9.x/initials/svg?seed={{ NOMBRE_USUARIO }}" alt="avatar" />
         <ul id="menu-desplegable" class="oculto">
             <li><a href="?slug=perfil">Perfil</a></li>
             <li><a href="?slug=logout">Cerrar sesión</a></li>

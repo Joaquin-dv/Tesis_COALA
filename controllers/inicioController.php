@@ -52,10 +52,12 @@
 	// $tpl->printExtends(["modalSubirApunte"]);
 	
 	if(isset($_POST["titulo"])){
-		$result = $apunte->create($_POST);
+		// $result = $apunte->create($_POST);
 
 		header("Location: ?slug=inicio");
 	}
+
+	$tpl->assignVar(["NOMBRE_USUARIO" => $_SESSION[APP_NAME]['user']['nombre_completo']]);
 
 	/* Imprime la plantilla en la página */
 	$tpl->printToScreen();
