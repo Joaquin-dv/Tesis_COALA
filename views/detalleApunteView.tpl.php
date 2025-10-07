@@ -85,29 +85,14 @@
             </section>
         </section>
         <section class="contenedor_archivos_apunte">
-            <div class="acciones">
-                <label for="selector">Elegí un archivo:</label><br>
-                <select id="selector">
-                    <option value="">-- Seleccionar archivo --</option>
-                    {% for archivo in archivos %}
-                        <option value="{{ archivo.ruta }}">{{ archivo.nombre }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+                
 
-            <div class="visor" id="visor">
-                <p>Seleccioná un archivo para verlo</p>
-            </div>
+            <div id="visor" class="visor-archivo"></div>
 
-            <div class="acciones">
-                <a id="descargar" href="#" download>
-                    <button class="btn_descargar">Descargar</button>
-                </a>
-            </div>
+            <a id="descargar" href="#" download>Descargar archivo</a>
         </section>
         <section class="contenedor_botones_detalle_apunte">
 
-            <button class="btn_descargar">Descargar</button>
             <button class="btn_reportar" id="btnAbrirPopup">Reportar</button>
 
         </section>
@@ -269,6 +254,7 @@
     </main>
 
     <script src="views/static/js/puntuarApunte.js"></script>
+    <script src="views/static/js/detalleApunte.js"></script>
 </body>
 
 </html>
