@@ -1,4 +1,4 @@
-
+// Menu desplegable del perfil
 document.addEventListener("DOMContentLoaded", () => {
     const perfilImg = document.getElementById("perfil-img");
     const menu = document.getElementById("menu-desplegable");
