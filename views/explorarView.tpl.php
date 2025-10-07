@@ -11,6 +11,7 @@
                     </div>
                 </section>
             </section>
+
             <section class="contenedor_apuntes">
                 {{ EXPLORAR }}
             </section>

@@ -1,5 +1,6 @@
 <?php
 
+
 	// Se carga la plantilla
 	$tpl = new Mopla("inicio");
 

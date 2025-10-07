@@ -41,6 +41,7 @@ i#cerrar_modal {
     border: none;
     width: 100%;
 }
+
 .datos_apunte {
     display: flex;
     gap: 1em;
