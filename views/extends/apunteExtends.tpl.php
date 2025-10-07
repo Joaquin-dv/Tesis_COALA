@@ -1,4 +1,5 @@
-<article class="apunte">
+<a href="?slug=detalleApunte">
+    <article class="apunte">
     <figure>
         <img class="imagen_apunte" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvhxLMRUJm6WP5tRsTPhSPKfBeKsoJebAwnQ&s" alt="Imagen de apunte">
         {{ IMAGEN }}
@@ -23,3 +24,4 @@
         <p>{{ AÑO }} - {{ PUNTUACION }}</p> -->
     </section>
 </article>
+</a>
