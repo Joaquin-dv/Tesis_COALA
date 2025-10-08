@@ -15,17 +15,18 @@
         </section>
 
         <h2 class="vistos_recientemente">Subidos recientemente</h2>
-        <section class="contenedor_apuntes">
-            {{ VISTOS_RECIENTEMENTE }}
+        <section id="contenedor_vistos_recientemente" class="contenedor_apuntes">
+            
         </section>
         <h2 class="para_ti">Para ti</h2>
-        <section class="contenedor_apuntes">
-            {{ PARA_TI }}
+        <section id="contenedor_para_ti" class="contenedor_apuntes">
+            
         </section>
         {{ MODAL_SUBIR_APUNTE }}
     </main>
+    <script src="views/static/js/inicio.js"></script>
     <script src="views/static/js/modal.js"></script>
-    <script src="views/static/js/validacionFormulario.js"></script>
+    <!-- <script src="views/static/js/validacionFormulario.js"></script> -->
     <script src="views/static/js/generalesScript.js"></script>
 </body>
 
