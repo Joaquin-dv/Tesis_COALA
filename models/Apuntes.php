@@ -90,6 +90,20 @@ class Apuntes extends DBAbstract
         return $result;
     }
 
+    /**
+     * Obtiene todos los apuntes de un alumno por su ID
+     */
+    public function getApuntesByAlumno($alumno_id)
+    {
+        if (!is_numeric($alumno_id) || $alumno_id <= 0) {
+            return ["errno" => 500, "error" => "No se obtuvo el ID del alumno correctamente"];;
+        }
+        $sql = "SELECT * FROM apuntes WHERE usuario_cargador_id = " . (int)$alumno_id . " AND borrado_en IS NULL ORDER BY creado_en DESC;";
+        $result = $this->query($sql);
+        return $result;
+    }
+    
+
     public function getPromedioByIDApunte($apunte_id)
     {
         $sql = "SELECT promedio_calificacion FROM `estadisticas_apunte` WHERE apunte_id = " . $apunte_id . ";";
