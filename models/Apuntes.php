@@ -58,7 +58,7 @@ class Apuntes extends DBAbstract
     public function getCantAprobados()
     {
         $row = $this->callSP("CALL sp_obtener_cantidad_apuntes_aprobados()");
-        return (int) $row[0]['c'];
+        return (int) $row['result_sets'][0][0]['c'];
     }
 
 
@@ -66,14 +66,15 @@ class Apuntes extends DBAbstract
     {
         // Evitá inyección por si llega algo raro en $limit
         $limit = (int) $limit;
-
-        $sql = "SELECT a.id, a.titulo AS TITULO, m.nombre AS MATERIA, e.nombre AS ESCUELA, al.anio AS AÑO, ea.promedio_calificacion AS PUNTUACION FROM apuntes a INNER JOIN materias m ON m.id = a.materia_id INNER JOIN escuelas e ON e.id = a.escuela_id INNER JOIN anios_lectivos al ON al.id = a.anio_lectivo_id LEFT JOIN estadisticas_apunte ea ON ea.apunte_id = a.id LEFT JOIN archivos_apunte aa ON aa.apunte_id = a.id AND aa.es_principal = 1 WHERE a.borrado_en IS NULL ORDER BY a.creado_en DESC LIMIT " . $limit . "; ";
-
-        $result = $this->query($sql);
+        
+        $result = $this->callSP(
+                "CALL sp_obtener_apuntes(?)",
+                [$limit]
+            );
 
         if ($formated === true) {
             $temp_array = [];
-            foreach ($result as $row) {
+            foreach ($result['result_sets'][0] as $row) {
                 $temp_array[] = [
                     "TITULO" => $row["TITULO"],
                     "MATERIA" => $row["MATERIA"],
@@ -102,7 +103,7 @@ class Apuntes extends DBAbstract
         $result = $this->query($sql);
         return $result;
     }
-    
+
 
     public function getPromedioByIDApunte($apunte_id)
     {
