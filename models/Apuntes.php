@@ -55,9 +55,9 @@ class Apuntes extends DBAbstract
      * Retorna la cantidad de apuntes
      * 
      * */
-    public function getCant()
+    public function getCantAprobados()
     {
-        $row = $this->query("SELECT COUNT(*) AS c FROM apuntes WHERE borrado_en IS NULL");
+        $row = $this->callSP("CALL sp_obtener_cantidad_apuntes_aprobados()");
         return (int) $row[0]['c'];
     }
 
@@ -434,5 +434,5 @@ class Apuntes extends DBAbstract
         $this->query($sql);
 
         return ["errno" => 202, "error" => "Apunte eliminado correctamente"];
-    }
+        }
 }
