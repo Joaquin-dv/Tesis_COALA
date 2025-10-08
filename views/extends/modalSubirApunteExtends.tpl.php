@@ -32,7 +32,7 @@
                     <i class="fa-solid fa-file-arrow-up"></i>
                     Subir archivo
                 </label>
-                <button id="subir_apunte" name="btn_subir_apunte" type="submit" class="btn_modal poppins-semibold" onclick=cargando()>Subir Apunte</button>
+                <button id="subir_apunte" name="btn_subir_apunte" type="submit" class="btn_modal poppins-semibold" onclick=simulacion()>Subir Apunte</button>
                 <div class="errorMsg" id="errorGeneral">{{ MSG_ERROR }}</div>
             </form>
         </section>
