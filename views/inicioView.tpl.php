@@ -24,6 +24,12 @@
         </section>
         {{ MODAL_SUBIR_APUNTE }}
     </main>
+    <footer class="mobile-nav">
+        <a href="?slug=inicio"><i class="fa-solid fa-house"></i></a>
+        <a href="?slug=explorar"><i class="fa-solid fa-magnifying-glass"></i></a>
+        <a href="?slug=mochila"><i class="fa-solid fa-box-archive"></i></a>
+        <a href="?slug=clases"><i class="fa-solid fa-school"></i></a>
+    </footer>
     <script src="views/static/js/inicio.js"></script>
     <script src="views/static/js/modal.js"></script>
     <!-- <script src="views/static/js/validacionFormulario.js"></script> -->
