@@ -21,6 +21,7 @@
         <section class="inicios_sesion">
             <a href="?slug=login" class="inicio_sesion">Iniciar sesión</a>
             <a href="?slug=register" class="registrarse">Registrarme</a>
+            <a href="?slug=login" class="acceso_movil">Acceder</a>
         </section>
     </header>
     <main>

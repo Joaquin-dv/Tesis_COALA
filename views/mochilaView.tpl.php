@@ -28,39 +28,55 @@
             </div>
         </section>
 
-        <h2 class="vistos_recientemente">Apuntes favoritos</h2>
-        <section class="contenedor_apuntes">
-            @extends(apunte_mochila)
-            @extends(apunte_mochila)
-            @extends(apunte_mochila)
-            @extends(apunte_mochila)
+        <section class="tabs">
+            <button class="btn_tab poppins-semibold" onclick="mostrarSeccion('todos')">Todos</button>
+            <button class="btn_tab poppins-semibold" onclick="mostrarSeccion('favoritos')">Favoritos</button>
+            <button class="btn_tab poppins-semibold" onclick="mostrarSeccion('pendientes')">Pendientes</button>
+            <button class="btn_tab poppins-semibold" onclick="mostrarSeccion('aprobados')">Aprobados</button>
+            <button class="btn_tab poppins-semibold" onclick="mostrarSeccion('rechazados')">Rechazados</button>
         </section>
-        
-        <h2 class="para_ti">Tus apuntes</h2>
+
+        <div id="favoritos" class="bloque_apuntes">
+            <h2 class="vistos_recientemente">Apuntes favoritos</h2>
+            <section class="contenedor_apuntes">
+                @extends(apunte_mochila)
+                @extends(apunte_mochila)
+                @extends(apunte_mochila)
+                @extends(apunte_mochila)
+            </section>
+        </div>
+
+        <div id="aprobados"class="bloque_apuntes">
         <h3>Aprobados</h3>
-        <section class="contenedor_apuntes">
-            @extends(apunte_mochila)
-            @extends(apunte_mochila)
-            @extends(apunte_mochila)
-        </section>
+            <section class="contenedor_apuntes">
+                @extends(apunte_mochila)
+                @extends(apunte_mochila)
+                @extends(apunte_mochila)
+            </section>
+        </div>
 
-        <h3>Pendientes</h3>
-        <section class="contenedor_apuntes">
-            @extends(apunte_mochila)
-            @extends(apunte_mochila)
-        </section>
+        <div id="pendientes" class="bloque_apuntes">
+            <h3>Pendientes</h3>
+            <section class="contenedor_apuntes">
+                @extends(apunte_mochila)
+                @extends(apunte_mochila)
+            </section>
+        </div>
 
-        <h3>Rechazados</h3>
-        <section class="contenedor_apuntes">
-            @extends(apunte_mochila)
-            @extends(apunte_mochila)
-            @extends(apunte_mochila)
-            @extends(apunte_mochila)
-            @extends(apunte_mochila)
-        </section>
+        <div id="rechazados" class="bloque_apuntes">
+            <h3>Rechazados</h3>
+            <section class="contenedor_apuntes">
+                @extends(apunte_mochila)
+                @extends(apunte_mochila)
+                @extends(apunte_mochila)
+                @extends(apunte_mochila)
+                @extends(apunte_mochila)
+            </section>
+        </div>
         @extends(modalSubirApunte)
     </main>
     <script src="views/static/js/modal.js"></script>
+    <script src="views/static/js/mochila.js"></script>
 </body>
 
 </html>

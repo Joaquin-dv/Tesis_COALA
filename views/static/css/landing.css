@@ -47,6 +47,16 @@ body {
 				border-radius: 5px;
 				color: var(--bg-boton-verde);
 			}
+
+			.acceso_movil{
+				display: none;
+				background-color: var(--bg-celeste);
+				border: solid 2px var(--bg-celeste);
+				text-decoration: none;
+				padding: 8px 20px;
+				border-radius: 5px;
+				color: #ffffff;
+			}
 		}
 	}
 
@@ -150,5 +160,43 @@ body {
 		padding: 1.5em;
 		font-size: 16px;
 
+	}
+}
+
+@media screen and (max-width: 480px) {			
+	a.inicio_sesion {
+		display: none;
+	}
+
+	.registrarse {
+		display: none;
+	}
+	.acceso_movil{
+		display: flex !important;
+		font-size: 19px;
+	}
+	body{
+		main{
+			padding:1em 2em;
+		}
+	}
+	.contenedor_imagen_informacion {
+		width: 100% !important;
+		height: 200px !important;
+	}
+	.carta_informacion {
+		display: flex;
+		width: 100% !important;
+		flex-direction: column;
+		align-items: center;
+	}
+	.informacion{
+		max-width: 100% !important;
+	}
+	.carta_informacion:nth-child(even){
+		flex-direction: column !important;
+	}
+	.boton_explorar_coala{
+		font-size: 18px;
 	}
 }
