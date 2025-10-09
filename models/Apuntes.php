@@ -330,9 +330,9 @@ class Apuntes extends DBAbstract
 
         // Verificar tipo permitido (PDF o imagen)
         $tiposPermitidos = [
-            'application/pdf',
-            'image/jpeg',
-            'image/png'
+            'application/pdf'
+            // 'image/jpeg',
+            // 'image/png'
             // 'image/gif'
         ];
         if (!in_array($tipoMime, $tiposPermitidos)) {
@@ -346,7 +346,7 @@ class Apuntes extends DBAbstract
 
         // Carpeta destino única por usuario
         $hashUsuario = hash("sha256", (string) $usuarioId);
-        $carpetaDestino = "data/uploads/" . $hashUsuario . "/";
+        $carpetaDestino = "../data/uploads/" . $hashUsuario . "/";
         if (!file_exists($carpetaDestino)) {
             mkdir($carpetaDestino, 0777, true);
         }
