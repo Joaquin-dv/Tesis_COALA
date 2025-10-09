@@ -41,5 +41,21 @@
 
             return $result[0]["nombre"];
         }
+
+        public function getCursos($id_escuela, $id_anio_lectivo) {
+            $sql = "SELECT * FROM `cursos` WHERE escuela_id = ".$id_escuela." AND anio_lectivo_id = ".$id_anio_lectivo." ORDER BY id ASC;";
+
+            $result = $this->query($sql);
+
+            return $result;
+        }
+
+        public function getCursoByNivelandDivision($nivel, $division, $id_escuela, $id_anio_lectivo) {
+            $sql = "SELECT * FROM `cursos` WHERE nivel = ".$nivel." AND division = '".$division."' AND escuela_id = ".$id_escuela." AND anio_lectivo_id = ".$id_anio_lectivo." ORDER BY id ASC;";
+
+            $result = $this->query($sql);
+
+            return $result;
+        }
     }
 ?>

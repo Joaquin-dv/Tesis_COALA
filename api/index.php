@@ -1,10 +1,11 @@
 <?php
+session_start();
 
 header("Content-Type: application/json");
 
 $method = $_SERVER['REQUEST_METHOD'];
 
-if ($method === 'GET') {
+if ($method == 'GET') {
     if (!isset($_GET['model'])) {
         echo json_encode("No se especifico un modelo.");
         exit();
@@ -38,8 +39,7 @@ if ($method === 'GET') {
     $respuesta = call_user_func_array([$modelo, $metodo], $params ? array_values($params) : []);
     echo json_encode($respuesta);
 
-} elseif ($method === 'POST') {
-    // Recibe parámetros por body (JSON o x-www-form-urlencoded)
+} elseif ($method == 'POST') {
     $input = file_get_contents('php://input');
     $bodyParams = [];
     $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
@@ -79,7 +79,21 @@ if ($method === 'GET') {
         exit();
     }
 
-    $respuesta = call_user_func_array([$modelo, $metodo], $bodyParams ? array_values($bodyParams) : []);
+    // Si hay archivos, agregarlos como parámetro
+    if (!empty($_FILES['btn_subir_archivo'])) {
+        $params = [
+            $bodyParams['titulo'] ?? '',
+            $bodyParams['descripcion'] ?? '',
+            $bodyParams['materia'] ?? '',
+            $_FILES['btn_subir_archivo'],
+            $bodyParams['curso'] ?? null,
+            $bodyParams['division'] ?? null,
+            $bodyParams['visibilidad'] ?? 'publico'
+        ];
+        $respuesta = call_user_func_array([$modelo, $metodo], $params);
+    } else {
+        $respuesta = call_user_func_array([$modelo, $metodo], $bodyParams ? array_values($bodyParams) : []);
+    }
     echo json_encode($respuesta);
 
 } else {
