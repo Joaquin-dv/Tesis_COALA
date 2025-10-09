@@ -88,31 +88,47 @@ class Apuntes extends DBAbstract
         }
 
         // Si no querés formateo, devolvés el resultset crudo
-        return $result;
+        return $result['result_sets'][0];
     }
 
     /**
      * Obtiene todos los apuntes de un alumno por su ID
      */
-    public function getApuntesByAlumno($alumno_id)
+    public function getApuntesByAlumno($alumno_id, bool $formated = false)
     {
         if (!is_numeric($alumno_id) || $alumno_id <= 0) {
             return ["errno" => 500, "error" => "No se obtuvo el ID del alumno correctamente"];;
         }
-        $sql = "SELECT * FROM apuntes WHERE usuario_cargador_id = " . (int)$alumno_id . " AND borrado_en IS NULL ORDER BY creado_en DESC;";
-        $result = $this->query($sql);
-        return $result;
+
+        $result = $this->callSP("CALL sp_obtener_apuntes_por_alumno()", [$alumno_id]);
+
+        if ($formated === true) {
+            $temp_array = [];
+            foreach ($result['result_sets'][0] as $row) {
+                $temp_array[] = [
+                    "TITULO" => $row["TITULO"],
+                    "MATERIA" => $row["MATERIA"],
+                    "ESCUELA" => $row["ESCUELA"],
+                    "AÑO" => $row["AÑO"],
+                    "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : null,
+                    "IMAGEN" => "",
+                ];
+            }
+            return $temp_array;
+        }
+
+        // Si no querés formateo, devolvés el resultset crudo
+        return $result['result_sets'][0];
     }
 
 
     public function getPromedioByIDApunte($apunte_id)
     {
-        $sql = "SELECT promedio_calificacion FROM `estadisticas_apunte` WHERE apunte_id = " . $apunte_id . ";";
+        //
+        $result = $this->callSP("CALL sp_obtener_promedio_por_apunte_id()", [$apunte_id]);
 
-        $result = $this->query($sql);
-
-        if (count($result) > 0) {
-            return (float) $result[0]["promedio_calificacion"];
+        if (count($result['result_sets'][0]) > 0) {
+            return (float) $result['result_sets'][0]["promedio_calificacion"];
         } else {
             return 0;
         }
@@ -120,6 +136,17 @@ class Apuntes extends DBAbstract
 
     public function getApuntesPorId($id)
     {
+        if (!is_numeric($id) || $id <= 0) {
+            return ["errno" => 400, "error" => "ID de apunte inválido"];
+        }
+
+        $result = $this->callSP("CALL sp_obtener_apunte_por_id()", [$id]);
+
+        if (count($result['result_sets'][0]) == 0) {
+            return ["errno" => 404, "error" => "No se encontró el apunte"];
+        }
+
+        return $result['result_sets'][0][0];
     }
     /* registra un nuevo apunte */
     // Create viejo (Guardado temporalmente)
@@ -426,12 +453,17 @@ class Apuntes extends DBAbstract
         // }
 
         // Campos opcionales
-        $updates = [];
-
-        $sql = "UPDATE `apuntes` SET `titulo` = '" . $form["titulo"] . "', `descripcion` = '" . $form["descripcion"] . "', `verificado_por_docente` = '0', `verificado_por_usuario_id` = 'null' WHERE `apuntes`.`id` = " . $apunte_id . ";";
-
-        $response = $this->query($sql);
-        // var_dump($response);
+        $updates = [];        
+        
+        $response = $this->callSP(
+                "CALL sp_update_apunte(?,?,?)",
+                [
+                    (string) $form["titulo"],
+                    (string) $form["descripcion"],
+                    (int) $apunte_id
+                ]
+            );
+        
         if ($response > 0) {
             return ["errno" => 200, "error" => "Apunte actualizado correctamente"];
         } else {
@@ -445,9 +477,13 @@ class Apuntes extends DBAbstract
             return ["errno" => 400, "error" => "ID de apunte inválido"];
         }
 
-        $sql = "UPDATE `apuntes` SET `borrado_en` = current_timestamp() WHERE `id` = " . $apunte_id . " AND `borrado_en` IS NULL;";
-        $this->query($sql);
+        $response = $this->callSP("sp_delete_apunte", [$apunte_id]);
 
-        return ["errno" => 202, "error" => "Apunte eliminado correctamente"];
+        if ($response > 0) {
+            return ["errno" => 200, "error" => "Apunte borrado correctamente"];
+        } else {
+            return ["errno" => 500, "error" => "Error al borrar el apunte"];
         }
+    }
+
 }
