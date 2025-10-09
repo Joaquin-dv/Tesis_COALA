@@ -11,7 +11,7 @@
   width: 13px;
   height: 13px;
   border-radius: 50%;
-  background: #fff;
+  background: color-mix(in srgb, var(--color-accion) 50%, white);
   animation-timing-function: cubic-bezier(0, 1, 1, 0);
 }
 
@@ -68,7 +68,7 @@
 .popup-cargando{
     width: 480px;
     height: 380px;
-    background-color: color-mix(in srgb, var(--color-accion) 50%, white);
+    background-color: #fff;
 }
 img.img_carga {
     width: 100%;

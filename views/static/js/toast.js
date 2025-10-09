@@ -20,8 +20,8 @@ function error(){
     text: "Hubo un problema al subir el apunte",
     showCloseButton: true,
     showConfirmButton: false,
-    timer: 4000,
-    timerProgressBar: true,
+    timer: 3000,
+    timerProgressBar: false,
 });     
 }
 
@@ -31,7 +31,15 @@ function exito(){
     text:  "Apunte subido con exito",
     showCloseButton: true,
     showConfirmButton: false,
-    timer: 4000,
-    timerProgressBar:true, 
+    timer: 3000,
+    timerProgressBar:false, 
 });     
+}
+
+function simulacion() {
+    cargando(); 
+    setTimeout(() => {
+        Swal.close();
+        exito();
+    }, 2000);
 }
