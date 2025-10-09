@@ -2,153 +2,406 @@
 
 html,
 body {
-	height: 100%;
-	scroll-behavior: smooth;
+  height: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ===== HEADER ===== */
+header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color: var(--bg-header);
+	padding: 0 2em!important;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.07);
+	position: sticky; /* ✅ el header queda fijo al hacer scroll */
+	top: 0; /* ✅ se pega arriba */
+	z-index: 1000; /* ✅ no se tapa con el contenido */
+	flex-shrink: 0; /* ✅ evita que se deforme o colapse */
+	height: 70px;
+}
+
+/* Elección landing */
+header .eleccion_landing {
+  height: 100%;
+  display: flex;
+  gap: 1em;
+}
+
+header .eleccion_landing button {
+    border: none;
+    background-color: transparent;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+	font-weight: 900;
+	color: rgba(153, 153, 153, 0.933);
+	transition: all 0.3s ease;
+}
+
+header .eleccion_landing button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+	border-radius: 10px;
+	border-bottom: 2px solid var(--bg-boton-verde);
+}
+
+header .eleccion_landing button.active {
+  color: var(--bg-boton-verde);
+	font-weight: 900;
+	border-bottom: 2px solid var(--bg-boton-verde);
+}
+
+
+
+
+header .logo_secundario {
+  width: 110px;
+  height: auto;
+  overflow: hidden;
+}
+
+header .logo_secundario img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+header .inicios_sesion .registrarse {
+  background-color: transparent;
+  border: solid 2px var(--bg-boton-verde);
+  text-decoration: none;
+  padding: 8px 30px;
+  border-radius: 5px;
+  color: var(--bg-boton-verde);
+  transition: all 0.8s ease;
+}
+
+header .inicios_sesion .registrarse:hover {
+  background-color: var(--bg-boton-verde);
+  color: var(--txt-blanco);
+}
+
+/* ===== MAIN ===== */
+main {
+	flex: 1;
 	display: flex;
 	flex-direction: column;
-	min-height: 100vh;
-
-	header {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		padding: 1em;
-
-		.logo_secundario {
-			width: 110px;
-			height: auto;
-			overflow: hidden;
-
-			img {
-				width: 100%;
-				height: 100%;
-				object-fit: cover;
-			}
-		}
-
-		.inicios_sesion {
-			.inicio_sesion {
-				background-color: var(--bg-celeste);
-				border: solid 2px var(--bg-celeste);
-				text-decoration: none;
-				padding: 8px 20px;
-				border-radius: 5px;
-				color: #ffffff;
-			}
-
-			.registrarse {
-				background-color: transparent;
-				border: solid 2px var(--bg-boton-verde);
-				text-decoration: none;
-				padding: 8px 20px;
-				border-radius: 5px;
-				color: var(--bg-boton-verde);
-			}
-		}
-	}
-
-	main {
-		display: flex;
-		flex-direction: column;
-
-		.eslogan {
-			height: calc(100vh - 60px);
-			background-color: #F7FAFC;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-
-			.eslogan_texto {
-				display: flex;
-				flex-direction: column;
-
-				span {
-					font-weight: bolder;
-					font-size: 25px;
-					margin: 0.2em;
-				}
-			}
-
-			.contenedor_logo {
-				width: 250px;
-				height: 250px;
-				overflow: hidden;
-
-				img {
-					width: 100%;
-					height: 100%;
-					object-fit: cover;
-				}
-			}
-
-			.boton_explorar_coala {
-				border: none;
-				background-color: var(--bg-boton-verde);
-				color: var(--txt-blanco);
-				padding: 10px 12px;
-				border-radius: 5px;
-				margin: 1em;
-			}
-		}
-
-		.informacion_de_coala {
-			background-color: #F7FAFC;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			gap: 1em;
-
-			.carta_informacion:nth-child(even) {
-				flex-direction: row-reverse;
-			}
-
-			.carta_informacion {
-				display: flex;
-				width: 80%;
-
-				.contenedor_imagen_informacion {
-					width: 50%;
-					height: 300px;
-					overflow: hidden;
-					border-radius: 20px;
-
-					img {
-						width: 100%;
-						height: 100%;
-						object-fit: cover;
-					}
-				}
-
-				.informacion {
-					background-color: #F7FAFC;
-					max-width: 50%;
-					display: flex;
-					flex-direction: column;
-					align-items: start;
-					padding: 1em;
-
-					h2 {
-						font-size: 35px;
-					}
-
-					p {
-						font-size: 18px;
-					}
-				}
-			}
-		}
-	}
-
-	footer {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		padding: 1.5em;
-		font-size: 16px;
-
-	}
+	align-items: center;
+  padding: 0!important;
 }
+
+/* Eslogan */
+main .eslogan {
+  height: calc(100vh - 60px);
+  background-color: #f7fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+main .eslogan .eslogan_texto {
+  display: flex;
+  flex-direction: column;
+}
+
+main .eslogan .eslogan_texto span {
+  font-weight: bolder;
+  font-size: 30px;
+  margin: 0.2em;
+  text-align: center;
+}
+
+main .eslogan .contenedor_logo {
+  width: 210px;
+  height: 210px;
+  overflow: hidden;
+}
+
+main .eslogan .contenedor_logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+main .eslogan .boton_explorar_coala {
+  border: none;
+  background-color: var(--bg-boton-verde);
+  color: var(--txt-blanco);
+  padding: 10px 12px;
+  border-radius: 5px;
+  margin: 1em;
+}
+
+/* Información de COALA */
+main .informacion_de_coala .carta_informacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2em;
+  background-color: #f7fafc;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: min(100%, 1100px); /* ✅ no se pasan del ancho del viewport */
+  margin: 1em auto;
+  transition: all 0.4s ease;
+}
+
+main .informacion_de_coala .carta_informacion:nth-child(even) {
+  flex-direction: row-reverse;
+}
+
+
+main .informacion_de_coala .contenedor_imagen_informacion {
+  width: 50%;
+  height: 320px;
+  overflow: hidden;
+}
+
+main .informacion_de_coala .contenedor_imagen_informacion img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+main .informacion_de_coala .informacion {
+  width: 50%;
+  padding: 2em;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1em;
+}
+
+main .informacion_de_coala .informacion h2 {
+  font-size: 2rem;
+  color: #1b557c;
+}
+
+main .informacion_de_coala .informacion p {
+  font-size: 1.1rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+
+
+
+@media (max-width: 900px) {
+  main .informacion_de_coala .carta_informacion {
+    flex-direction: column !important; /* ✅ fuerza imagen arriba */
+    width: 90%;
+    gap: 1em;
+  }
+
+  main .informacion_de_coala .contenedor_imagen_informacion {
+    width: 100%;
+    height: 240px;
+  }
+
+  main .informacion_de_coala .informacion {
+    width: 100%;
+    text-align: center;
+    align-items: center;
+  }
+
+  main .informacion_de_coala .informacion h2 {
+    font-size: 1.7rem;
+  }
+
+  main .informacion_de_coala .informacion p {
+    font-size: 1rem;
+  }
+}
+
+
+@media (max-width: 480px) {
+  main .informacion_de_coala .contenedor_imagen_informacion {
+    height: 180px;
+  }
+
+  main .informacion_de_coala .informacion {
+    padding: 1em;
+  }
+
+  main .informacion_de_coala .informacion h2 {
+    font-size: 1.5rem;
+  }
+
+  main .informacion_de_coala .informacion p {
+    font-size: 0.95rem;
+  }
+}
+
+
+
+
+
+
+
+
+/* ===== FOOTER ===== */
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5em;
+  font-size: 16px;
+}
+
+/* ===== SECCIONES ===== */
+#about,
+#team {
+  display: none;
+  animation: fade 0.3s ease-in-out;
+}
+
+#about.visible,
+#team.visible {
+  display: block;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== TEAM ===== */
+.contenido_team {
+  background-color: rgb(62, 216, 144);
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2em;
+}
+
+.presentacion_team {
+  background-color: red;
+}
+
+.presentacion_team .subtitulo_presentacion_team {
+  color: var(--bg-celeste);
+  font-weight: 900;
+}
+
+.presentacion_team .parrafo_presentacion_team {
+  color: var(--txt-gris);
+  font-size: 16px;
+  font-weight: bold;
+  padding: 0 1.5em;
+}
+
+/* ===== NUEVAS CARTAS DEL TEAM ===== */
+.team_cards {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2em;
+  padding: 1em 0;
+}
+
+.team_card {
+  background: linear-gradient(135deg, #e0f7fa, #ffffff);
+  border-radius: 15px;
+  width: 220px;
+  padding: 1.2em;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.4s ease;
+}
+
+.team_card:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.team_img {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 1em;
+  border: 3px solid #00acc1;
+}
+
+.team_img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.team_card h3 {
+  margin: 0.5em 0 0.3em 0;
+  font-size: 18px;
+  color: #007c91;
+}
+
+.team_card p {
+  font-size: 14px;
+  color: #555;
+  text-align: center;
+}
+
+/* ===== CTA REGISTRARSE ===== */
+.cta_registrarse {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+  padding: 2em;
+  border-radius: 15px;
+  background-color: blue;
+}
+
+.cta_registrarse h2 {
+  color: var(--bg-celeste);
+  text-align: center;
+  font-size: 24px;
+}
+
+.registrarse {
+  background-color: transparent;
+  border: solid 2px var(--bg-boton-verde);
+  text-decoration: none;
+  padding: 8px 20px;
+  border-radius: 5px;
+  color: var(--bg-boton-verde);
+  transition: all 0.8s ease;
+}
+
+.registrarse:hover {
+  background-color: var(--bg-boton-verde);
+  color: var(--txt-blanco);
+}
+
+/* ===== RESPONSIVE ===== */
+/* @media (max-width: 494px) {
+  header {
+    flex-wrap: wrap;
+    height: auto !important;
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .eleccion_landing {
+    order: 1;
+  }
+} */

@@ -40,9 +40,11 @@
                     <div>
                         <p class="puntuacion_apunte">⭐4.5/5 (32 valoraciones)</p>
                     </div>
-                    <div>
-                        <i class="fa-solid fa-heart"></i>
-                    </div>
+                    <i class="fa-solid fa-heart corazon"></i>
+
+
+
+
 
                 </div>
                 <div class="segunda_linea">
