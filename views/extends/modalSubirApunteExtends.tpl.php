@@ -6,7 +6,7 @@
         </section>
         <section class="contenido_formulario">
             <span class="form_titulo poppins-bold">Subi tu apunte a COALA</span>
-            <form action="?slug=inicio" method="POST" id="formulario" enctype="multipart/form-data">
+            <form action="?slug=inicio" method="POST" id="formulario" autocomplete="off" enctype="multipart/form-data">
                 <input type="text" name="titulo" id="titulo" class="campo_modal poppins-semibold" placeholder="Titulo del apunte">
                 <!-- <input type="text" name="materia" id="materia" class="campo_modal poppins-semibold" placeholder="Materia"> -->
                 <select name="materia" id="" class="campo_modal poppins-semibold">
@@ -16,13 +16,11 @@
                 <section class="curso_division">
                     <select name="curso" id="curso" class="campo_modal poppins-semibold">
                         <option value="">Curso</option>
-                        <option value="1">1</option>
-                        {{ CURSOS }}
+                        
                     </select>
                     <select name="division" id="division" class="campo_modal poppins-semibold">
                         <option value="">Division</option>
-                        <option value="1">1</option>
-                        {{ DIVISIONES }}
+                        
                     </select>
                 </section>
                 <input type="text" name="profesor" id="profesor" class="campo_modal poppins-semibold" placeholder="Profesor">
@@ -32,7 +30,7 @@
                     <i class="fa-solid fa-file-arrow-up"></i>
                     Subir archivo
                 </label>
-                <button id="subir_apunte" name="btn_subir_apunte" type="submit" class="btn_modal poppins-semibold" onclick=simulacion()>Subir Apunte</button>
+                <button id="subir_apunte" name="btn_subir_apunte" type="button" class="btn_modal poppins-semibold">Subir Apunte</button>
                 <div class="errorMsg" id="errorGeneral">{{ MSG_ERROR }}</div>
             </form>
         </section>
