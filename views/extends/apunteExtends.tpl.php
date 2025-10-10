@@ -1,7 +1,7 @@
 <a href="?slug=detalleApunte&alumno=nahuel&apunte=tesis.pdf" class="enlace_apunte">
     <article class="apunte">
     <figure>
-        <img class="imagen_apunte" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvhxLMRUJm6WP5tRsTPhSPKfBeKsoJebAwnQ&s" alt="Imagen de apunte">
+        <img class="imagen_apunte" src="data/thumbnails/tesis_miniaturaa.png" alt="Imagen de apunte">
     </figure>
     <section class="informacion">
         <h2>{{ TITULO }}</h2>
