@@ -73,3 +73,13 @@ document.addEventListener("DOMContentLoaded", () => {
     popup.style.display = "none";
   });
 });
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    const corazon = document.querySelector('.corazon');
+
+    corazon.addEventListener('click', () => {
+        corazon.classList.toggle('favorito');
+    });
+});

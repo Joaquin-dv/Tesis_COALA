@@ -12,6 +12,9 @@
     padding: 0;
     box-sizing: border-box;
 }
+a{
+    text-decoration: none;
+}
 
 article
 {
@@ -49,6 +52,7 @@ figure
     align-items: flex-start;
     background-color: var(--fondo);
     width: 100%;
+    gap: .5em;
 }
 
 .datos_apunte{
@@ -56,6 +60,7 @@ figure
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+    gap: 10px;
 }
 
 .datos_apunte_izquierda{
