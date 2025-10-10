@@ -12,6 +12,7 @@
 	require_once 'models/Usuarios.php';
 	require_once 'models/Apuntes.php';
 	require_once 'models/Escuelas.php';
+	require_once 'models/Logger.php';
 	require_once "lib/mopla/Mopla.php"; /*Motor de plantillas*/
 	require_once "lib/mopla/Extends.php"; /*Motor de componentes*/
 

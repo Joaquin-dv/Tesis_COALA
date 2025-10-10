@@ -19,6 +19,7 @@ class Usuarios extends DBAbstract
     public $creado_en;
     public $actualizado_en;
     public $borrado_en;
+    private $logger;
 
 
     public function __construct()
@@ -38,6 +39,9 @@ class Usuarios extends DBAbstract
         $this->creado_en = "";
         $this->actualizado_en = "";
         $this->borrado_en = null;
+        $this->logger = new Logger();
+
+        
     }
 
     /**
@@ -230,7 +234,7 @@ class Usuarios extends DBAbstract
             'escuela_id'	  => $this->id_escuela,
             'id_anio_lectivo' => $this->id_anio_lectivo
         ];
-
+        $this->logger->logueo($this->id);
         return ["errno" => 202, "error" => "Acceso valido"];
     }
 

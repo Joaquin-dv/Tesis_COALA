@@ -25,6 +25,7 @@ class Apuntes extends DBAbstract
     private $verificado_en;             // datetime NULL
     private $estado_ia;                 // 'no_escaneado' | 'aprobado' | 'marcado' | 'bloqueado'
     private $motivo_rechazo;            // varchar(255) NULL
+    private $logger;
 
     function __construct()
     {
@@ -48,6 +49,7 @@ class Apuntes extends DBAbstract
         $this->verificado_en = null;
         $this->estado_ia = "no_escaneado";
         $this->motivo_rechazo = null;
+        $this->logger = new Logger();
     }
 
     /**
@@ -62,7 +64,7 @@ class Apuntes extends DBAbstract
     }
 
 
-    public function getApuntes($limit = 100, bool $formated = false)
+    public function getApuntes($limit = 100)
     {
         // Evitá inyección por si llega algo raro en $limit
         $limit = (int) $limit;
@@ -70,21 +72,6 @@ class Apuntes extends DBAbstract
         $sql = "SELECT a.id, a.titulo AS TITULO, m.nombre AS MATERIA, e.nombre AS ESCUELA, al.anio AS AÑO, ea.promedio_calificacion AS PUNTUACION FROM apuntes a INNER JOIN materias m ON m.id = a.materia_id INNER JOIN escuelas e ON e.id = a.escuela_id INNER JOIN anios_lectivos al ON al.id = a.anio_lectivo_id LEFT JOIN estadisticas_apunte ea ON ea.apunte_id = a.id LEFT JOIN archivos_apunte aa ON aa.apunte_id = a.id AND aa.es_principal = 1 WHERE a.borrado_en IS NULL ORDER BY a.creado_en DESC LIMIT " . $limit . "; ";
 
         $result = $this->query($sql);
-
-        if ($formated === true) {
-            $temp_array = [];
-            foreach ($result as $row) {
-                $temp_array[] = [
-                    "TITULO" => $row["TITULO"],
-                    "MATERIA" => $row["MATERIA"],
-                    "ESCUELA" => $row["ESCUELA"],
-                    "AÑO" => $row["AÑO"],
-                    "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : null,
-                    "IMAGEN" => "",
-                ];
-            }
-            return $temp_array;
-        }
 
         // Si no querés formateo, devolvés el resultset crudo
         return $result;
@@ -370,6 +357,7 @@ class Apuntes extends DBAbstract
             }
 
             $this->commit();
+            $this->logger->creacion($usuarioId,'apunte', $apunte_id);
             return [
                 "errno" => 202,
                 "error" => "El archivo se subió correctamente",
@@ -416,6 +404,7 @@ class Apuntes extends DBAbstract
         $sql = "UPDATE `apuntes` SET `titulo` = '" . $form["titulo"] . "', `descripcion` = '" . $form["descripcion"] . "', `verificado_por_docente` = '0', `verificado_por_usuario_id` = 'null' WHERE `apuntes`.`id` = " . $apunte_id . ";";
 
         $response = $this->query($sql);
+        $this->logger->modificacion($usuarioId,'apunte', $apunte_id);
         // var_dump($response);
         if ($response > 0) {
             return ["errno" => 200, "error" => "Apunte actualizado correctamente"];
@@ -432,7 +421,7 @@ class Apuntes extends DBAbstract
 
         $sql = "UPDATE `apuntes` SET `borrado_en` = current_timestamp() WHERE `id` = " . $apunte_id . " AND `borrado_en` IS NULL;";
         $this->query($sql);
-
+        $this->logger->eliminacion($usuarioId,'apunte', $apunte_id);
         return ["errno" => 202, "error" => "Apunte eliminado correctamente"];
     }
 }
