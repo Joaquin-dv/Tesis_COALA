@@ -37,9 +37,35 @@ function exito(){
 }
 
 function simulacion() {
-    cargando(); 
+    cargando();
     setTimeout(() => {
         Swal.close();
         exito();
     }, 2000);
+}
+
+function aprobado() {
+    Swal.fire({
+        icon: "success",
+        text: "El apunte ha sido aprobado",
+        showCloseButton: true,
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: false,
+        position: 'bottom-right',
+        toast: true
+    });
+}
+
+function rechazado() {
+    Swal.fire({
+        icon: "error",
+        text: "El apunte ha sido rechazado",
+        showCloseButton: true,
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: false,
+        position: 'bottom-right',
+        toast: true
+    });
 }

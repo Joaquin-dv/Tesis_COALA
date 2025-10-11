@@ -58,6 +58,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!vacio) {
             errorGeneral.textContent = "Por favor completa todos los campos";
         } else {
+            // Mostrar modal de carga
+            cargando();
+
             const titulo = formulario.querySelector('#titulo').value;
             const materia = formulario.querySelector("select[name='materia']").value;
             const curso = select_cursos.value;
@@ -80,18 +83,40 @@ document.addEventListener("DOMContentLoaded", () => {
             formData.append('visibilidad', 'publico');
             formData.append('btn_subir_archivo', archivo); // nombre igual al esperado en PHP
 
-            const response = await fetch('/api/', {
-                method: 'POST',
-                body: formData
-            });
-            const result = await response.json();
-            console.log(result);
+            try {
+                const response = await fetch('/api/', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+                console.log(result);
 
-            if (result.errno === 202) {
-                errorGeneral.textContent = "¡Apunte subido correctamente!";
-                modal.close();
-            } else {
-                errorGeneral.textContent = result.error || "Error al subir el apunte";
+                // Cerrar modal de carga
+                Swal.close();
+
+                if (result.errno === 202) {
+                    // Iniciar procesamiento asíncrono
+                    startDocumentProcessing(result.apunte_id);
+                    exito(); // Mostrar mensaje de éxito
+                    modal.close();
+                } else if (result.errno === 409) {
+                    // Archivo duplicado
+                    Swal.fire({
+                        icon: "warning",
+                        text: result.error,
+                        showCloseButton: true,
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: false
+                    });
+                    errorGeneral.textContent = result.error;
+                } else {
+                    error(); // Mostrar mensaje de error
+                    errorGeneral.textContent = result.error || "Error al subir el apunte";
+                }
+            } catch (error) {
+                Swal.close();
+                errorGeneral.textContent = "Error de conexión";
             }
         }
     });
@@ -113,4 +138,52 @@ async function obtenerMaterias(id_escuela, id_anio_lectivo) {
     const response = await fetch(`api?model=Escuelas&method=getMaterias&id_escuela=${id_escuela}&id_anio_lectivo=${id_anio_lectivo}`);
     const data = await response.json();
     return data;
+}
+
+async function startDocumentProcessing(apunte_id) {
+    const formData = new FormData();
+    formData.append('model', 'Apuntes');
+    formData.append('method', 'startProcessing');
+    formData.append('apunte_id', apunte_id);
+
+    const response = await fetch('/api/', {
+        method: 'POST',
+        body: formData
+    });
+    const result = await response.json();
+
+    if (result.errno === 200) {
+        startPolling(result.processing_id);
+    } else {
+        console.error('Error al iniciar procesamiento:', result.error);
+    }
+}
+
+function startPolling(processingId) {
+    let processed = false;
+    const pollInterval = setInterval(async () => {
+        if (processed) return; // Deja de hacer polling si ya esta procesado
+
+        const response = await fetch(`api?model=Apuntes&method=checkProcessingStatus&processing_id=${processingId}`);
+        const data = await response.json();
+
+        if (data.status === 'completed' && !processed) {
+            processed = true;
+            clearInterval(pollInterval);
+            showProcessingResult(data.result);
+        } else if (data.status === 'error' && !processed) {
+            processed = true;
+            clearInterval(pollInterval);
+            console.error('Error en procesamiento:', data.message);
+        }
+        // Si sigue processing, continúa haciendo polling
+    }, 2000); // Poll cada 2 segundos
+}
+
+function showProcessingResult(result) {
+    if (result.status === 'approved') {
+        aprobado();
+    } else {
+        rechazado();
+    }
 }

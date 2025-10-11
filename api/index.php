@@ -62,6 +62,7 @@ if ($method == 'GET') {
 
     require_once "../.env.php";
     require_once "../models/DBAbstract.php";
+    require_once "../lib/DocumentAI.php";
 
     if (!file_exists("../models/" . $bodyParams['model'] . ".php")) {
         echo json_encode("El modelo especificado no existe.");
