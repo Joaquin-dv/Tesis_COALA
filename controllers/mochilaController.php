@@ -2,9 +2,41 @@
 
     $tpl = new Mopla('mochila');
 
+    // Se carga el componente
+	$apunteExtend = new Extend("apunte_mochila");
+    
+    // Se carga el modelo de apuntes
+	$apunte = new Apuntes();
+
+    // Array para guardar el componente con la informacion cargada
+	$lista_en_revision = "";
+	$lista_aprobados = "";
+	$lista_rechazados = "";
+    
+    //obtengo 5 apuntes
+	$lista_apuntes = $apunte->getApuntesByAlumno($_SESSION[APP_NAME]['user']['id'], true);
+	
+	// Cargo la informacion en el componente
+	foreach ($lista_apuntes as $row) {
+        if($row['ESTADO'] == "aprobado"){
+            $lista_aprobados .= $apunteExtend->assignVar($row);
+        }
+
+        if($row['ESTADO'] == "rechazado"){
+            $lista_rechazados .= $apunteExtend->assignVar($row);
+        }
+        
+        if($row['ESTADO'] == "en_revision"){
+            $lista_en_revision .= $apunteExtend->assignVar($row);
+        }
+	}
+
     $tpl->printExtends(["apunte_mochila", "modalSubirApunte"]);
 
     // $tpl->assignVar(["TITULO" => "Apuntes de Cálculo I", "MATERIA" => "Cálculo I", "ESCUELA" => "UTN FRBA", "AÑO" => "2020", "PUNTUACION" => "4.5", "IMAGEN" => '']);
+	$tpl->assignVar(["APUNTES_APROBADOS" => $lista_aprobados]);
+	$tpl->assignVar(["APUNTES_RECHAZADOS" => $lista_rechazados]);
+	$tpl->assignVar(["APUNTES_EN_REVISION" => $lista_en_revision]);
 
     $tpl->assignVar(["NOMBRE_USUARIO" => $_SESSION[APP_NAME]['user']['nombre_completo']]);
 

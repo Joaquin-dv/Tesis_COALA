@@ -61,7 +61,10 @@ class Apuntes extends DBAbstract
         return (int) $row['result_sets'][0][0]['c'];
     }
 
-    
+    /**
+     * Obtiene todos los apuntes, con un límite opcional
+     * Si $formated es true, devuelve un array simplificado para la vista
+     */
     public function getApuntes($limit = 100, bool $formated = false)
     {
         // Evitá inyección por si llega algo raro en $limit
@@ -100,18 +103,20 @@ class Apuntes extends DBAbstract
             return ["errno" => 500, "error" => "No se obtuvo el ID del alumno correctamente"];;
         }
 
-        $result = $this->callSP("CALL sp_obtener_apuntes_por_alumno()", [$alumno_id]);
+        $result = $this->callSP("CALL sp_obtener_apuntes_por_alumno(?)", [$alumno_id]);
 
         if ($formated === true) {
             $temp_array = [];
             foreach ($result['result_sets'][0] as $row) {
                 $temp_array[] = [
                     "TITULO" => $row["TITULO"],
+                    "DESCRIPCION" => $row["DESCRIPCION"],
                     "MATERIA" => $row["MATERIA"],
                     "ESCUELA" => $row["ESCUELA"],
                     "AÑO" => $row["AÑO"],
                     "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : null,
                     "IMAGEN" => "",
+                    "ESTADO" => $row["ESTADO"],
                 ];
             }
             return $temp_array;
