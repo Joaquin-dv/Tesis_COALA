@@ -57,5 +57,13 @@
 
             return $result;
         }
+
+        public function getMaterias($id_escuela, $id_anio_lectivo) {
+            $sql = "SELECT * FROM `materias` WHERE escuela_id = ".$id_escuela." ORDER BY id ASC;";
+
+            $result = $this->query($sql);
+
+            return $result;
+        }
     }
 ?>

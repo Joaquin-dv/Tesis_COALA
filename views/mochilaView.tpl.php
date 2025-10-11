@@ -75,8 +75,8 @@
         </div>
         @extends(modalSubirApunte)
     </main>
-    <script src="views/static/js/modal.js"></script>
-    <script src="views/static/js/mochila.js"></script>
+    <!-- <script src="views/static/js/modal.js"></script> -->
+    <script type="module" src="views/static/js/mochilaScript.js"></script>
 </body>
 
 </html>

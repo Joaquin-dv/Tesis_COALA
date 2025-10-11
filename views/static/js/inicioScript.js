@@ -1,10 +1,10 @@
+import { initModal } from './modules/modalSubirApunteModule.js';
+
 document.addEventListener("DOMContentLoaded", function () {
     const contenedor_vistos_recientemente = document.getElementById("contenedor_vistos_recientemente");
     const contenedor_para_ti = document.getElementById("contenedor_para_ti");
 
     obtenerApuntes(4).then(data => {
-        console.log(data);
-
         // Recorremos los apuntes de último a primero
         for (let i = data.length - 1; i >= 0; i--) {
             const apunte = data[i];
@@ -37,8 +37,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     obtenerApuntes(15).then(data => {
-        console.log(data);
-
         // Recorremos los apuntes de último a primero
         for (let i = data.length - 1; i >= 0; i--) {
             const apunte = data[i];
@@ -70,6 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    initModal();
 });
 
 async function obtenerApuntes(limit) {

@@ -6,6 +6,7 @@
 	 * index.php trabaja como un ROUTER - FIREWALL
 	 * 
 	 * */
+	date_default_timezone_set("America/Argentina/Buenos_Aires");
 
 	require_once ".env.php"; /*Variables de entorno*/
 	require_once "models/DBAbstract.php"; /*Modelo de conexión a la db*/
