@@ -1,5 +1,5 @@
 // import { validarFormulario } from "./validacionFormulario.js"; // Si no se usa, podés quitar la importación
-import { cargando, exito, error } from "./toastModule.js";
+import { cargando, exito, error, aprobado, rechazado } from "./toastModule.js";
 
 // IDs por defecto de la escuela y ciclo lectivo (ajustá si hace falta)
 const ID_ESCUELA_DEFAULT = 1;
@@ -26,7 +26,7 @@ async function fetchJSON(url, options) {
  * Estructura esperada (ejemplo): [{ id, nivel, division }, ...]
  */
 function obtenerCursos(idEscuela, idAnioLectivo) {
-    const url = `api?model=Escuelas&method=getCursos&id_escuela=${idEscuela}&id_anio_lectivo=${idAnioLectivo}`;
+    const url = `api/index.php?model=Escuelas&method=getCursos&id_escuela=${idEscuela}&id_anio_lectivo=${idAnioLectivo}`;
     return fetchJSON(url);
 }
 
@@ -35,7 +35,7 @@ function obtenerCursos(idEscuela, idAnioLectivo) {
  * Estructura esperada (ej.): [{ id, nivel, division }]
  */
 function buscarCurso(nivel, division) {
-    const url = `api?model=Escuelas&method=getCursoByNivelandDivision&nivel=${encodeURIComponent(nivel)}&division=${encodeURIComponent(division)}&id_escuela=${ID_ESCUELA_DEFAULT}&id_anio_lectivo=${ID_ANIO_LECTIVO_DEFAULT}`;
+    const url = `api/index.php?model=Escuelas&method=getCursoByNivelandDivision&nivel=${encodeURIComponent(nivel)}&division=${encodeURIComponent(division)}&id_escuela=${ID_ESCUELA_DEFAULT}&id_anio_lectivo=${ID_ANIO_LECTIVO_DEFAULT}`;
     return fetchJSON(url);
 }
 
@@ -44,7 +44,7 @@ function buscarCurso(nivel, division) {
  * Estructura esperada (ej.): [{ id, nombre }, ...]
  */
 function obtenerMaterias(idEscuela, idAnioLectivo) {
-    const url = `api?model=Escuelas&method=getMaterias&id_escuela=${idEscuela}&id_anio_lectivo=${idAnioLectivo}`;
+    const url = `api/index.php?model=Escuelas&method=getMaterias&id_escuela=${idEscuela}&id_anio_lectivo=${idAnioLectivo}`;
     return fetchJSON(url);
 }
 
@@ -262,11 +262,11 @@ async function abrirModalSubida() {
                 formData.set("curso", idCurso);
                 
                 // Envío al backend
-                const result = await fetchJSON("/api/", { method: "POST", body: formData });
+                const result = await fetchJSON("api/index.php", { method: "POST", body: formData });
 
                 // Convención de éxito según tu API
                 if (result?.errno === 202) {
-                    return { ok: true };
+                    return { ok: true, apunte_id: result.apunte_id };
                 }
 
                 error(result.error);
@@ -280,6 +280,56 @@ async function abrirModalSubida() {
     }).then((result) => {
         if (result.isConfirmed && result.value?.ok) {
             exito();
+            // Iniciar procesamiento del documento
+            startDocumentProcessing(result.value.apunte_id);
         }
     });
+}
+
+async function startDocumentProcessing(apunte_id) {
+    const formData = new FormData();
+    formData.append('model', 'Apuntes');
+    formData.append('method', 'startProcessing');
+    formData.append('apunte_id', apunte_id);
+
+    const response = await fetch('api/index.php', {
+        method: 'POST',
+        body: formData
+    });
+    const result = await response.json();
+
+    if (result.errno === 200) {
+        startPolling(result.processing_id);
+    } else {
+        console.error('Error al iniciar procesamiento:', result.error);
+    }
+}
+
+function startPolling(processingId) {
+    let processed = false;
+    const pollInterval = setInterval(async () => {
+        if (processed) return; // Deja de hacer polling si ya esta procesado
+
+        const response = await fetch(`api/index.php?model=Apuntes&method=checkProcessingStatus&processing_id=${processingId}`);
+        const data = await response.json();
+
+        if (data.status === 'completed' && !processed) {
+            processed = true;
+            clearInterval(pollInterval);
+            showProcessingResult(data.result);
+        } else if (data.status === 'error' && !processed) {
+            processed = true;
+            clearInterval(pollInterval);
+            console.error('Error en procesamiento:', data.message);
+        }
+        // Si sigue processing, continúa haciendo polling
+    }, 2000); // Poll cada 2 segundos
+}
+
+function showProcessingResult(result) {
+    if (result.status === 'approved') {
+        aprobado();
+    } else {
+        rechazado();
+    }
 }

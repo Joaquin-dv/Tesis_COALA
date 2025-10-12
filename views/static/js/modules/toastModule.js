@@ -38,3 +38,29 @@ export function exito() {
         timerProgressBar: true,
     });
 }
+
+export function aprobado() {
+    Swal.fire({
+        icon: "success",
+        text: "El apunte ha sido aprobado",
+        showCloseButton: true,
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: false,
+        position: 'bottom-right',
+        toast: true
+    });
+}
+
+export function rechazado() {
+    Swal.fire({
+        icon: "error",
+        text: "El apunte ha sido rechazado",
+        showCloseButton: true,
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: false,
+        position: 'bottom-right',
+        toast: true
+    });
+}

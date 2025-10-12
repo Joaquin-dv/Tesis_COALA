@@ -31,7 +31,7 @@
         <section class="tabs">
             <button class="btn_tab poppins-semibold" onclick="mostrarSeccion('todos')">Todos</button>
             <button class="btn_tab poppins-semibold" onclick="mostrarSeccion('favoritos')">Favoritos</button>
-            <button class="btn_tab poppins-semibold" onclick="mostrarSeccion('pendientes')">Pendientes</button>
+            <button class="btn_tab poppins-semibold" onclick="mostrarSeccion('pendientes')">En revision</button>
             <button class="btn_tab poppins-semibold" onclick="mostrarSeccion('aprobados')">Aprobados</button>
             <button class="btn_tab poppins-semibold" onclick="mostrarSeccion('rechazados')">Rechazados</button>
         </section>
@@ -39,44 +39,34 @@
         <div id="favoritos" class="bloque_apuntes">
             <h2 class="vistos_recientemente">Apuntes favoritos</h2>
             <section class="contenedor_apuntes">
-                @extends(apunte_mochila)
-                @extends(apunte_mochila)
-                @extends(apunte_mochila)
-                @extends(apunte_mochila)
+                {{ APUNTES_FAVORITOS }}
             </section>
         </div>
 
         <div id="aprobados"class="bloque_apuntes">
         <h3>Aprobados</h3>
             <section class="contenedor_apuntes">
-                @extends(apunte_mochila)
-                @extends(apunte_mochila)
-                @extends(apunte_mochila)
+                {{ APUNTES_APROBADOS }}
             </section>
         </div>
 
         <div id="pendientes" class="bloque_apuntes">
-            <h3>Pendientes</h3>
+            <h3>En revision</h3>
             <section class="contenedor_apuntes">
-                @extends(apunte_mochila)
-                @extends(apunte_mochila)
+                {{ APUNTES_EN_REVISION }}
             </section>
         </div>
 
         <div id="rechazados" class="bloque_apuntes">
             <h3>Rechazados</h3>
             <section class="contenedor_apuntes">
-                @extends(apunte_mochila)
-                @extends(apunte_mochila)
-                @extends(apunte_mochila)
-                @extends(apunte_mochila)
-                @extends(apunte_mochila)
+                {{ APUNTES_RECHAZADOS }}
             </section>
         </div>
         @extends(modalSubirApunte)
     </main>
     <!-- <script src="views/static/js/modal.js"></script> -->
-    <script type="module" src="views/static/js/mochilaScript.js"></script>
+    <script src="views/static/js/mochila.js"></script>
 </body>
 
 </html>
