@@ -1,5 +1,0 @@
-.env.php
-.vscode
-.gitignore
-lib/Mailer
-data
