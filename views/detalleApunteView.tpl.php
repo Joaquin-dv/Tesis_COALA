@@ -35,10 +35,10 @@
             <section class="informacion_apunte">
                 <div class="primer_linea">
                     <div>
-                        <h1>Título del apunte</h1>
+                        <h1>{{ TITULO }}</h1>
                     </div>
                     <div>
-                        <p class="puntuacion_apunte">⭐4.5/5 (32 valoraciones)</p>
+                        <p class="puntuacion_apunte">⭐{{ PROMEDIO_CALIFICACIONES }}/5 ({{ CANTIDAD_PUNTUACIONES }} valoraciones)</p>
                     </div>
                     <i class="fa-solid fa-heart corazon"></i>
 
@@ -50,12 +50,12 @@
                 <div class="segunda_linea">
                     <div>
                         <p>
-                            <strong>Autor:</strong> Nahuel M.
+                            <strong>Autor:</strong> {{ NOMBRE_USUARIO }}
                         </p>
                     </div>
                     <div>
                         <p>
-                            <strong>Materia:</strong> Matemáticas
+                            <strong>Materia:</strong> {{ MATERIA }}
                         </p>
                     </div>
                     <div>
@@ -67,7 +67,7 @@
                 <div class="tercer_linea">
                     <div>
                         <p>
-                            <strong>Subido el:</strong> 03/06/2024
+                            <strong>Subido el:</strong> {{ FECHA_CREACION }}
                         </p>
                     </div>
                 </div>
@@ -87,9 +87,7 @@
             </section>
         </section>
         <section class="contenedor_archivos_apunte">
-                
-
-            <div id="visor" class="visor-archivo"></div>
+            <div id="visor" class="visor-archivo" data-ruta="{{ RUTA_ARCHIVO }}" data-error="{{ ERROR_ARCHIVO }}"></div>
 
             <a id="descargar" href="#" download>Descargar archivo</a>
         </section>
@@ -103,113 +101,16 @@
                 <i class="fa-solid fa-user-group"></i>
                 <span>Comentarios del apunte</span>
             </p>
-            <!-- From Uiverse.io by alexruix --> 
-            <div class="input-group">
-                <input required="" type="text" name="text" autocomplete="off" class="input">
-                <label class="user-label">Deje un comentario</label>
-                <button type="submit" class="send-btn"><i class="fa-solid fa-paper-plane"></i></button>
-            </div>
+
+            <form id="form-comentario" method="POST">
+                <div class="input-group">
+                    <input required="" type="text" name="comentario" id="txt-comentario" autocomplete="off" class="input">
+                    <label class="user-label">Deje un comentario</label>
+                    <button type="submit" class="send-btn"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </form>
             <section class="contenedor_comentarios">
-                <article class="comentario_apunte">
-                    <div class="contenedor_foto_comentario">
-                        <img src="/views/static/img/inicio/foto_perfil.jpg" alt="Foto de perfil de Nahuel Martinez">
-                    </div>
-
-                    <div class="contenedor_comentario_derecha">
-                        <div class="header_comentario">
-                        <h4 class="nombre_usuario">Nahuel Martinez</h4>
-                        <time class="fecha_creacion_comentario" datetime="2024-06-03">03/06/2024</time>
-                        </div>
-
-                        <p class="texto_comentario">
-                        Muy buen apunte, me sirvió mucho para estudiar para el parcial.
-                        </p>
-                    </div>
-                </article>
-
-                <article class="comentario_apunte">
-                    <div class="contenedor_foto_comentario">
-                        <img src="/views/static/img/inicio/foto_perfil.jpg" alt="Foto de perfil de Nahuel Martinez">
-                    </div>
-
-                    <div class="contenedor_comentario_derecha">
-                        <div class="header_comentario">
-                        <h4 class="nombre_usuario">Nahuel Martinez</h4>
-                        <time class="fecha_creacion_comentario" datetime="2024-06-03">03/06/2024</time>
-                        </div>
-
-                        <p class="texto_comentario">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Commodi labore a quas voluptates voluptate. Dignissimos et corporis soluta quos numquam assumenda deserunt! Dolor, accusamus voluptatum vero quidem corporis commodi illum?
-                        </p>
-                    </div>
-                </article>
-
-                <article class="comentario_apunte">
-                    <div class="contenedor_foto_comentario">
-                        <img src="/views/static/img/inicio/foto_perfil.jpg" alt="Foto de perfil de Nahuel Martinez">
-                    </div>
-
-                    <div class="contenedor_comentario_derecha">
-                        <div class="header_comentario">
-                        <h4 class="nombre_usuario">Nahuel Martinez</h4>
-                        <time class="fecha_creacion_comentario" datetime="2024-06-03">03/06/2024</time>
-                        </div>
-
-                        <p class="texto_comentario">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Commodi labore a quas voluptates voluptate. Dignissimos et corporis soluta quos numquam assumenda deserunt! Dolor, accusamus voluptatum vero quidem corporis commodi illum?
-                        </p>
-                    </div>
-                </article>
-                <article class="comentario_apunte">
-                    <div class="contenedor_foto_comentario">
-                        <img src="/views/static/img/inicio/foto_perfil.jpg" alt="Foto de perfil de Nahuel Martinez">
-                    </div>
-
-                    <div class="contenedor_comentario_derecha">
-                        <div class="header_comentario">
-                        <h4 class="nombre_usuario">Nahuel Martinez</h4>
-                        <time class="fecha_creacion_comentario" datetime="2024-06-03">03/06/2024</time>
-                        </div>
-
-                        <p class="texto_comentario">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Commodi labore a quas voluptates voluptate. Dignissimos et corporis soluta quos numquam assumenda deserunt! Dolor, accusamus voluptatum vero quidem corporis commodi illum?
-                        </p>
-                    </div>
-                </article>
-                <article class="comentario_apunte">
-                    <div class="contenedor_foto_comentario">
-                        <img src="/views/static/img/inicio/foto_perfil.jpg" alt="Foto de perfil de Nahuel Martinez">
-                    </div>
-
-                    <div class="contenedor_comentario_derecha">
-                        <div class="header_comentario">
-                        <h4 class="nombre_usuario">Nahuel Martinez</h4>
-                        <time class="fecha_creacion_comentario" datetime="2024-06-03">03/06/2024</time>
-                        </div>
-
-                        <p class="texto_comentario">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Commodi labore a quas voluptates voluptate. Dignissimos et corporis soluta quos numquam assumenda deserunt! Dolor, accusamus voluptatum vero quidem corporis commodi illum?
-                        </p>
-                    </div>
-                </article>
-                <article class="comentario_apunte">
-                    <div class="contenedor_foto_comentario">
-                        <img src="/views/static/img/inicio/foto_perfil.jpg" alt="Foto de perfil de Nahuel Martinez">
-                    </div>
-
-                    <div class="contenedor_comentario_derecha">
-                        <div class="header_comentario">
-                        <h4 class="nombre_usuario">Nahuel Martinez</h4>
-                        <time class="fecha_creacion_comentario" datetime="2024-06-03">03/06/2024</time>
-                        </div>
-
-                        <p class="texto_comentario">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Commodi labore a quas voluptates voluptate. Dignissimos et corporis soluta quos numquam assumenda deserunt! Dolor, accusamus voluptatum vero quidem corporis commodi illum?
-                        </p>
-                    </div>
-                </article>
-
-
+                {{ COMENTARIOS_APUNTE }}
             </section>
         </section>
 

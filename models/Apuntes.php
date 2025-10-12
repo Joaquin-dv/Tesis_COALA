@@ -79,12 +79,14 @@ class Apuntes extends DBAbstract
             $temp_array = [];
             foreach ($result['result_sets'][0] as $row) {
                 $temp_array[] = [
+                    "APUNTE_ID" => $row["APUNTE_ID"],
                     "TITULO" => $row["TITULO"],
                     "MATERIA" => $row["MATERIA"],
                     "ESCUELA" => $row["ESCUELA"],
                     "AÑO" => $row["AÑO"],
                     "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : null,
                     "IMAGEN" => "",
+                    "USUARIO_ID" => $row["USUARIO_ID"],
                 ];
             }
             return $temp_array;
@@ -92,6 +94,59 @@ class Apuntes extends DBAbstract
 
         // Si no querés formateo, devolvés el resultset crudo
         return $result['result_sets'][0];
+    }
+
+    /**
+     * Obtiene un apunte por su ID
+     */
+    public function getApunteById($apunte_id, $formated = false)
+    {
+        if (!is_numeric($apunte_id) || $apunte_id <= 0) {
+            return ["errno" => 500, "error" => "No se obtuvo el ID del apunte correctamente"];;
+        }
+
+        $result = $this->callSP("CALL sp_obtener_apunte_por_id(?)", [$apunte_id]);
+
+        if ($formated === true) {
+            $temp_array = [];
+            foreach ($result['result_sets'][0] as $row) {
+                $temp_array[] = [
+                    "TITULO" => $row["TITULO"],
+                    "DESCRIPCION" => $row["DESCRIPCION"],
+                    "MATERIA" => $row["MATERIA"],
+                    "FECHA_CREACION" => $row["FECHA_CREACION"],
+                    "ESCUELA" => $row["ESCUELA"],
+                    "AÑO" => $row["AÑO"],
+                    "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : null,
+                    "IMAGEN" => "",
+                    "NOMBRE_USUARIO" => $row["NOMBRE_USUARIO"],
+                    "CANTIDAD_PUNTUACIONES" => $row["CANTIDAD_CALIFICACIONES"],
+                ];
+                // Si el apunte no tiene calificaciones, forzamos a 0 la puntuación
+                if ($row["PROMEDIO_CALIFICACIONES"] === null) {
+                    $temp_array[0]["PROMEDIO_CALIFICACIONES"] = "0";
+                }
+            }
+            return $temp_array;
+        }
+
+        // Si no querés formateo, devolvés el resultset crudo
+        return $result['result_sets'][0];
+    }
+
+    public function getRutaApunteById($apunte_id)
+    {
+        if (!is_numeric($apunte_id) || $apunte_id <= 0) {
+            return ["errno" => 500, "error" => "No se obtuvo el ID del apunte correctamente"];
+        }
+
+        $result = $this->callSP("CALL sp_obtener_ruta_apunte_por_id(?)", [$apunte_id]);
+
+        if (count($result['result_sets'][0]) > 0) {
+            return $result['result_sets'][0][0]['RUTA_ARCHIVO'];
+        } else {
+            return ["errno" => 404, "error" => "No se encontro la ruta del apunte"];
+        }
     }
 
     /**
@@ -166,20 +221,7 @@ class Apuntes extends DBAbstract
         }
     }
 
-    public function getApuntesPorId($id)
-    {
-        if (!is_numeric($id) || $id <= 0) {
-            return ["errno" => 400, "error" => "ID de apunte inválido"];
-        }
-
-        $result = $this->callSP("CALL sp_obtener_apunte_por_id()", [$id]);
-
-        if (count($result['result_sets'][0]) == 0) {
-            return ["errno" => 404, "error" => "No se encontró el apunte"];
-        }
-
-        return $result['result_sets'][0][0];
-    }
+    
     /* registra un nuevo apunte */
     // Create viejo (Guardado temporalmente)
     // public function create($form)
@@ -385,6 +427,9 @@ class Apuntes extends DBAbstract
         $safeName = preg_replace('/[^A-Za-z0-9._-]/', '_', $nombreArchivo);
         $rutaFinal = $carpetaDestino . uniqid('', true) . '_' . $safeName;
 
+        // Ruta para guardar en BD (absoluta desde web root)
+        $rutaBd = "/data/uploads/" . $hashUsuario . "/" . basename($rutaFinal);
+
         $sha256 = hash_file('sha256', $rutaTemporal);
         $bytes = filesize($rutaTemporal);
 
@@ -433,7 +478,7 @@ class Apuntes extends DBAbstract
                 "CALL sp_insert_archivo_apunte(?,?,?,?,?,?,?, @archivo_id)",
                 [
                     (int) $apunte_id,
-                    (string) $rutaFinal,
+                    (string) $rutaBd,
                     (string) $tipoMime,
                     (int) $bytes,
                     (string) $sha256,
@@ -551,8 +596,11 @@ class Apuntes extends DBAbstract
         }
         $ruta_archivo = $result[0]['ruta_archivo'];
 
+        // Convertir ruta web a ruta del sistema de archivos
+        $ruta_archivo_fs = $_SERVER['DOCUMENT_ROOT'] . $ruta_archivo;
+
         $documentAI = new DocumentAI();
-        $processingId = $documentAI->startProcessing($ruta_archivo, $apunte_id);
+        $processingId = $documentAI->startProcessing($ruta_archivo_fs, $apunte_id);
 
         return ["errno" => 200, "processing_id" => $processingId];
     }
@@ -610,6 +658,69 @@ class Apuntes extends DBAbstract
             return ["errno" => 200, "error" => "Estado actualizado correctamente"];
         } else {
             return ["errno" => 500, "error" => "Error al actualizar estado"];
+        }
+    }
+
+    public function getComentariosByApunte($apunte_id, bool $formated = false)
+    {
+        if (!is_numeric($apunte_id) || $apunte_id <= 0) {
+            return ["errno" => 500, "error" => "No se obtuvo el ID del apunte correctamente"];
+        }
+
+        $result = $this->callSP("CALL sp_obtener_comentarios_por_apunte(?)", [$apunte_id]);
+
+        if ($formated === true) {
+            $temp_array = [];
+            foreach ($result['result_sets'][0] as $row) {
+                $temp_array[] = [
+                    "NOMBRE_USUARIO" => $row["NOMBRE_USUARIO"],
+                    "TEXTO_COMENTARIO" => $row["TEXTO_COMENTARIO"],
+                    "FECHA_CREACION" => $row["FECHA_CREACION"],
+                ];
+            }
+            return $temp_array;
+        }
+
+        // Si no querés formateo, devolvés el resultset crudo
+        return $result['result_sets'][0];
+    }
+
+    public function createComentario($apunte_id, $texto_comentario)
+    {
+        if (!isset($_SESSION[APP_NAME])) {
+            return ["errno" => 403, "error" => "No autorizado"];
+        }
+
+        // Usuario logueado
+        $usuario = $_SESSION[APP_NAME]["user"];
+        $usuario_id = (int) $usuario["id"];
+
+        // Validaciones
+        if (!is_numeric($apunte_id) || $apunte_id <= 0) {
+            return ["errno" => 400, "error" => "ID de apunte inválido"];
+        }
+        if (empty(trim($texto_comentario))) {
+            return ["errno" => 400, "error" => "El comentario no puede estar vacío"];
+        }
+        if (strlen($texto_comentario) > 500) {
+            return ["errno" => 400, "error" => "El comentario es demasiado largo (máximo 500 caracteres)"];
+        }
+
+        // Llamar al stored procedure
+        $result = $this->callSP("CALL sp_crear_comentario(?,?,?)", [
+            (int) $apunte_id,
+            (int) $usuario_id,
+            (string) trim($texto_comentario)
+        ]);
+        
+        if ($result && isset($result['result_sets'][0][0]['comentario_id'])) {
+            return [
+                "errno" => 201,
+                "error" => "Comentario creado correctamente",
+                "comentario_id" => $result['result_sets'][0][0]['comentario_id']
+            ];
+        } else {
+            return ["errno" => 500, "error" => "Error al crear el comentario"];
         }
     }
 
