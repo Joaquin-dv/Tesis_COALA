@@ -24,17 +24,16 @@
         </section>
         {{ MODAL_SUBIR_APUNTE }}
     </main>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="views/static/js/toast.js"></script>
     <footer class="mobile-nav">
         <a href="?slug=inicio"><i class="fa-solid fa-house"></i></a>
         <a href="?slug=explorar"><i class="fa-solid fa-magnifying-glass"></i></a>
         <a href="?slug=mochila"><i class="fa-solid fa-box-archive"></i></a>
         <a href="?slug=clases"><i class="fa-solid fa-school"></i></a>
     </footer>
-    <script src="views/static/js/inicio.js"></script>
-    <script src="views/static/js/modal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- <script src="views/static/js/toast.js"></script> -->
     <!-- <script src="views/static/js/validacionFormulario.js"></script> -->
+    <script type="module" src="views/static/js/inicioScript.js"></script>
     <script src="views/static/js/generalesScript.js"></script>
 </body>
 

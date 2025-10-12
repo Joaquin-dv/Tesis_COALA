@@ -80,12 +80,12 @@ if ($method == 'GET') {
     }
 
     // Si hay archivos, agregarlos como parámetro
-    if (!empty($_FILES['btn_subir_archivo'])) {
+    if (!empty($_FILES['input_file'])) {
         $params = [
             $bodyParams['titulo'] ?? '',
             $bodyParams['descripcion'] ?? '',
             $bodyParams['materia'] ?? '',
-            $_FILES['btn_subir_archivo'],
+            $_FILES['input_file'],
             $bodyParams['curso'] ?? null,
             $bodyParams['division'] ?? null,
             $bodyParams['visibilidad'] ?? 'publico'

@@ -1,3 +1,38 @@
+/* Ajuste de contenedor del modal de SweetAlert */
+.modal_coala_popup {
+    max-width: 660px !important;
+    width: 100% !important;
+    border-radius: 8px;
+    overflow: hidden;
+    /* padding: 0 !important; */
+}
+
+.no-padding-modal {
+    padding: 0 !important;
+}
+
+.no-padding-modal .swal2-html-container {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.no-padding-modal .swal2-title {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.no-padding-modal .swal2-actions {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+
+.contenido_modal_swal {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
 dialog#modal {
     max-width: 660px;
     width: 100%;
@@ -10,7 +45,7 @@ dialog#modal {
     left: 50%;
     transform: translate(-50%, -50%);
     background: white;
-    z-index: 1000;
+    z-index: -1;
 
 }
 
@@ -49,9 +84,10 @@ i#cerrar_modal {
     padding: .8em 0em;
 }
 
-#curso{
+#curso {
     width: 100%;
 }
+
 #division {
     width: 100%;
 }
@@ -62,29 +98,36 @@ section.contenido_formulario {
     background: var(--modal-bg);
     height: 100%;
 }
-section.imagen{
+
+section.imagen {
     width: 48%;
+    background-color: white;
     display: flex;
     align-items: center;
     justify-content: center;
 }
+
 section.curso_division {
     display: flex;
     justify-content: center;
     width: 100%;
     gap: 10px;
 }
+
 span.form_titulo {
     font-size: 22px;
     color: var(--txt-form-titulo);
 }
-#koala_modal{
+
+#koala_modal {
     width: 100%;
 }
-textarea{
+
+textarea {
     display: flex;
     justify-content: start;
 }
+
 button#subir_apunte {
     padding: 10px 20px;
     border-radius: 20px;
@@ -93,10 +136,11 @@ button#subir_apunte {
     background: var(--btn-modal);
 }
 
-#btn_subir_arch{
+#btn_subir_arch {
     display: none;
 }
-.btn_label{
+
+.btn_label {
     width: 100%;
     background-color: var(--btn-modal);
     padding: 10px 20px;
@@ -108,14 +152,16 @@ button#subir_apunte {
     gap: 1em;
 }
 
-#subir_apunte:hover{
-      filter: brightness(0.85);
-      transition: 0.3s;
+#subir_apunte:hover {
+    filter: brightness(0.85);
+    transition: 0.3s;
 }
-.btn_label:hover{
-      filter: brightness(0.85);
-      transition: 0.3s;
+
+.btn_label:hover {
+    filter: brightness(0.85);
+    transition: 0.3s;
 }
+
 .remarcadoError {
     outline: 1px solid #FF5656;
 }
@@ -129,18 +175,22 @@ button#subir_apunte {
     min-height: 21px;
     margin-top: -.3em;
 }
+
 .campo_modal:focus {
     outline: 2px solid var(--color-accion);
     transition: 0.3s;
 }
+
 @media screen and (max-width: 750px) {
-    .imagen{
+    .imagen {
         display: none !important;
     }
-    .contenido_formulario{
+
+    .contenido_formulario {
         width: 100% !important;
     }
-    #modal{
+
+    #modal {
         width: 85% !important;
     }
 }
