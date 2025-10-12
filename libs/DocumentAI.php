@@ -3,7 +3,7 @@
  * DocumentAI.php - Integración con Google Document AI para clasificación de apuntes
  */
 
-require_once dirname(__DIR__) . '/lib/vendor/autoload.php';
+require_once dirname(__DIR__) . '/libs/vendor/autoload.php';
 
 use Google\ApiCore\ApiException;
 use Google\ApiCore\OperationResponse;

@@ -537,7 +537,7 @@ class Apuntes extends DBAbstract
     // Iniciar procesamiento de documento con IA
     public function startProcessing($apunte_id)
     {
-        require_once dirname(__DIR__) . "/lib/DocumentAI.php";
+        require_once dirname(__DIR__) . "/libs/DocumentAI.php";
 
         if (!is_numeric($apunte_id) || $apunte_id <= 0) {
             return ["errno" => 400, "error" => "ID de apunte inválido"];
@@ -560,7 +560,7 @@ class Apuntes extends DBAbstract
     // Verificar estado del procesamiento
     public function checkProcessingStatus($processing_id)
     {
-        require_once dirname(__DIR__) . "/lib/DocumentAI.php";
+        require_once dirname(__DIR__) . "/libs/DocumentAI.php";
 
         $documentAI = new DocumentAI();
         $status = $documentAI->checkProcessingStatus($processing_id);
