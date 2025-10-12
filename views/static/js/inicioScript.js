@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function obtenerApuntes(limit) {
-    const response = await fetch(`api?model=Apuntes&method=getApuntes&limit=${limit}`);
+    const response = await fetch(`api/index.php?model=Apuntes&method=getApuntes&limit=${limit}`);
     const data = await response.json();
     return data;
 }
