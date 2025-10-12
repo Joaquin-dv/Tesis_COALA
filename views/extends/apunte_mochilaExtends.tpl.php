@@ -3,14 +3,12 @@
         <section class="info_encabezado_apunte">
             <h2>{{ TITULO }}</h2>
             <p>{{ AÑO }}</p>
-            <p>{{ MATERIA }} - {{ ESCUELA }} | Prof. Gómez</p>
+            <p>{{ MATERIA }} - {{ ESCUELA }} <!-- | Prof. {{ PROFESOR }} --></p>
         </section>
         <figure><img src="{{ IMAGEN }}" alt=""></figure>
     </header>
     <section class="cuerpo_apunte">
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut consequat risus risus, in lobortis purus
-            pretium
-            et. Etiam facilisis lorem non faucibus faucibus.</p>
+        <p>{{ DESCRIPCION }}</p>
         <p>Contiene 2 archivos</p>
     </section>
     <footer>

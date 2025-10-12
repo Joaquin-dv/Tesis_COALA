@@ -1,9 +1,9 @@
 <?php
 
 /**
- * 
+ *
  * Apuntes.php esta clase es para gestionar los apuntes
- * 
+ *
  * */
 class Apuntes extends DBAbstract
 {
@@ -43,7 +43,7 @@ class Apuntes extends DBAbstract
         $this->nivel = null;
         $this->division = null;
         $this->visibilidad = "publico";
-        $this->estado = "pendiente";
+        $this->estado = "en_revision";
         $this->verificado_por_docente = 0;
         $this->verificado_por_usuario_id = null;
         $this->verificado_en = null;
@@ -57,13 +57,16 @@ class Apuntes extends DBAbstract
      * Retorna la cantidad de apuntes
      * 
      * */
-    public function getCant()
+    public function getCantAprobados()
     {
-        $row = $this->query("SELECT COUNT(*) AS c FROM apuntes WHERE borrado_en IS NULL");
-        return (int) $row[0]['c'];
+        $row = $this->callSP("CALL sp_obtener_cantidad_apuntes_aprobados()");
+        return (int) $row['result_sets'][0][0]['c'];
     }
 
-
+    /**
+     * Obtiene todos los apuntes, con un límite opcional
+     * Si $formated es true, devuelve un array simplificado para la vista
+     */
     public function getApuntes($limit = 100)
     {
         // Evitá inyección por si llega algo raro en $limit
@@ -73,18 +76,92 @@ class Apuntes extends DBAbstract
 
         $result = $this->query($sql);
 
+        if ($formated === true) {
+            $temp_array = [];
+            foreach ($result as $row) {
+                $temp_array[] = [
+                    "TITULO" => $row["TITULO"],
+                    "MATERIA" => $row["MATERIA"],
+                    "ESCUELA" => $row["ESCUELA"],
+                    "AÑO" => $row["AÑO"],
+                    "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : null,
+                    "IMAGEN" => "",
+                ];
+            }
+            return $temp_array;
+        }
+
         // Si no querés formateo, devolvés el resultset crudo
-        return $result;
+        return $result['result_sets'][0];
+    }
+
+    /**
+     * Obtiene todos los apuntes de un alumno por su ID
+     */
+    public function getApuntesByAlumno($alumno_id, bool $formated = false)
+    {
+        if (!is_numeric($alumno_id) || $alumno_id <= 0) {
+            return ["errno" => 500, "error" => "No se obtuvo el ID del alumno correctamente"];;
+        }
+
+        $result = $this->callSP("CALL sp_obtener_apuntes_por_alumno(?)", [$alumno_id]);
+
+        if ($formated === true) {
+            $temp_array = [];
+            foreach ($result['result_sets'][0] as $row) {
+                $temp_array[] = [
+                    "TITULO" => $row["TITULO"],
+                    "DESCRIPCION" => $row["DESCRIPCION"],
+                    "MATERIA" => $row["MATERIA"],
+                    "ESCUELA" => $row["ESCUELA"],
+                    "AÑO" => $row["AÑO"],
+                    "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : null,
+                    "IMAGEN" => "",
+                    "ESTADO" => $row["ESTADO"],
+                ];
+            }
+            return $temp_array;
+        }
+
+        // Si no querés formateo, devolvés el resultset crudo
+        return $result['result_sets'][0];
+    }
+
+    public function getApuntesFavoritosByAlumno($alumno_id, bool $formated = false)
+    {
+        if (!is_numeric($alumno_id) || $alumno_id <= 0) {
+            return ["errno" => 500, "error" => "No se obtuvo el ID del alumno correctamente"];;
+        }
+
+        $result = $this->callSP("CALL sp_obtener_apuntes_favoritos_por_alumno(?)", [$alumno_id]);
+
+        if ($formated === true) {
+            $temp_array = [];
+            foreach ($result['result_sets'][0] as $row) {
+                $temp_array[] = [
+                    "TITULO" => $row["TITULO"],
+                    "DESCRIPCION" => $row["DESCRIPCION"],
+                    "MATERIA" => $row["MATERIA"],
+                    "ESCUELA" => $row["ESCUELA"],
+                    "AÑO" => $row["AÑO"],
+                    "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : null,
+                    "IMAGEN" => "",
+                ];
+            }
+            return $temp_array;
+        }
+
+        // Si no querés formateo, devolvés el resultset crudo
+        return $result['result_sets'][0];
     }
 
     public function getPromedioByIDApunte($apunte_id)
     {
-        $sql = "SELECT promedio_calificacion FROM `estadisticas_apunte` WHERE apunte_id = " . $apunte_id . ";";
+        //
+        $result = $this->callSP("CALL sp_obtener_promedio_por_apunte_id()", [$apunte_id]);
 
-        $result = $this->query($sql);
-
-        if (count($result) > 0) {
-            return (float) $result[0]["promedio_calificacion"];
+        if (count($result['result_sets'][0]) > 0) {
+            return (float) $result['result_sets'][0]["promedio_calificacion"];
         } else {
             return 0;
         }
@@ -92,6 +169,17 @@ class Apuntes extends DBAbstract
 
     public function getApuntesPorId($id)
     {
+        if (!is_numeric($id) || $id <= 0) {
+            return ["errno" => 400, "error" => "ID de apunte inválido"];
+        }
+
+        $result = $this->callSP("CALL sp_obtener_apunte_por_id()", [$id]);
+
+        if (count($result['result_sets'][0]) == 0) {
+            return ["errno" => 404, "error" => "No se encontró el apunte"];
+        }
+
+        return $result['result_sets'][0][0];
     }
     /* registra un nuevo apunte */
     // Create viejo (Guardado temporalmente)
@@ -301,6 +389,12 @@ class Apuntes extends DBAbstract
         $sha256 = hash_file('sha256', $rutaTemporal);
         $bytes = filesize($rutaTemporal);
 
+        // Verificar si el archivo ya existe
+        $existing = $this->query("SELECT id FROM archivos_apuntes WHERE sha256 = '" . $sha256 . "'");
+        if ($existing && count($existing) > 0) {
+            return ["errno" => 409, "error" => "Este archivo ya ha sido subido anteriormente."];
+        }
+
         // Transacción
         $this->begin();
         try {
@@ -329,6 +423,7 @@ class Apuntes extends DBAbstract
                 return ["errno" => 500, "error" => "No se obtuvo el ID del apunte"];
             }
 
+            // Mover el archivo físicamente después de confirmar que el apunte se creó
             if (!move_uploaded_file($rutaTemporal, $rutaFinal)) {
                 $this->rollback();
                 return ["errno" => 500, "error" => "Error al mover el archivo al destino"];
@@ -357,7 +452,6 @@ class Apuntes extends DBAbstract
             }
 
             $this->commit();
-            $this->logger->creacion($usuarioId,'apunte', $apunte_id);
             return [
                 "errno" => 202,
                 "error" => "El archivo se subió correctamente",
@@ -366,6 +460,9 @@ class Apuntes extends DBAbstract
             ];
         } catch (Throwable $e) {
             $this->rollback();
+            if (strpos($e->getMessage(), 'Duplicate entry') !== false && strpos($e->getMessage(), 'uk_aa_sha') !== false) {
+                return ["errno" => 409, "error" => "Este archivo ya ha sido subido anteriormente."];
+            }
             return ["errno" => 500, "error" => "DB error: " . $e->getMessage()];
         }
     }
@@ -398,13 +495,17 @@ class Apuntes extends DBAbstract
         //     return ["errno" => 400, "error" => "Visibilidad inválida"];
         // }
 
+        // Si se está actualizando estado, usar método específico
+        if (isset($form["estado"])) {
+            return $this->updateEstado($apunte_id, $form["estado"], $form["motivo_rechazo"] ?? null);
+        }
+
         // Campos opcionales
         $updates = [];
 
         $sql = "UPDATE `apuntes` SET `titulo` = '" . $form["titulo"] . "', `descripcion` = '" . $form["descripcion"] . "', `verificado_por_docente` = '0', `verificado_por_usuario_id` = 'null' WHERE `apuntes`.`id` = " . $apunte_id . ";";
 
         $response = $this->query($sql);
-        $this->logger->modificacion($usuarioId,'apunte', $apunte_id);
         // var_dump($response);
         if ($response > 0) {
             return ["errno" => 200, "error" => "Apunte actualizado correctamente"];
@@ -419,9 +520,73 @@ class Apuntes extends DBAbstract
             return ["errno" => 400, "error" => "ID de apunte inválido"];
         }
 
-        $sql = "UPDATE `apuntes` SET `borrado_en` = current_timestamp() WHERE `id` = " . $apunte_id . " AND `borrado_en` IS NULL;";
+        $response = $this->callSP("sp_delete_apunte", [$apunte_id]);
+
+        if ($response > 0) {
+            return ["errno" => 200, "error" => "Apunte borrado correctamente"];
+        } else {
+            return ["errno" => 500, "error" => "Error al borrar el apunte"];
+        }
+    }
+
+    // Iniciar procesamiento de documento con IA
+    public function startProcessing($apunte_id)
+    {
+        require_once dirname(__DIR__) . "/libs/DocumentAI.php";
+
+        if (!is_numeric($apunte_id) || $apunte_id <= 0) {
+            return ["errno" => 400, "error" => "ID de apunte inválido"];
+        }
+
+        // Obtener la ruta del archivo desde la BD
+        $sql = "SELECT ruta_archivo FROM archivos_apuntes WHERE apunte_id = " . (int)$apunte_id . " AND es_principal = 1";
+        $result = $this->query($sql);
+        if (!$result || count($result) == 0) {
+            return ["errno" => 404, "error" => "Archivo no encontrado"];
+        }
+        $ruta_archivo = $result[0]['ruta_archivo'];
+
+        $documentAI = new DocumentAI();
+        $processingId = $documentAI->startProcessing($ruta_archivo, $apunte_id);
+
+        return ["errno" => 200, "processing_id" => $processingId];
+    }
+
+    // Verificar estado del procesamiento
+    public function checkProcessingStatus($processing_id)
+    {
+        require_once dirname(__DIR__) . "/libs/DocumentAI.php";
+
+        $documentAI = new DocumentAI();
+        $status = $documentAI->checkProcessingStatus($processing_id);
+
+        if ($status['status'] === 'completed') {
+            // Actualizar estado del apunte basado en el resultado
+            $this->updateEstadoFromProcessing($processing_id, $status['result']);
+        }
+
+        return $status;
+    }
+
+    // Actualizar estado del apunte basado en resultado de IA
+    private function updateEstadoFromProcessing($processing_id, $result)
+    {
+        // Obtener apunte_id del archivo de estado
+        $tempDir = sys_get_temp_dir();
+        $statusFile = $tempDir . '/' . $processing_id . '.status';
+        if (!file_exists($statusFile)) {
+            return;
+        }
+        $status = json_decode(file_get_contents($statusFile), true);
+        $apunte_id = $status['apunte_id'];
+
+        $nuevo_estado = $result['status'] === 'approved' ? 'aprobado' : 'rechazado';
+        $motivo = isset($result['reason']) ? $result['reason'] : null;
+
+        // Actualizar en BD
+        $sql = "UPDATE apuntes SET estado = '" . $nuevo_estado . "', motivo_rechazo = " . ($motivo ? "'" . $motivo . "'" : "NULL") . " WHERE id = " . (int)$apunte_id;
         $this->query($sql);
-        $this->logger->eliminacion($usuarioId,'apunte', $apunte_id);
+
         return ["errno" => 202, "error" => "Apunte eliminado correctamente"];
     }
 }
