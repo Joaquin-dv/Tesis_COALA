@@ -8,96 +8,6 @@
     --detalle: #8d8d8d;
 }
 
-article
-{
-    border: solid 1px var(--linea);
-    background-color: var(--fondo);
-    max-width: 250px;
-    max-height: 12em;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 13px;
-    align-items: center;
-    border-radius: 20px;
-    gap: .3em;
-}
-figure
-{
-    background-color: rgb(194, 234, 240);
-    border-radius: 0.8em;
-    width: 100%;
-    height: 10em;
-}
-.informacion
-{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    background-color: var(--fondo);
-    width: 100%;
-}
-h2{
-    color: var(--titulo);
-    font-size: 19px;
-}
-p{
-    color: var(--detalle);
-    font-size: 15px;
-}
-
-#sidebar_activo {
-    display: none;
-}
-
-
-.abrir_sidebar {
-    font-size: 1.5em;
-    cursor: pointer;
-    padding: 0.5em;
-    background-color: #b3d4f0;
-    border-radius: 14px;
-    margin-left: 20px;
-    color: #2f3e4d;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.escuelas_materias {
-    position: fixed;
-    top: 4.3em;
-    left: 0;
-    width: 12em;
-    height: 100%;
-    background-color: #cbe4f7;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 1em;
-    transform: translateX(-100%);
-    transition: transform 0.4s ease;
-    z-index: 100;
-    color: #2f3e4d;
-    border-radius: 0 20px 0 0;
-    gap: 1em;
-}
-nav a{
-    text-decoration: none;
-    color: #2f3e4d;
-    transition: background-color 0.4s ease, color 0.4s ease;
-}
-#sidebar_activo:checked ~ .escuelas_materias {
-    transform: translateX(0);
-}
-
-.cerrar_sidebar {
-    align-self: flex-end;
-    font-size: 1.2em;
-    cursor: pointer;
-    margin-bottom: 1em;
-}
-nav a:hover{
-    color: #87c7e3;
-}
 section.barra_superior {
     display: flex;
     align-items: center;
@@ -107,21 +17,68 @@ main .buscador_subir_apunte{
      
 }
 
-.contenido {
-    margin-top: 2em;
-    width: 100%;
+.contenedor_apuntes {
+    margin: 1em 0;
     display: flex;
     flex-wrap: wrap;
-    flex-direction: row;
-    align-items: center;
-    justify-content: start;
     gap: 10px;
+    justify-content: center;
 }
 
 
-.escuela{
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #2f3e4d;
-    margin-bottom: 0;
+/* nuevos */
+.filtros {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    background-color: var(--bg-boton-verde);
+    color: white;
+    padding: 5px 9px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.dropbtn:hover {
+    background-color: var(--bg-boton-verde-hover);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 120px;
+    border-radius: 8px;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    z-index: 100;
+    margin-top: 5px;
+}
+
+.dropdown-content a {
+    color: #333;
+    padding: 10px 14px;
+    text-decoration: none;
+    display: block;
+    transition: background 0.2s;
+}
+
+.dropdown-content a:hover {
+    background-color: #f2f2f2;
+    border-radius: 8px;
+}
+
+
+.dropdown:focus-within .dropdown-content {
+    display: block;
 }

@@ -1,51 +1,38 @@
 <dialog id="modal">
     <section class="contenido_modal">
         <i id="cerrar_modal" class="fa-solid fa-x"></i>
-        <form action="?slug=inicio" method="POST" id="form_subir_apunte" enctype="multipart/form-data">
-            <label for="titulo">Titulo</label>
-            <input type="text" name="titulo" id="titulo" placeholder="Titulo" class="campo_modal">
-            <label for="descripcion">Descripcion</label>
-            <input type="text" name="descripcion" id="descripcion" placeholder="Descripcion" class="campo_modal">
-            <button id="subir_archivo" class="btn_modal">Agregar archivo</button>
-            <section class="datos_apunte">
-                <div class="input_label">
-                    <label for="curso">Curso</label>
-                    <select name="curso" id="curso" class="campo_modal">
-                        <option value="">Seleccionar</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
+        <section class="imagen">
+            <img id="koala_modal" src="views/static/img/modal/koala.png" alt="">
+        </section>
+        <section class="contenido_formulario">
+            <span class="form_titulo poppins-bold">Subi tu apunte a COALA</span>
+            <form action="?slug=inicio" method="POST" id="formulario" autocomplete="off" enctype="multipart/form-data">
+                <input type="text" name="titulo" id="titulo" class="campo_modal poppins-semibold" placeholder="Titulo del apunte">
+                <!-- <input type="text" name="materia" id="materia" class="campo_modal poppins-semibold" placeholder="Materia"> -->
+                <select name="materia" id="" class="campo_modal poppins-semibold">
+                    <option value="">Materia</option>
+                    <option value="1">Matematicas</option>
+                </select>
+                <section class="curso_division">
+                    <select name="curso" id="curso" class="campo_modal poppins-semibold">
+                        <option value="">Curso</option>
+                        
                     </select>
-                </div>
-                <div class="input_label">
-                    <label for="division">Division</label>
-                    <select name="division" id="division" class="campo_modal">
-                        <option value="">Seleccionar</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
+                    <select name="division" id="division" class="campo_modal poppins-semibold">
+                        <option value="">Division</option>
+                        
                     </select>
-                </div>
-                <div class="input_label">
-                    <label for="materia">Materia</label>
-                    <select name="materia" id="materia" class="campo_modal">
-                        <option value="">Seleccionar</option>
-                        <option value="1">Cálculo I</option>
-                        <option value="2">Cálculo II</option>
-                        <option value="3">Física I</option>
-                        <option value="4">Física II</option>
-                        <option value="5">Álgebra</option>
-                        <option value="6">Química</option>
-                    </select>
-                </div>
-            </section>
-            <button id="subir_apunte" name="btn_subir_apunte" type="submit" class="btn_modal">Subir Apunte</button>
-        </form>
+                </section>
+                <input type="text" name="profesor" id="profesor" class="campo_modal poppins-semibold" placeholder="Profesor">
+                <textarea id="descripcion" class="campo_modal poppins-semibold" name="descripcion" rows="4" cols="50" placeholder="Descripción"></textarea>
+                <input type="file" name="btn_subir_archivo" id="btn_subir_arch" class="poppins-semibold" value="Subir archivo">
+                <label for="btn_subir_arch" class="btn_label poppins-semibold">
+                    <i class="fa-solid fa-file-arrow-up"></i>
+                    Subir archivo
+                </label>
+                <button id="subir_apunte" name="btn_subir_apunte" type="button" class="btn_modal poppins-semibold">Subir Apunte</button>
+                <div class="errorMsg" id="errorGeneral">{{ MSG_ERROR }}</div>
+            </form>
+        </section>
     </section>
 </dialog>

@@ -131,3 +131,24 @@ footer button:active{
     background-color: #0056b3;
     color: white;
 }
+.btn_tab {
+    padding: 12px 24px;
+    background: white;
+    border-radius: 8px;
+    font-size: 16px;
+    border: solid 2px var(--color-accion);
+}
+section.tabs {
+    display: flex;
+    gap: 11px;
+    margin: 1.5em 0 1.5em 0;
+}
+button.btn_tab.active {
+    background: var(--color-accion);
+    color: white;
+}
+.btn_tab:hover {
+    background: var(--color-accion);
+    color: white;
+    transition: background-color 0.2s ease-out, color 0.2s ease-out;
+}

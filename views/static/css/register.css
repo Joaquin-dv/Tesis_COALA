@@ -43,3 +43,30 @@
         left: 30em;
     }
 }
+
+/* Estilos específicos para la página de verificación */
+.texto-verificacion {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #666;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+#codigo {
+    text-align: center;
+    font-size: 1.2rem;
+    letter-spacing: 0.2em;
+    font-weight: bold;
+}
+
+.successMsg {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    border-radius: 4px;
+    padding: 0.75rem;
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 0.9rem;
+}

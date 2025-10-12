@@ -15,23 +15,7 @@
 </head>
 
 <body class="josefin-sans-normal">
-    <header>
-        <div class="contenedor_logo_secundario">
-            <img src="/views/static/img/branding/logo_secundario.png" alt="">
-        </div>
-
-        <nav class="barra_navegacion">
-            <a href="?slug=inicio">Inicio</a>
-            <a href="?slug=explorar">Explorar</a>
-            <a href="?slug=mochila">Mochila</a>
-            <a href="?slug=clases">Clases</a>
-        </nav>
-
-
-        <section class="perfil">
-            <img src="/views/static/img/inicio/foto_perfil.jpg" alt="foto de perfil">
-        </section>
-    </header>
+    @extends(appHeader)
 
     <main>
         <section class="buscador_subir_apunte">
@@ -44,39 +28,45 @@
             </div>
         </section>
 
-        <h2 class="vistos_recientemente">Apuntes favoritos</h2>
-        <section class="contenedor_apuntes">
-            @extends(apunte_mochila)
-            @extends(apunte_mochila)
-            @extends(apunte_mochila)
-            @extends(apunte_mochila)
+        <section class="tabs">
+            <button class="btn_tab poppins-semibold" onclick="mostrarSeccion('todos')">Todos</button>
+            <button class="btn_tab poppins-semibold" onclick="mostrarSeccion('favoritos')">Favoritos</button>
+            <button class="btn_tab poppins-semibold" onclick="mostrarSeccion('pendientes')">En revision</button>
+            <button class="btn_tab poppins-semibold" onclick="mostrarSeccion('aprobados')">Aprobados</button>
+            <button class="btn_tab poppins-semibold" onclick="mostrarSeccion('rechazados')">Rechazados</button>
         </section>
-        
-        <h2 class="para_ti">Tus apuntes</h2>
+
+        <div id="favoritos" class="bloque_apuntes">
+            <h2 class="vistos_recientemente">Apuntes favoritos</h2>
+            <section class="contenedor_apuntes">
+                {{ APUNTES_FAVORITOS }}
+            </section>
+        </div>
+
+        <div id="aprobados"class="bloque_apuntes">
         <h3>Aprobados</h3>
-        <section class="contenedor_apuntes">
-            @extends(apunte_mochila)
-            @extends(apunte_mochila)
-            @extends(apunte_mochila)
-        </section>
+            <section class="contenedor_apuntes">
+                {{ APUNTES_APROBADOS }}
+            </section>
+        </div>
 
-        <h3>Pendientes</h3>
-        <section class="contenedor_apuntes">
-            @extends(apunte_mochila)
-            @extends(apunte_mochila)
-        </section>
+        <div id="pendientes" class="bloque_apuntes">
+            <h3>En revision</h3>
+            <section class="contenedor_apuntes">
+                {{ APUNTES_EN_REVISION }}
+            </section>
+        </div>
 
-        <h3>Rechazados</h3>
-        <section class="contenedor_apuntes">
-            @extends(apunte_mochila)
-            @extends(apunte_mochila)
-            @extends(apunte_mochila)
-            @extends(apunte_mochila)
-            @extends(apunte_mochila)
-        </section>
+        <div id="rechazados" class="bloque_apuntes">
+            <h3>Rechazados</h3>
+            <section class="contenedor_apuntes">
+                {{ APUNTES_RECHAZADOS }}
+            </section>
+        </div>
         @extends(modalSubirApunte)
     </main>
-    <script src="views/static/js/modal.js"></script>
+    <!-- <script src="views/static/js/modal.js"></script> -->
+    <script src="views/static/js/mochila.js"></script>
 </body>
 
 </html>

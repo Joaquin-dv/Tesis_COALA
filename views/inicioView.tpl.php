@@ -1,38 +1,7 @@
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/views/static/css/inicio.css">
-    <link rel="stylesheet" href="/views/static/css/modal.css">
-    <link rel="stylesheet" href="/views/static/css/style_apunte.css">
-    <script src="https://kit.fontawesome.com/f63493d67a.js" crossorigin="anonymous"></script>
-    <link rel="icon" type="image/png" sizes="32x32" href="views/static/img/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="views/static/img/favicon/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="views/static/img/favicon/apple-touch-icon.png">
-    <link rel="manifest" href="views/static/img/favicon/site.webmanifest">
-    <title>COALA</title>
-</head>
+@extends(htmlHead)
 
 <body class="josefin-sans-normal">
-    <header>
-        <div class="contenedor_logo_secundario">
-            <img src="/views/static/img/branding/logo_secundario.png" alt="">
-        </div>
-
-        <nav class="barra_navegacion">
-            <a href="?slug=inicio">Inicio</a>
-            <a href="?slug=explorar">Explorar</a>
-            <a href="?slug=mochila">Mochila</a>
-            <a href="?slug=clases">Clases</a>
-        </nav>
-
-
-        <section class="perfil">
-            <img src="/views/static/img/inicio/foto_perfil.jpg" alt="foto de perfil">
-        </section>
-    </header>
+    @extends(appHeader)
 
     <main>
         <section class="buscador_subir_apunte">
@@ -45,29 +14,27 @@
             </div>
         </section>
 
-        <h2 class="vistos_recientemente">Vistos recientemente</h2>
-        <section class="contenedor_apuntes">
-            @extends(apunte)
-            @extends(apunte)
-            @extends(apunte)
-            @extends(apunte)
-            @extends(apunte)
-            @extends(apunte)
+        <h2 class="vistos_recientemente">Subidos recientemente</h2>
+        <section id="contenedor_vistos_recientemente" class="contenedor_apuntes">
+            
         </section>
         <h2 class="para_ti">Para ti</h2>
-        <section class="contenedor_apuntes">
-            @extends(apunte)
-            @extends(apunte)
-            @extends(apunte)
-            @extends(apunte)
-            @extends(apunte)
-            @extends(apunte)
-            @extends(apunte)
-            @extends(apunte)
+        <section id="contenedor_para_ti" class="contenedor_apuntes">
+            
         </section>
-        @extends(modalSubirApunte)
+        {{ MODAL_SUBIR_APUNTE }}
     </main>
-    <script src="views/static/js/modal.js"></script>
+    <footer class="mobile-nav">
+        <a href="?slug=inicio"><i class="fa-solid fa-house"></i></a>
+        <a href="?slug=explorar"><i class="fa-solid fa-magnifying-glass"></i></a>
+        <a href="?slug=mochila"><i class="fa-solid fa-box-archive"></i></a>
+        <a href="?slug=clases"><i class="fa-solid fa-school"></i></a>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- <script src="views/static/js/toast.js"></script> -->
+    <!-- <script src="views/static/js/validacionFormulario.js"></script> -->
+    <script type="module" src="views/static/js/inicioScript.js"></script>
+    <script src="views/static/js/generalesScript.js"></script>
 </body>
 
 </html>

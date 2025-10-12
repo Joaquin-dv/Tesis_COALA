@@ -3,15 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ APP_SECTION }} - {{ APP_NAME }}</title>
+    <title>{{ APP_NAME }}</title>
 
     <meta property="og:description" content="{{ APP_DESCRIPTION }}">
-
-
 	<!-- Primary Meta Tags -->
 	<meta name="title" content="{{ APP_NAME }}">
 	<meta name="description" content="{{ APP_DESCRIPTION }}">
-	
 	<meta name="author" content="{{ APP_AUTHOR }}">
 	<!-- <meta name="reply-to" content="elmattprofe@gmail.com">
 	<link rev="made" href="mailto:elmattprofe@gmail.com">
@@ -25,4 +22,29 @@
 	<meta property="og:title" content="{{ APP_NAME }}">
 	<meta property="og:description" content="{{ APP_DESCRIPTION }}">
 	<meta property="og:image" content="{{ APP_URL }}/img/hero.jpeg">
+
+	<!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="views/static/img/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="views/static/img/favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="views/static/img/favicon/apple-touch-icon.png">
+    <link rel="manifest" href="views/static/img/favicon/site.webmanifest">
+
+	<!-- Font Awesome -->
+	<script src="https://kit.fontawesome.com/f63493d67a.js" crossorigin="anonymous"></script>
+
+	<!-- ===== Estilos ===== -->
+	<!-- Inicio -->
+	<link rel="stylesheet" href="/views/static/css/inicio.css">
+    <link rel="stylesheet" href="/views/static/css/modal.css">
+    <link rel="stylesheet" href="/views/static/css/style_apunte.css">
+	<link rel="stylesheet" href="/views/static/css/toast.css">
+	<!-- Explorar -->
+	<link rel="stylesheet" href="views/static/css/explorar.css">
+    <link rel="stylesheet" href="views/static/css/style_apunte.css">
+
+	<!-- Clases -->
+	<!-- mismas que Inicio -->
+
+	<!-- Mochila -->
+    <!-- <link rel="stylesheet" href="views/static/css/mochila.css"> -->
 </head>

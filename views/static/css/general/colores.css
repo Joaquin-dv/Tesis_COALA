@@ -2,7 +2,11 @@
     --bg-body: #f7f7f7;
     
     --bg-boton-verde: #A7D129;
+    --bg-boton-verde-hover: #91B21A;
     --bg-celeste: #00a1db;
+    --bg-header: #FFFFFF;
+    --bg-gris: #DBDBDB;
+    
 
     --txt-negro: #000000;
     --txt-celeste: #00a1db;
@@ -13,4 +17,9 @@
     --color-accion: #56AEFF;
     --borde-input: #D8D8D8;
     --btn-hover: #2D9BFF;
+
+    --btn-modal : #E9EEF6;
+    --modal-bg:  #A7D129;
+    --txt-form-titulo: #2B2B2B;
+    --modal-placeholder: #C0C0C0;
 }
