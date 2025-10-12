@@ -6,19 +6,20 @@
 	 * index.php trabaja como un ROUTER - FIREWALL
 	 * 
 	 * */
+	date_default_timezone_set("America/Argentina/Buenos_Aires");
 
 	require_once ".env.php"; /*Variables de entorno*/
 	require_once "models/DBAbstract.php"; /*Modelo de conexión a la db*/
 	require_once 'models/Usuarios.php';
 	require_once 'models/Apuntes.php';
 	require_once 'models/Escuelas.php';
-	require_once "lib/mopla/Mopla.php"; /*Motor de plantillas*/
-	require_once "lib/mopla/Extends.php"; /*Motor de componentes*/
-	require_once "lib/DocumentAI.php"; /*Procesamiento de documentos con IA*/
+	require_once "libs/DocumentAI.php"; /*Procesamiento de documentos con IA*/
+	require_once "libs/mopla/Mopla.php"; /*Motor de plantillas*/
+	require_once "libs/mopla/Extends.php"; /*Motor de componentes*/
 
-	include 'lib/Mailer/src/PHPMailer.php';
-	include 'lib/Mailer/src/SMTP.php';
-	include 'lib/Mailer/src/Exception.php';
+	include 'libs/Mailer/src/PHPMailer.php';
+	include 'libs/Mailer/src/SMTP.php';
+	include 'libs/Mailer/src/Exception.php';
 
 	session_start();
 	
