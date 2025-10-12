@@ -126,6 +126,33 @@ class Apuntes extends DBAbstract
         return $result['result_sets'][0];
     }
 
+    public function getApuntesFavoritosByAlumno($alumno_id, bool $formated = false)
+    {
+        if (!is_numeric($alumno_id) || $alumno_id <= 0) {
+            return ["errno" => 500, "error" => "No se obtuvo el ID del alumno correctamente"];;
+        }
+
+        $result = $this->callSP("CALL sp_obtener_apuntes_favoritos_por_alumno(?)", [$alumno_id]);
+
+        if ($formated === true) {
+            $temp_array = [];
+            foreach ($result['result_sets'][0] as $row) {
+                $temp_array[] = [
+                    "TITULO" => $row["TITULO"],
+                    "DESCRIPCION" => $row["DESCRIPCION"],
+                    "MATERIA" => $row["MATERIA"],
+                    "ESCUELA" => $row["ESCUELA"],
+                    "AÑO" => $row["AÑO"],
+                    "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : null,
+                    "IMAGEN" => "",
+                ];
+            }
+            return $temp_array;
+        }
+
+        // Si no querés formateo, devolvés el resultset crudo
+        return $result['result_sets'][0];
+    }
 
     public function getPromedioByIDApunte($apunte_id)
     {
