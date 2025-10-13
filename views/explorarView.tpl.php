@@ -19,6 +19,7 @@
                 {{ EXPLORAR }}
             </section>
     </main>
+    @extends(mobile_nav)
     <script src="views/static/js/botonFiltro.js"></script>
 </body>
 

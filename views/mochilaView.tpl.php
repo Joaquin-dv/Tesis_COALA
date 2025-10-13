@@ -4,8 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="views/static/css/genereales.css">
     <link rel="stylesheet" href="views/static/css/modal.css">
     <link rel="stylesheet" href="views/static/css/mochila.css">
+    <link rel="stylesheet" href="views/static/css/style_apunte.css">
     <script src="https://kit.fontawesome.com/f63493d67a.js" crossorigin="anonymous"></script>
     <link rel="icon" type="image/png" sizes="32x32" href="views/static/img/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="views/static/img/favicon/favicon-16x16.png">
@@ -20,11 +22,7 @@
     <main>
         <section class="buscador_subir_apunte">
             <div class="contenedor_buscador">
-                <h2>¡Hola, Pepe!</h2>
                 <input type="text" placeholder="Buscar..." class="input_buscador">
-            </div>
-            <div class="boton_subir_apunte">
-                <button id="abrir_modal">Subir apunte</button>
             </div>
         </section>
 
@@ -65,6 +63,7 @@
         </div>
         @extends(modalSubirApunte)
     </main>
+    @extends(mobile_nav)
     <!-- <script src="views/static/js/modal.js"></script> -->
     <script src="views/static/js/mochila.js"></script>
 </body>

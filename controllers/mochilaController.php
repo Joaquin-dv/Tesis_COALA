@@ -3,7 +3,10 @@
     $tpl = new Mopla('mochila');
 
     // Se carga el componente
-	$apunteExtend = new Extend("apunte_mochila");
+	$apunteAprobado = new Extend("apunte_aprobado");
+    $apunteRevision = new Extend("apunte_en_revision");
+    $apunteRechazado = new Extend("apunte_rechazado");
+    $apunteFavorito = new Extend("apunte_favorito");
     
     // Se carga el modelo de apuntes
 	$apunte = new Apuntes();
@@ -21,21 +24,21 @@
 	// Cargo la informacion en los componentes
 	foreach ($lista_apuntes as $row) {
         if($row['ESTADO'] == "aprobado"){
-            $lista_aprobados .= $apunteExtend->assignVar($row);
+            $lista_aprobados .= $apunteAprobado->assignVar($row);
         }
 
         if($row['ESTADO'] == "rechazado"){
-            $lista_rechazados .= $apunteExtend->assignVar($row);
+            $lista_rechazados .= $apunteRechazado->assignVar($row);
         }
         
         if($row['ESTADO'] == "en_revision"){
-            $lista_en_revision .= $apunteExtend->assignVar($row);
+            $lista_en_revision .= $apunteRevision->assignVar($row);
         }
 	}
 
     //Carga la informacion de los apuntes favoritos
     foreach ($lista_apuntes_favoritos as $row) {
-        $lista_favoritos .= $apunteExtend->assignVar($row);    
+        $lista_favoritos .= $apunteFavorito->assignVar($row);    
 	}
 
     // Verificar listas vacías y asignar mensajes
@@ -52,7 +55,7 @@
         $lista_en_revision = '<p class="msg_vacio">No hay apuntes en revisión</p>';
     }
 
-    $tpl->printExtends(["apunte_mochila", "modalSubirApunte"]);
+    $tpl->printExtends(["apunte_favorito", "modalSubirApunte","mobile_nav","apunte_aprobado","apunte_en_revision","apunte_rechazado"]);
 
     // $tpl->assignVar(["TITULO" => "Apuntes de Cálculo I", "MATERIA" => "Cálculo I", "ESCUELA" => "UTN FRBA", "AÑO" => "2020", "PUNTUACION" => "4.5", "IMAGEN" => '']);
 	$tpl->assignVar(["APUNTES_FAVORITOS" => $lista_favoritos]);

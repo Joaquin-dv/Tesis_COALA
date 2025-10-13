@@ -11,6 +11,7 @@
 section.barra_superior {
     display: flex;
     align-items: center;
+    /* flex-direction: column; */
 }
 main .buscador_subir_apunte{
         width: 100%;
@@ -81,4 +82,14 @@ main .buscador_subir_apunte{
 
 .dropdown:focus-within .dropdown-content {
     display: block;
+}
+
+@media(max-width: 768px){
+    section.barra_superior{
+        flex-direction: column;
+    }
+
+    .filtros{
+        margin: 5px;
+    }
 }

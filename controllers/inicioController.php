@@ -50,6 +50,8 @@
 
 	$tpl->assignVar(["MODAL_SUBIR_APUNTE" => $modalCargado]);
 
+	$tpl->printExtends(["mobile_nav"]);
+
 	// $tpl->printExtends(["modalSubirApunte"]);
 	
 	// if(isset($_POST["titulo"])){
