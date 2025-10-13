@@ -14,6 +14,7 @@
 	require_once 'models/Apuntes.php';
 	require_once 'models/Escuelas.php';
 	require_once 'models/Logger.php';
+	require_once 'models/ThumbnailGenerator.php';
 	require_once "libs/DocumentAI.php"; /*Procesamiento de documentos con IA*/
 	require_once "libs/mopla/Mopla.php"; /*Motor de plantillas*/
 	require_once "libs/mopla/Extends.php"; /*Motor de componentes*/
