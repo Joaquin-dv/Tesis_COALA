@@ -34,7 +34,7 @@
                 <div class="segunda_linea">
                     <div>
                         <p>
-                            <strong>Autor:</strong> {{ NOMBRE_USUARIO }}
+                            <strong>Autor:</strong> {{ NOMBRE_AUTOR }}
                         </p>
                     </div>
                     <div>

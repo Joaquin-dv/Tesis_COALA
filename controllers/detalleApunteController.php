@@ -62,8 +62,11 @@
     // }
 
     // Cargamos los componentes necesarios
-    $tpl->assignVar(["TITULO" => $info_apunte['TITULO'], "MATERIA" => $info_apunte['MATERIA'], "ESCUELA" => $info_apunte['ESCUELA'], "AÑO" => $info_apunte['AÑO'], "PROMEDIO_CALIFICACIONES" => $info_apunte['PROMEDIO_CALIFICACIONES'], "CANTIDAD_PUNTUACIONES" => $info_apunte['CANTIDAD_PUNTUACIONES'], "NOMBRE_USUARIO" => $info_apunte['NOMBRE_USUARIO'], "FECHA_CREACION" => $info_apunte['FECHA_CREACION'], "RUTA_ARCHIVO" => $ruta_archivo, "ERROR_ARCHIVO" => $error_archivo, "ES_FAVORITO" => $es_favorito]);
+    $tpl->assignVar(["TITULO" => $info_apunte['TITULO'], "MATERIA" => $info_apunte['MATERIA'], "ESCUELA" => $info_apunte['ESCUELA'], "AÑO" => $info_apunte['AÑO'], "PROMEDIO_CALIFICACIONES" => $info_apunte['PROMEDIO_CALIFICACIONES'], "CANTIDAD_PUNTUACIONES" => $info_apunte['CANTIDAD_PUNTUACIONES'], "NOMBRE_AUTOR" => $info_apunte['NOMBRE_AUTOR'], "FECHA_CREACION" => $info_apunte['FECHA_CREACION'], "RUTA_ARCHIVO" => $ruta_archivo, "ERROR_ARCHIVO" => $error_archivo, "ES_FAVORITO" => $es_favorito, "MOSTRAR_TOAST_COMENTARIO" => isset($mostrar_toast_comentario) ? 'true' : 'false']);
     $tpl->assignVar(["COMENTARIOS_APUNTE" => $lista_comentarios]);
+
+    // Cargamos la informacion del usuario logueado
+    $tpl->assignVar(["NOMBRE_USUARIO" => $_SESSION[APP_NAME]['user']['nombre_completo']]);
     
     // Mostramos la vista
     $tpl->printToScreen();

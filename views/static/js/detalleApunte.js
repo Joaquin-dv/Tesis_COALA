@@ -174,6 +174,21 @@ document.addEventListener("DOMContentLoaded", () => {
                                 corazon.classList.remove("favorito-activo");
                             }
                         });
+                    } else if (data.errno === 400) {
+                        // Mostrar mensaje específico para apuntes no aprobados
+                        import('./modules/toastModule.js').then(module => {
+                            // Crear un toast personalizado con el mensaje del servidor
+                            Swal.fire({
+                                icon: "warning",
+                                text: data.error,
+                                showCloseButton: true,
+                                showConfirmButton: false,
+                                timer: 4000,
+                                timerProgressBar: false,
+                                position: 'bottom-right',
+                                toast: true
+                            });
+                        });
                     } else {
                         alert("Error al cambiar favorito: " + data.error);
                     }
