@@ -84,9 +84,10 @@ class Apuntes extends DBAbstract
                     "MATERIA" => $row["MATERIA"],
                     "ESCUELA" => $row["ESCUELA"],
                     "AÑO" => $row["AÑO"],
-                    "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : null,
+                    "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : "Sin calificar",
                     "IMAGEN" => "",
                     "USUARIO_ID" => $row["USUARIO_ID"],
+                    "NIVEL_CURSO" => $row["NIVEL_CURSO"],
                 ];
             }
             return $temp_array;
@@ -125,6 +126,8 @@ class Apuntes extends DBAbstract
                 // Si el apunte no tiene calificaciones, forzamos a 0 la puntuación
                 if ($row["PROMEDIO_CALIFICACIONES"] === null) {
                     $temp_array[0]["PROMEDIO_CALIFICACIONES"] = "0";
+                }else{
+                    $temp_array[0]["PROMEDIO_CALIFICACIONES"] = number_format((float)$row["PROMEDIO_CALIFICACIONES"], 1);
                 }
             }
             return $temp_array;
@@ -164,14 +167,16 @@ class Apuntes extends DBAbstract
             $temp_array = [];
             foreach ($result['result_sets'][0] as $row) {
                 $temp_array[] = [
+                    "APUNTE_ID" => $row["APUNTE_ID"],
                     "TITULO" => $row["TITULO"],
                     "DESCRIPCION" => $row["DESCRIPCION"],
                     "MATERIA" => $row["MATERIA"],
                     "ESCUELA" => $row["ESCUELA"],
                     "AÑO" => $row["AÑO"],
-                    "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : null,
+                    "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : "Sin calificar",
                     "IMAGEN" => "",
                     "ESTADO" => $row["ESTADO"],
+                    "NIVEL_CURSO" => $row["NIVEL_CURSO"],
                 ];
             }
             return $temp_array;
@@ -193,13 +198,15 @@ class Apuntes extends DBAbstract
             $temp_array = [];
             foreach ($result['result_sets'][0] as $row) {
                 $temp_array[] = [
+                    "APUNTE_ID" => $row["APUNTE_ID"],
                     "TITULO" => $row["TITULO"],
                     "DESCRIPCION" => $row["DESCRIPCION"],
                     "MATERIA" => $row["MATERIA"],
                     "ESCUELA" => $row["ESCUELA"],
                     "AÑO" => $row["AÑO"],
-                    "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : null,
+                    "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : "Sin calificar",
                     "IMAGEN" => "",
+                    "NIVEL_CURSO" => $row["NIVEL_CURSO"],
                 ];
             }
             return $temp_array;
@@ -353,7 +360,7 @@ class Apuntes extends DBAbstract
 
     public function create(
         $titulo,
-        $descripcion,
+        $descripcion = null,
         $materia,
         $archivo,           // array estilo $_FILES: ['name' => ..., 'tmp_name' => ...]
         $curso = null,
@@ -712,7 +719,7 @@ class Apuntes extends DBAbstract
             (int) $usuario_id,
             (string) trim($texto_comentario)
         ]);
-        
+
         if ($result && isset($result['result_sets'][0][0]['comentario_id'])) {
             return [
                 "errno" => 201,
@@ -724,4 +731,180 @@ class Apuntes extends DBAbstract
         }
     }
 
+    /**
+     * Toggle de favorito: agrega si no existe, o cambia el estado activo/inactivo
+     * @param int $apunte_id ID del apunte
+     * @return array Resultado de la operación con el estado final
+     */
+    public function toggleFavorito($apunte_id)
+    {
+        if (!isset($_SESSION[APP_NAME])) {
+            return ["errno" => 403, "error" => "No autorizado"];
+        }
+
+        // Usuario logueado
+        $usuario = $_SESSION[APP_NAME]["user"];
+        $usuario_id = (int) $usuario["id"];
+
+        // Validaciones
+        if (!is_numeric($apunte_id) || $apunte_id <= 0) {
+            return ["errno" => 400, "error" => "ID de apunte inválido"];
+        }
+
+        // Método funcionando correctamente
+
+        // Llamar al stored procedure
+        $result = $this->callSP("CALL sp_toggle_favorito(?,?)", [
+            (int) $usuario_id,
+            (int) $apunte_id
+        ]);
+
+        // Método funcionando correctamente
+
+        if ($result && isset($result['result_sets']) && is_array($result['result_sets']) && count($result['result_sets']) > 0) {
+            if (isset($result['result_sets'][0]) && is_array($result['result_sets'][0]) && count($result['result_sets'][0]) > 0) {
+                $row = $result['result_sets'][0][0];
+                if (isset($row['activo'])) {
+                    $activo = (int) $row['activo'];
+
+                    return [
+                        "errno" => 200,
+                        "error" => $activo ? "Apunte agregado a favoritos" : "Apunte removido de favoritos",
+                        "activo" => $activo
+                    ];
+                } else {
+                    error_log("Campo 'activo' no encontrado en resultado: " . json_encode($row));
+                    return ["errno" => 500, "error" => "Campo 'activo' no encontrado en respuesta"];
+                }
+            } else {
+                error_log("Result set vacío: " . json_encode($result['result_sets']));
+                return ["errno" => 500, "error" => "Result set vacío"];
+            }
+        } else {
+            error_log("Resultado inválido del SP: " . json_encode($result));
+            return ["errno" => 500, "error" => "Error al cambiar estado de favorito"];
+        }
+    }
+
+    /**
+         * Verifica si un apunte está en favoritos del usuario actual
+         * @param int $apunte_id ID del apunte
+         * @return bool True si está en favoritos, false si no
+         */
+        public function esFavorito($apunte_id)
+        {
+            if (!isset($_SESSION[APP_NAME])) {
+                return false;
+            }
+    
+            // Usuario logueado
+            $usuario = $_SESSION[APP_NAME]["user"];
+            $usuario_id = (int) $usuario["id"];
+    
+            // Validaciones
+            if (!is_numeric($apunte_id) || $apunte_id <= 0) {
+                return false;
+            }
+    
+            // Query directa para verificar si existe el favorito activo
+            $sql = "SELECT COUNT(*) as count FROM favoritos WHERE usuario_id = " . (int)$usuario_id . " AND apunte_id = " . (int)$apunte_id . " AND activo = 1";
+            $result = $this->query($sql);
+    
+            return isset($result[0]['count']) && (int) $result[0]['count'] > 0;
+        }
+
+    /**
+     * Busca apuntes con filtros opcionales usando stored procedure
+     * @param string $query Texto de búsqueda (título, descripción, materia)
+     * @param int|null $anio ID del año lectivo
+     * @param string|null $modalidad Modalidad (ej: Informatica, Alimentos)
+     * @param string|null $materia Nombre de la materia
+     * @param int $limit Límite de resultados
+     * @param bool $formated Si formatear para vista
+     * @return array
+     */
+    public function searchApuntes($query = "", $anio = null, $modalidad = null, $materia = null, $limit = 100, bool $formated = false)
+    {
+        $limit = (int) $limit;
+
+        // Si no hay búsqueda ni filtros, usar getApuntes normal
+        if (empty($query) && $anio === null && $modalidad === null && $materia === null) {
+            return $this->getApuntes($limit, $formated);
+        }
+
+        // Usar query directa para evitar problemas de collation
+        $sql = "SELECT a.id AS APUNTE_ID, a.titulo AS TITULO, m.nombre AS MATERIA, e.nombre AS ESCUELA,
+                       al.anio AS AÑO, AVG(co.puntuacion) AS PUNTUACION, a.usuario_cargador_id AS USUARIO_ID, c.nivel AS NIVEL_CURSO
+                FROM apuntes a
+                LEFT JOIN materias m ON a.materia_id = m.id
+                LEFT JOIN escuelas e ON a.escuela_id = e.id
+                LEFT JOIN anios_lectivos al ON a.anio_lectivo_id = al.id
+                LEFT JOIN comentarios co ON a.id = co.apunte_id
+                LEFT JOIN cursos c ON a.curso_id = c.id
+                WHERE a.estado = 'aprobado'";
+
+        if (!empty($query)) {
+            $searchTerm = "%" . addslashes($query) . "%";
+            $sql .= " AND (a.titulo LIKE '$searchTerm' OR a.descripcion LIKE '$searchTerm' OR m.nombre LIKE '$searchTerm')";
+        }
+
+        if ($anio !== null && is_numeric($anio)) {
+            $sql .= " AND c.nivel = " . (int)$anio;
+        }
+
+        if ($materia !== null) {
+            $materiaEscaped = addslashes($materia);
+            $sql .= " AND m.nombre = '$materiaEscaped'";
+        }
+
+        $sql .= " GROUP BY a.id ORDER BY a.creado_en DESC LIMIT " . (int)$limit;
+
+        $result = $this->query($sql);
+        if ($formated === true) {
+            $temp_array = [];
+            foreach ($result as $row) {
+                $temp_array[] = [
+                    "APUNTE_ID" => $row["APUNTE_ID"],
+                    "TITULO" => $row["TITULO"],
+                    "MATERIA" => $row["MATERIA"],
+                    "ESCUELA" => $row["ESCUELA"],
+                    "AÑO" => $row["AÑO"],
+                    "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : null,
+                    "IMAGEN" => "",
+                    "USUARIO_ID" => $row["USUARIO_ID"],
+                    "NIVEL_CURSO" => $row["NIVEL_CURSO"],
+                ];
+            }
+            return $temp_array;
+        }
+
+        return $result['result_sets'][0];
+    }
+
+    /**
+     * Obtiene todos los años lectivos disponibles
+     * @return array Lista de años con ID y nombre
+     */
+    public function getAniosLectivos()
+    {
+        $result = $this->callSP("CALL sp_obtener_anios_lectivos()");
+        return $result['result_sets'][0];
+    }
+
+    /**
+     * Obtiene las materias disponibles para un año lectivo específico
+     * @param int $anio_id ID del año lectivo
+     * @return array Lista de materias
+     */
+    public function getMateriasPorAnio($anio)
+    {
+        if (!is_numeric($anio) || $anio <= 0) {
+            return [];
+        }
+
+        $result = $this->callSP("CALL sp_obtener_materias_por_anio(?)", [$anio]);
+        return $result['result_sets'][0];
+    }
+
 }
+

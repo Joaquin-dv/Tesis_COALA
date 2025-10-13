@@ -12,23 +12,7 @@
     <title>COALA</title>
 </head>
 <body class="josefin-sans-normal">
-    <header>
-        <div class="contenedor_logo_secundario">
-            <img src="/views/static/img/branding/logo_secundario.png" alt="">
-        </div>
-
-        <nav class="barra_navegacion">
-            <a href="?slug=inicio">Inicio</a>
-            <a href="?slug=explorar">Explorar</a>
-            <a href="?slug=mochila">Mochila</a>
-            <a href="?slug=clases">Clases</a>
-        </nav>
-
-
-        <section class="perfil">
-            <img src="/views/static/img/inicio/foto_perfil.jpg" alt="foto de perfil">
-        </section>
-    </header>
+    @extends(appHeader)
 
     <main>
         <section class="contenedor_detalle_apunte">
@@ -40,7 +24,7 @@
                     <div>
                         <p class="puntuacion_apunte">⭐{{ PROMEDIO_CALIFICACIONES }}/5 ({{ CANTIDAD_PUNTUACIONES }} valoraciones)</p>
                     </div>
-                    <i class="fa-solid fa-heart corazon"></i>
+                    <i class="fa-solid fa-heart corazon {{ ES_FAVORITO }}"></i>
 
 
 
@@ -58,11 +42,11 @@
                             <strong>Materia:</strong> {{ MATERIA }}
                         </p>
                     </div>
-                    <div>
+                    <!-- <div>
                         <p>
                             <strong>Profesor:</strong> Chamorro
                         </p>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="tercer_linea">
                     <div>
@@ -158,6 +142,8 @@
 
     <script src="views/static/js/puntuarApunte.js"></script>
     <script src="views/static/js/detalleApunte.js"></script>
+    <script src="views/static/js/generalesScript.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>

@@ -64,3 +64,29 @@ export function rechazado() {
         toast: true
     });
 }
+
+export function favoritoAgregado() {
+    Swal.fire({
+        icon: "success",
+        text: "Apunte agregado a favoritos",
+        showCloseButton: true,
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: false,
+        position: 'bottom-right',
+        toast: true
+    });
+}
+
+export function favoritoRemovido() {
+    Swal.fire({
+        icon: "info",
+        text: "Apunte removido de favoritos",
+        showCloseButton: true,
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: false,
+        position: 'bottom-right',
+        toast: true
+    });
+}

@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (errorArchivo) {
       // Mostrar mensaje de error
       visor.innerHTML = `<p>⚠️ ${errorArchivo}</p>`;
+      descargar.style.display = 'none';
     } else if (rutaArchivo) {
       // Mostrar el archivo
       console.log("Ruta del apunte desde data attribute:", rutaArchivo);
@@ -135,5 +136,52 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert("Error al enviar el comentario. Inténtalo de nuevo.");
             }
         });
+    }
+});
+
+// Función para manejar el corazón de favoritos
+document.addEventListener("DOMContentLoaded", () => {
+    const corazon = document.querySelector(".corazon");
+
+    if (corazon) {
+        // Obtener el apunteId de la URL
+        const params = new URLSearchParams(window.location.search);
+        const apunteId = params.get("apunteId");
+
+        if (apunteId) {
+            corazon.addEventListener("click", async () => {
+                try {
+                    const formData = new FormData();
+                    formData.append('model', 'Apuntes');
+                    formData.append('method', 'toggleFavorito');
+                    formData.append('apunte_id', apunteId);
+
+                    const response = await fetch('api/index.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const data = await response.json();
+
+                    if (data.errno === 200) {
+                        // Importar y mostrar el toast correspondiente
+                        import('./modules/toastModule.js').then(module => {
+                            if (data.activo) {
+                                module.favoritoAgregado();
+                                corazon.classList.add("favorito-activo");
+                            } else {
+                                module.favoritoRemovido();
+                                corazon.classList.remove("favorito-activo");
+                            }
+                        });
+                    } else {
+                        alert("Error al cambiar favorito: " + data.error);
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert("Error al cambiar favorito. Inténtalo de nuevo.");
+                }
+            });
+        }
     }
 });
