@@ -1,4 +1,4 @@
-<a href="?slug=detalleApunte&alumno=nahuel&apunte=tesis.pdf" class="enlace_apunte">
+<a href="?slug=detalleApunte&apunteId={{ APUNTE_ID }}" class="enlace_apunte">
     <article class="apunte">
     <figure>
         <img class="imagen_apunte" src="data/thumbnails/tesis_miniaturaa.png" alt="Imagen de apunte">
@@ -10,6 +10,7 @@
             <section class="datos_apunte_izquierda">
                 <p class="informacion_apunte">{{ MATERIA }}</p>
                 <p class="informacion_apunte">{{ ESCUELA }}</p>
+                <p class="informacion_apunte">{{ NIVEL_CURSO }}° año</p>
                 <p class="informacion_apunte">⭐ {{ PUNTUACION }}</p>
 
             </section>

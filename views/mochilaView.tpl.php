@@ -20,11 +20,6 @@
     @extends(appHeader)
 
     <main>
-        <section class="buscador_subir_apunte">
-            <div class="contenedor_buscador">
-                <input type="text" placeholder="Buscar..." class="input_buscador">
-            </div>
-        </section>
 
         <section class="tabs">
             <button class="btn_tab poppins-semibold" onclick="mostrarSeccion('todos')">Todos</button>
@@ -66,6 +61,7 @@
     @extends(mobile_nav)
     <!-- <script src="views/static/js/modal.js"></script> -->
     <script src="views/static/js/mochila.js"></script>
+    <script src="views/static/js/generalesScript.js"></script>
 </body>
 
 </html>

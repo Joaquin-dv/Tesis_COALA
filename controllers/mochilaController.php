@@ -3,10 +3,12 @@
     $tpl = new Mopla('mochila');
 
     // Se carga el componente
+
 	$apunteAprobado = new Extend("apunte_aprobado");
     $apunteRevision = new Extend("apunte_en_revision");
     $apunteRechazado = new Extend("apunte_rechazado");
     $apunteFavorito = new Extend("apunte_favorito");
+
     
     // Se carga el modelo de apuntes
 	$apunte = new Apuntes();

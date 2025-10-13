@@ -12,37 +12,44 @@
 	// Se carga el modelo de apuntes
 	$apunte = new Apuntes();
 
-	// // ========================= CARGA DE COMPONENTE VISTO RECIENTEMENTE =========================
+	// ========================= CARGA DE COMPONENTE VISTO RECIENTEMENTE =========================
 
-	// // Array para guardar el componente con la informacion cargada
-	// $lista_vistos_recientemente = "";
+	// Array para guardar el componente con la informacion cargada
+	$lista_subidos_recientemente = "";
 
-	// //obtengo 5 apuntes
-	// $lista_apuntes = $apunte->getApuntes(4, true);
-	
-	// // Cargo la informacion en el componente
-	// foreach ($lista_apuntes as $row) {	
-	// 	$lista_vistos_recientemente .= $apunteExtend->assignVar($row);
-	// }
-	
-	// // Muestro los componentes con la info
-	// $tpl->assignVar(["VISTOS_RECIENTEMENTE" => $lista_vistos_recientemente]);
+	// Obtener parámetro de búsqueda
+	$query = isset($_GET['q']) ? trim($_GET['q']) : "";
 
-	// // ============================== CARGA DE COMPONENTE PARA TI ==============================
+	// Si hay búsqueda, usar searchApuntes, sino getApuntes normal
+	if (!empty($query)) {
+		$lista_apuntes = $apunte->searchApuntes($query, null, null, null, 4, true);
+	} else {
+		$lista_apuntes = $apunte->getApuntes(4, true);
+	}
 
-	// // Array para guardar el componente con la informacion cargada
-	// $lista_para_ti = "";
+	// Cargo la informacion en el componente
+	foreach ($lista_apuntes as $row) {
+		$lista_subidos_recientemente .= $apunteExtend->assignVar($row);
+	}
 
-	// //obtengo 5 apuntes
-	// $lista_componente_para_ti = $apunte->getApuntes(15, true);
-	
-	// // Cargo la informacion en el componente
-	// foreach ($lista_componente_para_ti as $row) {
-	// 	$lista_para_ti .= $apunteExtend->assignVar($row);
-	// }
-	
-	// // Muestro los componentes con la info
-	// $tpl->assignVar(["PARA_TI" => $lista_para_ti]);
+	// Muestro los componentes con la info
+	$tpl->assignVar(["SUBIDOS_RECIENTEMENTE" => $lista_subidos_recientemente]);
+
+	// ============================== CARGA DE COMPONENTE PARA TI ==============================
+
+	// Array para guardar el componente con la informacion cargada
+	$lista_para_ti = "";
+
+	//obtengo 5 apuntes
+	$lista_componente_para_ti = $apunte->getApuntes(15, true);
+
+	// Cargo la informacion en el componente
+	foreach ($lista_componente_para_ti as $row) {
+		$lista_para_ti .= $apunteExtend->assignVar($row);
+	}
+
+	// Muestro los componentes con la info
+	$tpl->assignVar(["PARA_TI" => $lista_para_ti]);
 
 	// // =========================================================================================
 
@@ -53,16 +60,19 @@
 	$tpl->printExtends(["mobile_nav"]);
 
 	// $tpl->printExtends(["modalSubirApunte"]);
-	
+
 	// if(isset($_POST["titulo"])){
 	// 	// $result = $apunte->create($_POST);
 
 	// 	header("Location: ?slug=inicio");
 	// }
 
+	// Asigno el nombre del usuario
+	$primer_nombre = explode(" ", $_SESSION[APP_NAME]['user']['nombre_completo'])[0];
+	$tpl->assignVar(["PRIMER_NOMBRE_USUARIO" => $primer_nombre]);
 	$tpl->assignVar(["NOMBRE_USUARIO" => $_SESSION[APP_NAME]['user']['nombre_completo']]);
 
 	/* Imprime la plantilla en la página */
 	$tpl->printToScreen();
-	
+
 ?>
