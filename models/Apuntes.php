@@ -74,25 +74,29 @@ class Apuntes extends DBAbstract
      * Obtiene todos los apuntes, con un límite opcional
      * Si $formated es true, devuelve un array simplificado para la vista
      */
-    public function getApuntes($limit = 100)
+    public function getApuntes($limit = 100, bool $formated = false)
     {
         // Evitá inyección por si llega algo raro en $limit
         $limit = (int) $limit;
-
-        $sql = "SELECT a.id, a.titulo AS TITULO, m.nombre AS MATERIA, e.nombre AS ESCUELA, al.anio AS AÑO, ea.promedio_calificacion AS PUNTUACION FROM apuntes a INNER JOIN materias m ON m.id = a.materia_id INNER JOIN escuelas e ON e.id = a.escuela_id INNER JOIN anios_lectivos al ON al.id = a.anio_lectivo_id LEFT JOIN estadisticas_apunte ea ON ea.apunte_id = a.id LEFT JOIN archivos_apunte aa ON aa.apunte_id = a.id AND aa.es_principal = 1 WHERE a.borrado_en IS NULL ORDER BY a.creado_en DESC LIMIT " . $limit . "; ";
-
-        $result = $this->query($sql);
+        
+        $result = $this->callSP(
+                "CALL sp_obtener_apuntes(?)",
+                [$limit]
+            );
 
         if ($formated === true) {
             $temp_array = [];
-            foreach ($result as $row) {
+            foreach ($result['result_sets'][0] as $row) {
                 $temp_array[] = [
+                    "APUNTE_ID" => $row["APUNTE_ID"],
                     "TITULO" => $row["TITULO"],
                     "MATERIA" => $row["MATERIA"],
                     "ESCUELA" => $row["ESCUELA"],
                     "AÑO" => $row["AÑO"],
-                    "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : null,
+                    "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : "Sin calificar",
                     "IMAGEN" => "",
+                    "USUARIO_ID" => $row["USUARIO_ID"],
+                    "NIVEL_CURSO" => $row["NIVEL_CURSO"],
                 ];
             }
             return $temp_array;
@@ -101,7 +105,6 @@ class Apuntes extends DBAbstract
         // Si no querés formateo, devolvés el resultset crudo
         return $result['result_sets'][0];
     }
-
     /**
      * Obtiene todos los apuntes de un alumno por su ID
      */
@@ -363,8 +366,7 @@ class Apuntes extends DBAbstract
             return ["errno" => 500, "error" => "DB error: " . $e->getMessage()];
         }
     }
-
-    public function update($apunte_id, $form)
+public function update($apunte_id, $form)
     {
 
         $usuario = $_SESSION[APP_NAME]["user"];
@@ -399,14 +401,18 @@ class Apuntes extends DBAbstract
         // Campos opcionales
         $updates = [];
 
-        $sql = "UPDATE apuntes SET titulo = '" . $form["titulo"] . "', descripcion = '" . $form["descripcion"] . "', verificado_por_docente = '0', verificado_por_usuario_id = 'null' WHERE apuntes.id = " . $apunte_id . ";";
+        $response = $this->callSP(
+                "CALL sp_update_apunte(?,?,?)",
+                [
+                    (string) $form["titulo"],
+                    (string) $form["descripcion"],
+                    (int) $apunte_id
+                ]
+            );
 
-        $response = $this->query($sql);
-        // var_dump($response);
         if ($response > 0) {
             return ["errno" => 200, "error" => "Apunte actualizado correctamente"];
         } else {
-            $this->logger->error($this->user_id, '500', 'Error al crear el apunte');
             return ["errno" => 500, "error" => "Error al crear el apunte"];
         }
     }
