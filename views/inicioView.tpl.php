@@ -16,11 +16,11 @@
 
         <h2 class="vistos_recientemente">Subidos recientemente</h2>
         <section id="contenedor_vistos_recientemente" class="contenedor_apuntes">
-            
+            {{ SUBIDOS_RECIENTEMENTE }}
         </section>
         <h2 class="para_ti">Para ti</h2>
         <section id="contenedor_para_ti" class="contenedor_apuntes">
-            
+            {{ PARA_TI }}
         </section>
         {{ MODAL_SUBIR_APUNTE }}
     </main>
