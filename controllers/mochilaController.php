@@ -3,7 +3,7 @@
     $tpl = new Mopla('mochila');
 
     // Se carga el componente
-	$apunteExtend = new Extend("apunte_mochila");
+	$apunteExtend = new Extend("apunte");
     
     // Se carga el modelo de apuntes
 	$apunte = new Apuntes();
