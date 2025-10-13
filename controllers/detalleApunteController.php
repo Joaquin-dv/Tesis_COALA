@@ -13,6 +13,10 @@
     // Cargamos la informacion del apunte
     $info_apunte = $apunte->getApunteById($_GET['apunteId'], true)[0];
 
+    // Verificar si el apunte está en favoritos del usuario actual
+    $es_favorito = $apunte->esFavorito($_GET['apunteId']);
+    $es_favorito = $es_favorito ? 'favorito-activo' : '';
+
     // Array para guardar el componente con la informacion cargada
     $lista_comentarios = "";
 
@@ -58,7 +62,7 @@
     // }
 
     // Cargamos los componentes necesarios
-    $tpl->assignVar(["TITULO" => $info_apunte['TITULO'], "MATERIA" => $info_apunte['MATERIA'], "ESCUELA" => $info_apunte['ESCUELA'], "AÑO" => $info_apunte['AÑO'], "PROMEDIO_CALIFICACIONES" => $info_apunte['PROMEDIO_CALIFICACIONES'], "CANTIDAD_PUNTUACIONES" => $info_apunte['CANTIDAD_PUNTUACIONES'], "NOMBRE_USUARIO" => $info_apunte['NOMBRE_USUARIO'], "FECHA_CREACION" => $info_apunte['FECHA_CREACION'], "RUTA_ARCHIVO" => $ruta_archivo, "ERROR_ARCHIVO" => $error_archivo]);
+    $tpl->assignVar(["TITULO" => $info_apunte['TITULO'], "MATERIA" => $info_apunte['MATERIA'], "ESCUELA" => $info_apunte['ESCUELA'], "AÑO" => $info_apunte['AÑO'], "PROMEDIO_CALIFICACIONES" => $info_apunte['PROMEDIO_CALIFICACIONES'], "CANTIDAD_PUNTUACIONES" => $info_apunte['CANTIDAD_PUNTUACIONES'], "NOMBRE_USUARIO" => $info_apunte['NOMBRE_USUARIO'], "FECHA_CREACION" => $info_apunte['FECHA_CREACION'], "RUTA_ARCHIVO" => $ruta_archivo, "ERROR_ARCHIVO" => $error_archivo, "ES_FAVORITO" => $es_favorito]);
     $tpl->assignVar(["COMENTARIOS_APUNTE" => $lista_comentarios]);
     
     // Mostramos la vista

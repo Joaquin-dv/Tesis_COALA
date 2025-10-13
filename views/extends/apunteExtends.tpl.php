@@ -10,6 +10,7 @@
             <section class="datos_apunte_izquierda">
                 <p class="informacion_apunte">{{ MATERIA }}</p>
                 <p class="informacion_apunte">{{ ESCUELA }}</p>
+                <p class="informacion_apunte">{{ NIVEL_CURSO }}° año</p>
                 <p class="informacion_apunte">⭐ {{ PUNTUACION }}</p>
 
             </section>

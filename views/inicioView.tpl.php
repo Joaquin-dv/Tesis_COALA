@@ -6,8 +6,8 @@
     <main>
         <section class="buscador_subir_apunte">
             <div class="contenedor_buscador">
-                <h2>¡Hola, Pepe!</h2>
-                <input type="text" placeholder="Buscar..." class="input_buscador">
+                <h2>¡Hola, {{ PRIMER_NOMBRE_USUARIO }}!</h2>
+                <input type="text" placeholder="Buscar..." class="input_buscador" id="input_buscador">
             </div>
             <div class="boton_subir_apunte">
                 <button id="abrir_modal">Subir apunte</button>
