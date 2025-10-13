@@ -1,69 +1,131 @@
 <?php
 
-    class Escuelas extends DBAbstract {
-        private $id;
-        private $nombre;
-        private $tipo;
-        private $slug;
-        private $creado_en;
 
-        
-        public function __construct() {
-            parent::__construct();
 
-            $this->id = null;
-            $this->nombre = null;
-            $this->tipo = null;
-            $this->slug = null;
-            $this->creado_en = null;
-        }
+class Escuelas extends DBAbstract {
 
-        public function getNameById($escuela_id) {
-            $sql = "SELECT nombre FROM `escuelas` WHERE id = ".$escuela_id.";";
+    private $id;
 
-            $result = $this->query($sql);
+    private $nombre;
 
-            return $result[0]["nombre"];
-        }
+    private $tipo;
 
-        public function getAnioLectivoById($anio_lectivo_id){
-            $sql = "SELECT anio FROM `anios_lectivos` WHERE id = ".$anio_lectivo_id.";";
+    private $slug;
 
-            $result = $this->query($sql);
+    private $creado_en;
 
-            return $result[0]["anio"];
-        }
 
-        public function getMateriaByID($materia_id) {
-            $sql = "SELECT nombre FROM `materias` WHERE id = ".$materia_id.";";
 
-            $result = $this->query($sql);
+    // Nuevo: logger y user_id cacheado desde la sesión
 
-            return $result[0]["nombre"];
-        }
+    private $logger;
 
-        public function getCursos($id_escuela, $id_anio_lectivo) {
-            $sql = "SELECT * FROM `cursos` WHERE escuela_id = ".$id_escuela." AND anio_lectivo_id = ".$id_anio_lectivo." ORDER BY id ASC;";
+    private $user_id;
 
-            $result = $this->query($sql);
 
-            return $result;
-        }
 
-        public function getCursoByNivelandDivision($nivel, $division, $id_escuela, $id_anio_lectivo) {
-            $sql = "SELECT * FROM `cursos` WHERE nivel = ".$nivel." AND division = '".$division."' AND escuela_id = ".$id_escuela." AND anio_lectivo_id = ".$id_anio_lectivo." ORDER BY id ASC;";
+    public function __construct() {
 
-            $result = $this->query($sql);
+        parent::__construct();
 
-            return $result;
-        }
 
-        public function getMaterias($id_escuela, $id_anio_lectivo) {
-            $sql = "SELECT * FROM `materias` WHERE escuela_id = ".$id_escuela." ORDER BY id ASC;";
 
-            $result = $this->query($sql);
+        $this->id = null;
 
-            return $result;
-        }
+        $this->nombre = null;
+
+        $this->tipo = null;
+
+        $this->slug = null;
+
+        $this->creado_en = null;
+
+
+
+        // Inicializar logger y tomar user_id de la sesión una sola vez
+
+        $this->logger = new Logger();
+
+        $this->user_id = (isset($_SESSION[APP_NAME]["user"]["id"]) && is_numeric($_SESSION[APP_NAME]["user"]["id"]))
+
+            ? (int) $_SESSION[APP_NAME]["user"]["id"]
+
+            : 0;
+
     }
+
+
+
+    public function getNameById($escuela_id) {
+
+        $sql = "SELECT nombre FROM escuelas WHERE id = ".$escuela_id.";";
+
+        $result = $this->query($sql);
+
+        return $result[0]["nombre"];
+
+    }
+
+
+
+    public function getAnioLectivoById($anio_lectivo_id){
+
+        $sql = "SELECT anio FROM anios_lectivos WHERE id = ".$anio_lectivo_id.";";
+
+        $result = $this->query($sql);
+
+        return $result[0]["anio"];
+
+    }
+
+
+
+    public function getMateriaByID($materia_id) {
+
+        $sql = "SELECT nombre FROM materias WHERE id = ".$materia_id.";";
+
+        $result = $this->query($sql);
+
+        return $result[0]["nombre"];
+
+    }
+
+
+
+    public function getCursos($id_escuela, $id_anio_lectivo) {
+
+        $sql = "SELECT * FROM cursos WHERE escuela_id = ".$id_escuela." AND anio_lectivo_id = ".$id_anio_lectivo." ORDER BY id ASC;";
+
+        $result = $this->query($sql);
+
+        return $result;
+
+    }
+
+
+
+    public function getCursoByNivelandDivision($nivel, $division, $id_escuela, $id_anio_lectivo) {
+
+        $sql = "SELECT * FROM cursos WHERE nivel = ".$nivel." AND division = '".$division."' AND escuela_id = ".$id_escuela." AND anio_lectivo_id = ".$id_anio_lectivo." ORDER BY id ASC;";
+
+        $result = $this->query($sql);
+
+        return $result;
+
+    }
+
+
+
+    public function getMaterias($id_escuela, $id_anio_lectivo) {
+
+        $sql = "SELECT * FROM materias WHERE escuela_id = ".$id_escuela." ORDER BY id ASC;";
+
+        $result = $this->query($sql);
+
+        return $result;
+
+    }
+
+}
+
 ?>
