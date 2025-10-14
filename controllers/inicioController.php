@@ -79,7 +79,7 @@
 	}
 
 	$tpl->assignVar(["PRIMER_NOMBRE_USUARIO" => $primer_nombre]);
-	$tpl->assignVar(["NOMBRE_USUARIO" => $nombre_completo, "USER_ROLE" => isset($_SESSION[APP_NAME]['user']['rol']) ? $_SESSION[APP_NAME]['user']['rol'] : ""]);
+	$tpl->assignVar(["NOMBRE_USUARIO" => $nombre_completo, "USER_ROLE" => isset($_SESSION[APP_NAME]['user']['rol']) ? $_SESSION[APP_NAME]['user']['rol'] : "Invitado"]);
 
 	/* Imprime la plantilla en la página */
 	$tpl->printToScreen();

@@ -50,7 +50,7 @@
                 <div class="errorMsg" id="errorGeneral">{{ MSG_ERROR }}</div>
             </form>
             <div class="btn_volver">
-                <a href="?slug=login" class="btn_volver_login">
+                <a href="?slug=landing" class="btn_volver_login">
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
             </div>

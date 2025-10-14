@@ -101,9 +101,9 @@ header .barra_navegacion a:hover {
     padding: 10px 0;
     border-top: 1px solid #ccc;
     z-index: 10;
-    
-}
+    padding-bottom: env(safe-area-inset-bottom); /* Para dispositivos con notch */
 
+}
 .mobile-nav a {
     font-size: 20px;
     color: #333;
@@ -116,6 +116,17 @@ header .barra_navegacion a:hover {
 
     .mobile-nav {
         display: flex;
+    }
+
+    /* Ajustar posición de toasts en móvil para no tapar la navegación */
+    .swal2-toast.swal2-top-right {
+        top: 20px !important;
+        right: 20px !important;
+    }
+
+    .swal2-toast.swal2-bottom-right {
+        bottom: 80px !important; /* Espacio para la navegación móvil */
+        right: 20px !important;
     }
 }
 

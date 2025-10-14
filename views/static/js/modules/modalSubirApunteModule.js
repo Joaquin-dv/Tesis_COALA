@@ -1,5 +1,5 @@
 // import { validarFormulario } from "./validacionFormulario.js"; // Si no se usa, podés quitar la importación
-import { cargando, exito, error, aprobado, rechazado } from "./toastModule.js";
+import { cargando, exito, error, aprobado, rechazado, procesando, cerrarProcesando } from "./toastModule.js";
 
 // IDs por defecto de la escuela y ciclo lectivo (ajustá si hace falta)
 const ID_ESCUELA_DEFAULT = 1;
@@ -280,8 +280,14 @@ async function abrirModalSubida() {
     }).then((result) => {
         if (result.isConfirmed && result.value?.ok) {
             exito();
-            // Iniciar procesamiento del documento
-            startDocumentProcessing(result.value.apunte_id);
+            setTimeout(() => {
+            // Iniciar procesamiento del documento usando la función global
+            if (typeof window.startDocumentProcessing === 'function') {
+                window.startDocumentProcessing(result.value.apunte_id);
+            } else {
+                // Fallback al método local si no está disponible globalmente
+                startDocumentProcessing(result.value.apunte_id);
+            }}, 3000);
         }
     });
 }
@@ -299,6 +305,8 @@ async function startDocumentProcessing(apunte_id) {
     const result = await response.json();
 
     if (result.errno === 200) {
+        // Mostrar notificación de procesamiento
+        procesando();
         startPolling(result.processing_id);
     } else {
         console.error('Error al iniciar procesamiento:', result.error);
@@ -316,10 +324,12 @@ function startPolling(processingId) {
         if (data.status === 'completed' && !processed) {
             processed = true;
             clearInterval(pollInterval);
+            cerrarProcesando();
             showProcessingResult(data.result);
         } else if (data.status === 'error' && !processed) {
             processed = true;
             clearInterval(pollInterval);
+            cerrarProcesando();
             console.error('Error en procesamiento:', data.message);
         }
         // Si sigue processing, continúa haciendo polling
