@@ -75,7 +75,10 @@ class Logger {
      * @param string $codigoError Código del error (por ejemplo "404")
      * @param string $mensajeError Mensaje descriptivo del error
      */
-    public function error ($usuario, $codigoError, $mensajeError){
+    public function error ($usuario=null, $codigoError, $mensajeError){
+        if($usuario === null){
+            $usuario=$_SESSION[APP_NAME]['user']['id'];
+        }
         $this->writeError('!',$usuario,"ERROR {$codigoError}: {$mensajeError}");
     }
 
