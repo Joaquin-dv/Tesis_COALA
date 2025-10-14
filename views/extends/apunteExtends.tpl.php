@@ -19,6 +19,7 @@
             </section>
 
         </section>
+            {{ COMPONENTE_ESTADO }}
         <!-- <h2>{{ TITULO }}</h2>
         <p>{{ MATERIA }} - {{ ESCUELA }}</p>
         <p>{{ AÑO }} - {{ PUNTUACION }}</p> -->

@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="views/static/css/genereales.css">
     <link rel="stylesheet" href="views/static/css/modal.css">
     <link rel="stylesheet" href="views/static/css/mochila.css">
     <link rel="stylesheet" href="views/static/css/style_apunte.css">
@@ -19,6 +20,7 @@
     @extends(appHeader)
 
     <main>
+
         <section class="tabs">
             <button class="btn_tab poppins-semibold" onclick="mostrarSeccion('todos')">Todos</button>
             <button class="btn_tab poppins-semibold" onclick="mostrarSeccion('favoritos')">Favoritos</button>
@@ -56,6 +58,7 @@
         </div>
         @extends(modalSubirApunte)
     </main>
+    @extends(mobile_nav)
     <!-- <script src="views/static/js/modal.js"></script> -->
     <script src="views/static/js/mochila.js"></script>
     <script src="views/static/js/generalesScript.js"></script>

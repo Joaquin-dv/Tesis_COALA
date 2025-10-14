@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="views/static/css/general/formulario.css">
     <link rel="stylesheet" href="views/static/css/register.css">
+    <script src="https://kit.fontawesome.com/f63493d67a.js" crossorigin="anonymous"></script>
     <link rel="icon" type="image/png" sizes="32x32" href="views/static/img/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="views/static/img/favicon/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="views/static/img/favicon/apple-touch-icon.png">
@@ -31,6 +32,11 @@
                 <div class="errorMsg" id="errorGeneral">{{ MSG_ERROR }}</div>
                 <div class="successMsg" id="successGeneral">{{ MSG_SUCCESS }}</div>
             </form>
+            <div class="btn_volver">
+                <a href="?slug=register" class="btn_volver_login">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+            </div>
         </section>
     </section>
 </body>
