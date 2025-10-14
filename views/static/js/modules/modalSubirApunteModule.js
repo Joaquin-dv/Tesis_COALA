@@ -274,7 +274,7 @@ async function abrirModalSubida() {
                 // Si la API devolvió algo distinto, mostramos mensaje claro
                 // throw new Error(result?.message || "Hubo un error al subir el apunte. Intentá nuevamente.");
             } catch (e) {
-                error();
+                error(e);
             }
         },
     }).then((result) => {

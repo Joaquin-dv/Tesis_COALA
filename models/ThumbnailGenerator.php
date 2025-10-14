@@ -1,4 +1,5 @@
 <?php
+
 // models/ThumbnailGenerator.php
 
 class ThumbnailGenerator
@@ -13,6 +14,15 @@ class ThumbnailGenerator
         if (!is_dir($this->outputDir)) {
             mkdir($this->outputDir, 0777, true);
         }
+    }
+
+    /**
+     * Retorna la ruta del directorio de salida.
+     * @return string
+     */
+    public function getOutputDir()
+    {
+        return $this->outputDir;
     }
 
     /**
@@ -42,8 +52,7 @@ class ThumbnailGenerator
 
             return $thumbnailPath;
         } catch (Exception $e) {
-            error_log('Error generando miniatura: ' . $e->getMessage());
-            return false;
+            return ["errno" => 500, "error" => "Error generando miniatura: " . $e->getMessage()];
         }
     }
 }
