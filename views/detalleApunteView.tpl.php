@@ -12,35 +12,22 @@
     <title>COALA</title>
 </head>
 <body class="josefin-sans-normal">
-    <header>
-        <div class="contenedor_logo_secundario">
-            <img src="/views/static/img/branding/logo_secundario.png" alt="">
-        </div>
-
-        <nav class="barra_navegacion">
-            <a href="?slug=inicio">Inicio</a>
-            <a href="?slug=explorar">Explorar</a>
-            <a href="?slug=mochila">Mochila</a>
-            <a href="?slug=clases">Clases</a>
-        </nav>
-
-
-        <section class="perfil">
-            <img src="/views/static/img/inicio/foto_perfil.jpg" alt="foto de perfil">
-        </section>
-    </header>
-
+    @extends(appHeader)
+    <script>
+        // Pasar el rol del usuario a JavaScript
+        window.userRole = '{{ USER_ROLE }}';
+    </script>
     <main>
         <section class="contenedor_detalle_apunte">
             <section class="informacion_apunte">
                 <div class="primer_linea">
                     <div>
-                        <h1>Título del apunte</h1>
+                        <h1>{{ TITULO }}</h1>
                     </div>
                     <div>
-                        <p class="puntuacion_apunte">⭐4.5/5 (32 valoraciones)</p>
+                        <p class="puntuacion_apunte">⭐{{ PROMEDIO_CALIFICACIONES }}/5 ({{ CANTIDAD_PUNTUACIONES }} valoraciones)</p>
                     </div>
-                    <i class="fa-solid fa-heart corazon"></i>
+                    <i class="fa-solid fa-heart corazon {{ ES_FAVORITO }}" onclick="return checkDemoUser()"></i>
 
 
 
@@ -50,166 +37,67 @@
                 <div class="segunda_linea">
                     <div>
                         <p>
-                            <strong>Autor:</strong> Nahuel M.
+                            <strong>Autor:</strong> {{ NOMBRE_AUTOR }}
                         </p>
                     </div>
                     <div>
                         <p>
-                            <strong>Materia:</strong> Matemáticas
+                            <strong>Materia:</strong> {{ MATERIA }}
                         </p>
                     </div>
-                    <div>
+                    <!-- <div>
                         <p>
                             <strong>Profesor:</strong> Chamorro
                         </p>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="tercer_linea">
                     <div>
                         <p>
-                            <strong>Subido el:</strong> 03/06/2024
+                            <strong>Subido el:</strong> {{ FECHA_CREACION }}
                         </p>
                     </div>
                 </div>
             </section>
 
 
-            <section class="puntuacion_apunte">
+            <!-- <section class="puntuacion_apunte">
                 <span class="texto_puntuacion">¿Este apunte te fue útil?</span>
-               <div class="rating">
-                    <i class="fa-solid fa-star" data-value="1"></i>
-                    <i class="fa-solid fa-star" data-value="2"></i>
-                    <i class="fa-solid fa-star" data-value="3"></i>
-                    <i class="fa-solid fa-star" data-value="4"></i>
-                    <i class="fa-solid fa-star" data-value="5"></i>
-                </div>
+               <div class="rating" onclick="return checkDemoUser()">
+                   <i class="fa-solid fa-star" data-value="1"></i>
+                   <i class="fa-solid fa-star" data-value="2"></i>
+                   <i class="fa-solid fa-star" data-value="3"></i>
+                   <i class="fa-solid fa-star" data-value="4"></i>
+                   <i class="fa-solid fa-star" data-value="5"></i>
+               </div>
                 <input type="hidden" id="rating-value" name="rating" value="0">
-            </section>
+            </section> -->
         </section>
         <section class="contenedor_archivos_apunte">
-                
+            <div id="visor" class="visor-archivo" data-ruta="{{ RUTA_ARCHIVO }}" data-error="{{ ERROR_ARCHIVO }}"></div>
 
-            <div id="visor" class="visor-archivo"></div>
-
-            <a id="descargar" href="#" download>Descargar archivo</a>
+            <a id="descargar" href="#" download onclick="return checkDemoUser()">Descargar archivo</a>
         </section>
-        <section class="contenedor_botones_detalle_apunte">
+        <!-- <section class="contenedor_botones_detalle_apunte">
 
-            <button class="btn_reportar" id="btnAbrirPopup">Reportar</button>
+            <button class="btn_reportar" id="btnAbrirPopup" onclick="return checkDemoUser()">Reportar</button>
 
-        </section>
+        </section> -->
         <section class="contenedor_comentarios_apunte">
             <p class="titulo_comentarios_apunte">
                 <i class="fa-solid fa-user-group"></i>
                 <span>Comentarios del apunte</span>
             </p>
-            <!-- From Uiverse.io by alexruix --> 
-            <div class="input-group">
-                <input required="" type="text" name="text" autocomplete="off" class="input">
-                <label class="user-label">Deje un comentario</label>
-                <button type="submit" class="send-btn"><i class="fa-solid fa-paper-plane"></i></button>
-            </div>
+
+            <form id="form-comentario" method="POST" onsubmit="return checkDemoUser()">
+                <div class="input-group">
+                    <input required="" type="text" name="comentario" id="txt-comentario" autocomplete="off" class="input" onclick="checkDemoUser()">
+                    <label class="user-label">Deje un comentario</label>
+                    <button type="submit" class="send-btn" onclick="return checkDemoUser()"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </form>
             <section class="contenedor_comentarios">
-                <article class="comentario_apunte">
-                    <div class="contenedor_foto_comentario">
-                        <img src="/views/static/img/inicio/foto_perfil.jpg" alt="Foto de perfil de Nahuel Martinez">
-                    </div>
-
-                    <div class="contenedor_comentario_derecha">
-                        <div class="header_comentario">
-                        <h4 class="nombre_usuario">Nahuel Martinez</h4>
-                        <time class="fecha_creacion_comentario" datetime="2024-06-03">03/06/2024</time>
-                        </div>
-
-                        <p class="texto_comentario">
-                        Muy buen apunte, me sirvió mucho para estudiar para el parcial.
-                        </p>
-                    </div>
-                </article>
-
-                <article class="comentario_apunte">
-                    <div class="contenedor_foto_comentario">
-                        <img src="/views/static/img/inicio/foto_perfil.jpg" alt="Foto de perfil de Nahuel Martinez">
-                    </div>
-
-                    <div class="contenedor_comentario_derecha">
-                        <div class="header_comentario">
-                        <h4 class="nombre_usuario">Nahuel Martinez</h4>
-                        <time class="fecha_creacion_comentario" datetime="2024-06-03">03/06/2024</time>
-                        </div>
-
-                        <p class="texto_comentario">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Commodi labore a quas voluptates voluptate. Dignissimos et corporis soluta quos numquam assumenda deserunt! Dolor, accusamus voluptatum vero quidem corporis commodi illum?
-                        </p>
-                    </div>
-                </article>
-
-                <article class="comentario_apunte">
-                    <div class="contenedor_foto_comentario">
-                        <img src="/views/static/img/inicio/foto_perfil.jpg" alt="Foto de perfil de Nahuel Martinez">
-                    </div>
-
-                    <div class="contenedor_comentario_derecha">
-                        <div class="header_comentario">
-                        <h4 class="nombre_usuario">Nahuel Martinez</h4>
-                        <time class="fecha_creacion_comentario" datetime="2024-06-03">03/06/2024</time>
-                        </div>
-
-                        <p class="texto_comentario">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Commodi labore a quas voluptates voluptate. Dignissimos et corporis soluta quos numquam assumenda deserunt! Dolor, accusamus voluptatum vero quidem corporis commodi illum?
-                        </p>
-                    </div>
-                </article>
-                <article class="comentario_apunte">
-                    <div class="contenedor_foto_comentario">
-                        <img src="/views/static/img/inicio/foto_perfil.jpg" alt="Foto de perfil de Nahuel Martinez">
-                    </div>
-
-                    <div class="contenedor_comentario_derecha">
-                        <div class="header_comentario">
-                        <h4 class="nombre_usuario">Nahuel Martinez</h4>
-                        <time class="fecha_creacion_comentario" datetime="2024-06-03">03/06/2024</time>
-                        </div>
-
-                        <p class="texto_comentario">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Commodi labore a quas voluptates voluptate. Dignissimos et corporis soluta quos numquam assumenda deserunt! Dolor, accusamus voluptatum vero quidem corporis commodi illum?
-                        </p>
-                    </div>
-                </article>
-                <article class="comentario_apunte">
-                    <div class="contenedor_foto_comentario">
-                        <img src="/views/static/img/inicio/foto_perfil.jpg" alt="Foto de perfil de Nahuel Martinez">
-                    </div>
-
-                    <div class="contenedor_comentario_derecha">
-                        <div class="header_comentario">
-                        <h4 class="nombre_usuario">Nahuel Martinez</h4>
-                        <time class="fecha_creacion_comentario" datetime="2024-06-03">03/06/2024</time>
-                        </div>
-
-                        <p class="texto_comentario">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Commodi labore a quas voluptates voluptate. Dignissimos et corporis soluta quos numquam assumenda deserunt! Dolor, accusamus voluptatum vero quidem corporis commodi illum?
-                        </p>
-                    </div>
-                </article>
-                <article class="comentario_apunte">
-                    <div class="contenedor_foto_comentario">
-                        <img src="/views/static/img/inicio/foto_perfil.jpg" alt="Foto de perfil de Nahuel Martinez">
-                    </div>
-
-                    <div class="contenedor_comentario_derecha">
-                        <div class="header_comentario">
-                        <h4 class="nombre_usuario">Nahuel Martinez</h4>
-                        <time class="fecha_creacion_comentario" datetime="2024-06-03">03/06/2024</time>
-                        </div>
-
-                        <p class="texto_comentario">
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Commodi labore a quas voluptates voluptate. Dignissimos et corporis soluta quos numquam assumenda deserunt! Dolor, accusamus voluptatum vero quidem corporis commodi illum?
-                        </p>
-                    </div>
-                </article>
-
-
+                {{ COMENTARIOS_APUNTE }}
             </section>
         </section>
 
@@ -250,13 +138,19 @@
     <footer class="mobile-nav">
         <a href="?slug=inicio"><i class="fa-solid fa-house"></i></a>
         <a href="?slug=explorar"><i class="fa-solid fa-magnifying-glass"></i></a>
-        <a href="?slug=mochila"><i class="fa-solid fa-box-archive"></i></a>
-        <a href="?slug=clases"><i class="fa-solid fa-school"></i></a>
+        <a href="?slug=mochila" onclick="return checkDemoUser()"><i class="fa-solid fa-box-archive"></i></a>
+        <a href="?slug=clases" onclick="return checkDemoUser()"><i class="fa-solid fa-school"></i></a>
     </footer>
     </main>
 
+    <script>
+        // Pasar el rol del usuario a JavaScript
+        window.userRole = '{{ USER_ROLE }}';
+    </script>
     <script src="views/static/js/puntuarApunte.js"></script>
     <script src="views/static/js/detalleApunte.js"></script>
+    <script src="views/static/js/generalesScript.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
 
 </html>

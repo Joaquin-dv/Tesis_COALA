@@ -1,34 +1,39 @@
 @extends(htmlHead)
 
+<script>
+    // Pasar el rol del usuario a JavaScript
+    window.userRole = '{{ USER_ROLE }}';
+</script>
+
 <body class="josefin-sans-normal">
     @extends(appHeader)
 
     <main>
         <section class="buscador_subir_apunte">
             <div class="contenedor_buscador">
-                <h2>¡Hola, Pepe!</h2>
-                <input type="text" placeholder="Buscar..." class="input_buscador">
+                <h2>¡Hola, {{ PRIMER_NOMBRE_USUARIO }}!</h2>
+                <input type="text" placeholder="Buscar..." class="input_buscador" id="input_buscador">
             </div>
             <div class="boton_subir_apunte">
-                <button id="abrir_modal">Subir apunte</button>
+                <button id="abrir_modal" onclick="return checkDemoUser()">Subir apunte</button>
             </div>
         </section>
 
         <h2 class="vistos_recientemente">Subidos recientemente</h2>
         <section id="contenedor_vistos_recientemente" class="contenedor_apuntes">
-            
+            {{ SUBIDOS_RECIENTEMENTE }}
         </section>
         <h2 class="para_ti">Para ti</h2>
         <section id="contenedor_para_ti" class="contenedor_apuntes">
-            
+            {{ PARA_TI }}
         </section>
         {{ MODAL_SUBIR_APUNTE }}
     </main>
     <footer class="mobile-nav">
         <a href="?slug=inicio"><i class="fa-solid fa-house"></i></a>
         <a href="?slug=explorar"><i class="fa-solid fa-magnifying-glass"></i></a>
-        <a href="?slug=mochila"><i class="fa-solid fa-box-archive"></i></a>
-        <a href="?slug=clases"><i class="fa-solid fa-school"></i></a>
+        <a href="?slug=mochila" onclick="return checkDemoUser()"><i class="fa-solid fa-box-archive"></i></a>
+        <!-- <a href="?slug=clases" onclick="return checkDemoUser()"><i class="fa-solid fa-school"></i></a> -->
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- <script src="views/static/js/toast.js"></script> -->

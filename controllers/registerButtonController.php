@@ -16,5 +16,5 @@
     // Finally, destroy the session.
     session_destroy();
 
-    header("Location: ?slug=landing");
+    header("Location: ?slug=register");
 ?>

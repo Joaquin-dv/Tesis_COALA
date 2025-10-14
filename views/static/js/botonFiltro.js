@@ -1,57 +1,105 @@
 document.addEventListener("DOMContentLoaded", () => {
     const listaMaterias = document.getElementById("listaMaterias");
     const dropdownMateria = document.getElementById("dropdownMateria");
-    const dropdownModalidad = document.getElementById("dropdownModalidad");
+    const inputBuscador = document.getElementById("input_buscador");
 
     let anioSeleccionado = null;
-    let modalidadSeleccionada = null;
+    let materiaSeleccionada = null;
 
-    // Materias hardcodeadas según año y modalidad
-    const materiasPorAnioModalidad = {
-        "1": { "Informatica": ["Literatura"], "Alimentos": ["Matemática"] },
-        "2": { "Informatica": ["Historia"], "Alimentos": ["Ciencias"] },
-        "3": { "Informatica": ["Matemática"], "Alimentos": ["Programación"] },
-        "4": { "Informatica": ["Física"], "Alimentos": ["Química"] },
-        "5": { "Informatica": ["Biología"], "Alimentos": ["Literatura"] },
-        "6": { "Informatica": ["Redes"], "Alimentos": ["Programación"] },
-        "7": { "Informatica": ["Programación"], "Alimentos": ["Bases de Datos"] }
-    };
+    // Función para actualizar la URL y recargar apuntes
+    function actualizarBusqueda() {
+        const params = new URLSearchParams(window.location.search);
+        const query = inputBuscador ? inputBuscador.value.trim() : "";
+        if (query) {
+            params.set('q', query);
+        } else {
+            params.delete('q');
+        }
+        if (anioSeleccionado) {
+            params.set('anio', anioSeleccionado);
+        } else {
+            params.delete('anio');
+        }
+        if (materiaSeleccionada) {
+            params.set('materia', materiaSeleccionada);
+        } else {
+            params.delete('materia');
+        }
 
-    // Click en año
-    document.querySelectorAll("#listaAnios a").forEach(link => {
-        link.addEventListener("click", (e) => {
-            e.preventDefault();
-            anioSeleccionado = link.dataset.anio;
+        // Recargar la página con los nuevos parámetros
+        window.location.search = params.toString();
+    }
 
-            // Mostrar dropdown de modalidad
-            dropdownModalidad.style.display = "inline-block";
-            dropdownMateria.style.display = "none"; // ocultar materia
-        });
-    });
-
-    // Click en modalidad
-    document.querySelectorAll("#listaModalidad a").forEach(link => {
-        link.addEventListener("click", (e) => {
-            e.preventDefault();
-            modalidadSeleccionada = link.dataset.modalidad;
+    // Función para cargar materias de un año
+    async function cargarMaterias(anio) {
+        try {
+            const response = await fetch(`api/index.php?model=Apuntes&method=getMateriasPorAnio&anio=${anio}`);
+            const materias = await response.json();
 
             // Mostrar dropdown de materia
             dropdownMateria.style.display = "inline-block";
 
-            // Llenar materias según año + modalidad
+            // Llenar materias
             listaMaterias.innerHTML = "";
-            const materias = materiasPorAnioModalidad[anioSeleccionado][modalidadSeleccionada] || [];
-            materias.forEach(m => {
-                let a = document.createElement("a");
-                a.href = "#";
-                a.textContent = m;
-                listaMaterias.appendChild(a);
+            if (materias && Array.isArray(materias)) {
+                materias.forEach(materia => {
+                    let a = document.createElement("a");
+                    a.href = "#";
+                    a.textContent = materia.nombre;
+                    a.dataset.materia = materia.nombre;
+                    listaMaterias.appendChild(a);
 
-                // Click en materia
-                a.addEventListener("click", (e) => {
-                    e.preventDefault();
+                    // Click en materia
+                    a.addEventListener("click", (e) => {
+                        e.preventDefault();
+                        materiaSeleccionada = materia.nombre;
+                        actualizarBusqueda();
+                    });
                 });
-            });
+            }
+        } catch (error) {
+            console.error("Error cargando materias:", error);
+        }
+    }
+
+    // Inicializar búsqueda y filtros desde URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const queryParam = urlParams.get('q');
+    const anioParam = urlParams.get('anio');
+    const materiaParam = urlParams.get('materia');
+
+    if (inputBuscador) {
+        if (queryParam) {
+            inputBuscador.value = queryParam;
+        }
+
+        let debounceTimer;
+        inputBuscador.addEventListener("input", () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(actualizarBusqueda, 500);
+        });
+    }
+
+    // Si hay año en URL, mostrar dropdown de materia y cargar materias
+    if (anioParam) {
+        anioSeleccionado = anioParam;
+        if (materiaParam) {
+            materiaSeleccionada = materiaParam;
+        }
+        cargarMaterias(anioSeleccionado);
+    }
+
+    // Click en año
+    document.querySelectorAll("#listaAnios a").forEach(link => {
+        link.addEventListener("click", async (e) => {
+            e.preventDefault();
+            anioSeleccionado = link.dataset.anio;
+            materiaSeleccionada = null;
+
+            // Cargar materias para este año
+            await cargarMaterias(anioSeleccionado);
+
+            actualizarBusqueda();
         });
     });
 });
