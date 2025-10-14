@@ -6,6 +6,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+    justify-content: center;
 }
 
 .apunte_mochila{
@@ -132,23 +133,36 @@ footer button:active{
     color: white;
 }
 .btn_tab {
-    padding: 12px 24px;
+    padding: 8px 20px;
     background: white;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 12px;
     border: solid 2px var(--color-accion);
+    transition: all 0.2s ease-out;
 }
+
+.btn_tab:hover {
+    background: var(--color-accion);
+    color: white;
+    /* transition: background-color 0.2s ease-out, color 0.2s ease-out; */
+}
+
+
 section.tabs {
     display: flex;
     gap: 11px;
     margin: 1.5em 0 1.5em 0;
+    flex-wrap: wrap;
 }
 button.btn_tab.active {
     background: var(--color-accion);
     color: white;
 }
-.btn_tab:hover {
-    background: var(--color-accion);
-    color: white;
-    transition: background-color 0.2s ease-out, color 0.2s ease-out;
+
+@media (max-width: 485px) {
+    .btn_tab {
+        padding: 6px 12px;
+        font-size: 10px;
+    }
+    
 }

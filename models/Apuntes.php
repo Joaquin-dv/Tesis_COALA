@@ -88,6 +88,7 @@ class Apuntes extends DBAbstract
                     "IMAGEN" => "",
                     "USUARIO_ID" => $row["USUARIO_ID"],
                     "NIVEL_CURSO" => $row["NIVEL_CURSO"],
+                    "COMPONENTE_ESTADO" => "", // se asigna luego en el controlador
                 ];
             }
             return $temp_array;
@@ -120,7 +121,7 @@ class Apuntes extends DBAbstract
                     "AÑO" => $row["AÑO"],
                     "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : null,
                     "IMAGEN" => "",
-                    "NOMBRE_USUARIO" => $row["NOMBRE_USUARIO"],
+                    "NOMBRE_AUTOR" => $row["NOMBRE_USUARIO"],
                     "CANTIDAD_PUNTUACIONES" => $row["CANTIDAD_CALIFICACIONES"],
                 ];
                 // Si el apunte no tiene calificaciones, forzamos a 0 la puntuación
@@ -670,8 +671,6 @@ class Apuntes extends DBAbstract
             return ["errno" => 400, "error" => "ID de apunte inválido"];
         }
 
-        // Método funcionando correctamente
-
         // Llamar al stored procedure
         $result = $this->callSP("CALL sp_toggle_favorito(?,?)", [
             (int) $usuario_id,
@@ -683,17 +682,19 @@ class Apuntes extends DBAbstract
         if ($result && isset($result['result_sets']) && is_array($result['result_sets']) && count($result['result_sets']) > 0) {
             if (isset($result['result_sets'][0]) && is_array($result['result_sets'][0]) && count($result['result_sets'][0]) > 0) {
                 $row = $result['result_sets'][0][0];
-                if (isset($row['activo'])) {
-                    $activo = (int) $row['activo'];
+                if (isset($row['errno']) && isset($row['error'])) {
+                    $errno = (int) $row['errno'];
+                    $error_msg = $row['error'];
+                    $activo = isset($row['activo']) ? $row['activo'] : null;
 
                     return [
-                        "errno" => 200,
-                        "error" => $activo ? "Apunte agregado a favoritos" : "Apunte removido de favoritos",
+                        "errno" => $errno,
+                        "error" => $error_msg,
                         "activo" => $activo
                     ];
                 } else {
-                    error_log("Campo 'activo' no encontrado en resultado: " . json_encode($row));
-                    return ["errno" => 500, "error" => "Campo 'activo' no encontrado en respuesta"];
+                    error_log("Campos requeridos no encontrados en resultado: " . json_encode($row));
+                    return ["errno" => 500, "error" => "Respuesta del procedimiento almacenado inválida"];
                 }
             } else {
                 error_log("Result set vacío: " . json_encode($result['result_sets']));
@@ -792,6 +793,7 @@ class Apuntes extends DBAbstract
                     "IMAGEN" => "",
                     "USUARIO_ID" => $row["USUARIO_ID"],
                     "NIVEL_CURSO" => $row["NIVEL_CURSO"],
+                    "COMPONENTE_ESTADO" => "",
                 ];
             }
             return $temp_array;

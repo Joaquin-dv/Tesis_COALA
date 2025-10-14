@@ -57,6 +57,9 @@
 
 	$tpl->assignVar(["MODAL_SUBIR_APUNTE" => $modalCargado]);
 
+	$tpl->printExtends(["mobile_nav"]);
+	
+
 	// $tpl->printExtends(["modalSubirApunte"]);
 
 	// if(isset($_POST["titulo"])){
@@ -66,9 +69,17 @@
 	// }
 
 	// Asigno el nombre del usuario
-	$primer_nombre = explode(" ", $_SESSION[APP_NAME]['user']['nombre_completo'])[0];
+	if(isset($_SESSION[APP_NAME]) && isset($_SESSION[APP_NAME]['user']['nombre_completo'])){
+		$nombre_completo = $_SESSION[APP_NAME]['user']['nombre_completo'];
+		$primer_nombre = explode(" ", $_SESSION[APP_NAME]['user']['nombre_completo'])[0];
+		$tpl->assignVar(["PRIMER_NOMBRE_USUARIO" => $primer_nombre]);
+	} else {
+		$primer_nombre = "Invitado";
+		$nombre_completo = "Invitado";
+	}
+
 	$tpl->assignVar(["PRIMER_NOMBRE_USUARIO" => $primer_nombre]);
-	$tpl->assignVar(["NOMBRE_USUARIO" => $_SESSION[APP_NAME]['user']['nombre_completo']]);
+	$tpl->assignVar(["NOMBRE_USUARIO" => $nombre_completo, "USER_ROLE" => isset($_SESSION[APP_NAME]['user']['rol']) ? $_SESSION[APP_NAME]['user']['rol'] : "Invitado"]);
 
 	/* Imprime la plantilla en la página */
 	$tpl->printToScreen();

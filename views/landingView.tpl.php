@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="views/static/css/landing.css">
+    <link rel="stylesheet" href="views/static/css/footer.css">
     <link rel="icon" type="image/png" sizes="32x32" href="views/static/img/favicon/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="views/static/img/favicon/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="views/static/img/favicon/apple-touch-icon.png">
@@ -39,11 +40,11 @@
                 </div>
                 <div class="eslogan_texto">
                     <span>Lo que sabés, lo compartís.</span>
-                    <span>Lo que no, lo descubrís.</span>
+                    <span>Lo que no, lo <a href="?slug=inicio" class="cta-button">descubrís ahora</a>.</span>
                 </div>
-                <a href="#carta_informacion">
+                <!-- <a href="#carta_informacion">
                     <button class="boton_explorar_coala">Explorar COALA</button>
-                </a>
+                </a> -->
             </section>
 
             <article class="carta_informacion" id="carta_informacion">
@@ -88,45 +89,64 @@
             <div class="team_cards">
                 <div class="team_card">
                     <div class="team_img">
-                        <img src="https://via.placeholder.com/150" alt="Creador 1">
+                        <img src="views/static/img/inicio/foto_perfil.jpg" alt="Creador 1">
                     </div>
-                    <h3>Nombre Creador 1</h3>
-                    <p>Diseñador UX/UI</p>
+                    <h3>Ezequiel Cernadas</h3>
+                    <p>Back-end</p>
+                    <div class="contenedor_koala_cernadas">
+                        <img class="koala_carta" src="views/static/img/branding/koala_landing_cartas.png" alt="">
+                    </div>
                 </div>
 
                 <div class="team_card">
                     <div class="team_img">
-                        <img src="https://via.placeholder.com/150" alt="Creador 2">
+                        <img src="views/static/img/inicio/foto_perfil.jpg" alt="Creador 2">
                     </div>
-                    <h3>Nombre Creador 2</h3>
-                    <p>Programador Frontend</p>
+                    <h3>Milena Lopez</h3>
+                    <p>Front-end</p>
+                    <div class="contenedor_koala_milena">
+                        <img class="koala_carta" src="views/static/img/branding/koala_landing_cartas.png" alt="">
+                    </div>
                 </div>
 
                 <div class="team_card">
                     <div class="team_img">
-                        <img src="https://via.placeholder.com/150" alt="Creador 3">
+                        <img src="views/static/img/inicio/foto_perfil.jpg" alt="Creador 3">
                     </div>
-                    <h3>Nombre Creador 3</h3>
-                    <p>Backend & DB</p>
+                    <h3>Joaquin Paez</h3>
+                    <p>Back-end</p>
+                    <div class="contenedor_koala_paez">
+                        <img class="koala_carta" src="views/static/img/branding/koala_landing_cartas.png" alt="">
+                    </div>
+                </div>
+
+                <div class="team_card">
+                    <div class="team_img">
+                        <img src="views/static/img/inicio/foto_perfil.jpg" alt="Creador 3">
+                    </div>
+                    <h3>Nahuel Martinez</h3>
+                    <p>Front-end</p>
+                    <div class="contenedor_koala_nahuel">
+                        <img class="koala_carta" src="views/static/img/branding/koala_landing_cartas.png" alt="">
+                    </div>
                 </div>
             </div>
 
             <section class="presentacion_team">
                 <h2 class="subtitulo_presentacion_team">Somos estudiantes de la Técnica N°3 de Malvinas Argentinas</h2>
-                <p class="parrafo_presentacion_team">COALA nació como nuestra tesis, pero lo proyectamos como una herramienta real para mejorar la forma de estudiar y compartir conocimientos</p>
+                <p class="parrafo_presentacion_team">COALA nació como nuestra tesis, pero desde el principio lo pensamos como una herramienta real para transformar la forma en que compartimos apuntes y aprendemos juntos.
+                    Creemos en una educación más abierta, accesible y colaborativa.</p>
             </section>
-
+            
             <section class="cta_registrarse">
-                <h2>¿Querés sumarte a la comunidad? Tu próximo apunte te espera.</h2>
-                <a href="?slug=login" class="registrarse">Registrarme</a>
+                <h2>COALA no es solo una tesis: es una comunidad para aprender, compartir y crecer juntos. Unite y descubrí tu próximo apunte.</h2>
+                <a href="?slug=login" class="registrarse">Sumarme</a>
             </section>
         </section>
 
     </main>
 
-    <footer>
-        <span>&copy; COALA</span>
-    </footer>
+    @extends(footer)
 
     <script src="views/static/js/botonesLanding.js"></script>
 </body>

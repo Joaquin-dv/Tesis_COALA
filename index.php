@@ -30,8 +30,9 @@
 		$section = $_GET['slug'];
 	}
 
-	$secciones_permitidas_logeado = array("inicio","explorar","mochila","clases");
-	$secciones_permitidas_deslogeado = array("landing","login","registro","registerConfirm","error404");
+	$secciones_permitidas_logeado = array("inicio","explorar","mochila","clases","detalleApunte","logout");
+	$secciones_permitidas_deslogeado = array("inicio","explorar","landing","login","registro","registerConfirm","error404","logout");
+	$secciones_permitidas_demo = array("inicio","explorar","detalleApunte","registro");
 
 	/* Se especifico una sección pero esta no existe */
 	if(!file_exists("controllers/".$section."Controller.php")){
@@ -40,13 +41,23 @@
 
 	/* Protección de secciones */
 	/*Si la sección está en el array de secciones permitidas para usuarios logeados*/
-	if(in_array($section, $secciones_permitidas_logeado) == true){
+	if(in_array($section, $secciones_permitidas_logeado) == true && in_array($section, $secciones_permitidas_deslogeado) == false){
 		if(!isset($_SESSION[APP_NAME])){ /*y el usuario no está logeado*/
-			header("Location: index.php?slug=login"); /*lo llevamos a login*/
+			header("Location: index.php?slug=login&msg=requiere_login"); /*lo llevamos a login con mensaje*/
+			exit();
 		}
-	}elseif(in_array($section, $secciones_permitidas_deslogeado) == true){
-		if(isset($_SESSION[APP_NAME])){ /*y el usuario está logeado*/
-			header("Location: index.php?slug=inicio"); /*lo llevamos a inicio*/
+	}
+	
+	// if(in_array($section, $secciones_permitidas_deslogeado) == true){
+	// 	if(isset($_SESSION[APP_NAME]) && $_SESSION[APP_NAME]['user']['rol'] != 'demo'){ /*y el usuario está logeado y no es demo*/
+	// 		header("Location: index.php?slug=inicio"); /*lo llevamos a inicio*/
+	// 	}
+	// }
+
+	/* Protección para usuario demo */
+	if(in_array($section, $secciones_permitidas_logeado) == true && !in_array($section, $secciones_permitidas_demo)){
+		if(isset($_SESSION[APP_NAME]) && $_SESSION[APP_NAME]['user']['rol'] == 'demo'){
+			header("Location: index.php?slug=inicio"); /*lo llevamos a inicio si intenta acceder a secciones no permitidas*/
 		}
 	}
 
