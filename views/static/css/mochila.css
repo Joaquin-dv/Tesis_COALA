@@ -158,3 +158,11 @@ button.btn_tab.active {
     background: var(--color-accion);
     color: white;
 }
+
+@media (max-width: 485px) {
+    .btn_tab {
+        padding: 6px 12px;
+        font-size: 10px;
+    }
+    
+}
