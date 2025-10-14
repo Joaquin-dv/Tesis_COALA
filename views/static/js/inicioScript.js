@@ -1,6 +1,10 @@
 import { initModal } from './modules/modalSubirApunteModule.js';
 
 document.addEventListener("DOMContentLoaded", function () {
+    if (window.userRole === 'demo' || window.userRole === 'Invitado') {
+            return false; // Prevenir la acción predeterminada
+    };
+        
     initModal();
 
     // Función común de búsqueda

@@ -77,6 +77,10 @@
 	$rol = isset($_SESSION[APP_NAME]['user']['rol']) ? $_SESSION[APP_NAME]['user']['rol'] : "Invitado";
     $tpl->assignVar(["USER_ROLE" => $rol]);
 
+
+    // Cargamos el nav mobile
+    $tpl->printExtends(["mobile_nav"]);
+    
     // Mostramos la vista
     $tpl->printToScreen();
 
