@@ -10,6 +10,12 @@
     // Se carga el modelo de apuntes
     $apunte = new Apuntes();
 
+    // Verificar si el usuario no está logueado
+    if (!isset($_SESSION[APP_NAME])) {
+        header("Location: ?slug=login");
+        exit();
+    }
+
     // Cargamos la informacion del apunte
     $info_apunte = $apunte->getApunteById($_GET['apunteId'], true)[0];
 
@@ -66,8 +72,11 @@
     $tpl->assignVar(["COMENTARIOS_APUNTE" => $lista_comentarios]);
 
     // Cargamos la informacion del usuario logueado
-    $tpl->assignVar(["NOMBRE_USUARIO" => $_SESSION[APP_NAME]['user']['nombre_completo']]);
+    $tpl->assignVar(["NOMBRE_USUARIO" => $_SESSION[APP_NAME]['user']['nombre_completo'], "USER_ROLE" => $_SESSION[APP_NAME]['user']['rol']]);
     
+	$rol = isset($_SESSION[APP_NAME]['user']['rol']) ? $_SESSION[APP_NAME]['user']['rol'] : "Invitado";
+    $tpl->assignVar(["USER_ROLE" => $rol]);
+
     // Mostramos la vista
     $tpl->printToScreen();
 

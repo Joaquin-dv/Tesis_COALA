@@ -15,6 +15,22 @@
 			/* instancia la clase usuario en el objeto usuario*/
 			$usuario = new Usuarios();
 
+		// Verificar si es usuario demo
+		if($_POST["txt_email"] == "demo@demo" && $_POST["txt_password"] == "demo"){
+			// Crear sesión demo
+			$_SESSION[APP_NAME]['user'] = [
+				'id' => 'demo',
+				'nombre_completo' => 'Usuario Demo',
+				'email' => 'demo@demo.com',
+				'rol' => 'demo',
+				'esta_activo' => 1,
+				'escuela_id' => 1,
+				'id_anio_lectivo' => 1
+			];
+			header("Location: ?slug=inicio");
+			exit();
+		}
+
 		$result = $usuario->login($_POST);
 
 		/* si retorna 202 el usuario y contraseña son validos*/
@@ -23,6 +39,7 @@
 			/*¨¨¨*/
 			/* lleva al panel de usuario */
 			header("Location: ?slug=inicio");
+			exit();
 		}
 
 		/* usuario no verificado: redirigir a confirmación */
@@ -39,6 +56,10 @@
 
 	if(isset($_GET["msg"]) && $_GET["msg"] == "email_verificado"){
 		$msg_success = "Email verificado correctamente. Ya puedes iniciar sesión.";
+	}
+
+	if(isset($_GET["msg"]) && $_GET["msg"] == "requiere_login"){
+		$msg_error = "Es necesario iniciar sesión para acceder a esta funcionalidad.";
 	}
 
 

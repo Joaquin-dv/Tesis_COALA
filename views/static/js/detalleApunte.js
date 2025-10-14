@@ -150,6 +150,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (apunteId) {
             corazon.addEventListener("click", async () => {
+                // Verificar si es usuario demo antes de procesar
+                if (window.userRole === 'demo') {
+                    return; // La función checkDemoUser ya muestra el mensaje
+                }
+
                 try {
                     const formData = new FormData();
                     formData.append('model', 'Apuntes');

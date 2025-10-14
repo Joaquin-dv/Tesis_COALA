@@ -12,6 +12,10 @@ stars.forEach(star => {
   });
 
   star.addEventListener("click", () => {
+    // Verificar si es usuario demo antes de puntuar
+    if (window.userRole === 'demo') {
+      return; // La función checkDemoUser ya muestra el mensaje
+    }
     const value = parseInt(star.dataset.value);
     ratingValue.value = value;
     selectStars(value);
@@ -57,6 +61,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("formReporte");
 
   btnAbrir.addEventListener("click", () => {
+    // Verificar si es usuario demo antes de abrir el popup
+    if (window.userRole === 'demo') {
+      return; // La función checkDemoUser ya muestra el mensaje desde el HTML
+    }
     popup.style.display = "flex";
   });
 
@@ -80,6 +88,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const corazon = document.querySelector('.corazon');
 
     corazon.addEventListener('click', () => {
+        // Verificar si es usuario demo antes de marcar favorito
+        if (window.userRole === 'demo') {
+          return; // La función checkDemoUser ya muestra el mensaje
+        }
         corazon.classList.toggle('favorito');
     });
 });
