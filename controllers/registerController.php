@@ -33,6 +33,15 @@
 	/* formato {{ variable }} valor a pasar como un vector asociativo [ variable_html => valor] */
 	$tpl->assignVar(["APP_SECTION" => "Registro"]);
 
+	/* Obtener la lista de escuelas desde la base de datos */
+	$escuelas = new Escuelas();
+	$listaEscuelas = $escuelas->getEscuelas();
+	$opcionesEscuelas = "";
+	foreach ($listaEscuelas as $escuela) {
+		$opcionesEscuelas .= '<option value="' . htmlspecialchars($escuela['ESCUELA_ID']) . '">' . htmlspecialchars($escuela['ESCUELA_NOMBRE']) . '</option>';
+	}
+	$tpl->assignVar(["ESCUELAS" => $opcionesEscuelas]);
+
 	/* Imprime la plantilla en la página */
 	$tpl->printToScreen();
 

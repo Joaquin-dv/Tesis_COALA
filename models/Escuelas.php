@@ -18,6 +18,16 @@
             $this->creado_en = null;
         }
 
+        /**
+         * Obtiene todas las escuelas disponibles
+         * @return array Lista de escuelas con ID y nombre
+         */
+        public function getEscuelas()
+        {
+            $result = $this->callSP("CALL sp_obtener_escuelas()");
+            return $result['result_sets'][0];
+        }
+
         public function getNameById($escuela_id) {
             $sql = "SELECT nombre FROM `escuelas` WHERE id = ".$escuela_id.";";
 
