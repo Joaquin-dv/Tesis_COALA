@@ -87,3 +87,149 @@ function checkInvitadoUser() {
     }
     return true; // Permite la acción
 }
+
+// Inicializar verificación de procesamiento activo al cargar la página
+document.addEventListener("DOMContentLoaded", function() {
+    checkActiveProcessing();
+});
+
+// Variables globales para mantener el estado del procesamiento
+window.processingIntervals = new Map(); // Mapa para almacenar intervalos de polling por processing_id
+
+// Función para verificar si hay procesamiento activo al cargar la página
+function checkActiveProcessing() {
+    const activeProcessing = sessionStorage.getItem('activeProcessing');
+    if (activeProcessing) {
+        try {
+            const processingData = JSON.parse(activeProcessing);
+            // Importar dinámicamente el módulo de toast si no está disponible
+            if (typeof procesando === 'function') {
+                procesando();
+                // Reanudar polling si es necesario
+                startPolling(processingData.processingId);
+            } else {
+                import('./modules/toastModule.js').then(module => {
+                    module.procesando();
+                    startPolling(processingData.processingId);
+                }).catch(err => {
+                    console.error('Error al importar toastModule:', err);
+                });
+            }
+        } catch (error) {
+            sessionStorage.removeItem('activeProcessing');
+        }
+    }
+}
+
+// Función para iniciar procesamiento de documento (versión global)
+window.startDocumentProcessing = async function(apunte_id) {
+    const formData = new FormData();
+    formData.append('model', 'Apuntes');
+    formData.append('method', 'startProcessing');
+    formData.append('apunte_id', apunte_id);
+
+    try {
+        const response = await fetch('api/index.php', {
+            method: 'POST',
+            body: formData
+        });
+        const result = await response.json();
+
+        if (result.errno === 200) {
+            // Almacenar estado de procesamiento en sessionStorage
+            sessionStorage.setItem('activeProcessing', JSON.stringify({
+                processingId: result.processing_id,
+                apunteId: apunte_id,
+                timestamp: Date.now()
+            }));
+
+            // Mostrar notificación de procesamiento usando toast
+            if (typeof procesando === 'function') {
+                procesando();
+            } else {
+                import('./modules/toastModule.js').then(module => {
+                    module.procesando();
+                }).catch(err => {
+                    console.error('Error al importar toastModule:', err);
+                });
+            }
+            startPolling(result.processing_id);
+        } else {
+            console.error('Error al iniciar procesamiento:', result.error);
+        }
+    } catch (error) {
+        console.error('Error en startDocumentProcessing:', error);
+    }
+};
+
+// Función para hacer polling del estado de procesamiento (versión global)
+window.startPolling = function(processingId) {
+    let processed = false;
+    const pollInterval = setInterval(async () => {
+        if (processed) return; // Deja de hacer polling si ya esta procesado
+
+        try {
+            const response = await fetch(`api/index.php?model=Apuntes&method=checkProcessingStatus&processing_id=${processingId}`);
+            const data = await response.json();
+
+            if (data.status === 'completed' && !processed) {
+                processed = true;
+                clearInterval(pollInterval);
+                window.processingIntervals.delete(processingId);
+                // Limpiar sessionStorage
+                sessionStorage.removeItem('activeProcessing');
+                // Cerrar toast de procesamiento
+                if (typeof cerrarProcesando === 'function') {
+                    cerrarProcesando();
+                } else {
+                    import('./modules/toastModule.js').then(module => {
+                        module.cerrarProcesando();
+                    });
+                }
+                showProcessingResult(data.result);
+            } else if (data.status === 'error' && !processed) {
+                processed = true;
+                clearInterval(pollInterval);
+                window.processingIntervals.delete(processingId);
+                // Limpiar sessionStorage
+                sessionStorage.removeItem('activeProcessing');
+                // Cerrar toast de procesamiento
+                if (typeof cerrarProcesando === 'function') {
+                    cerrarProcesando();
+                } else {
+                    import('./modules/toastModule.js').then(module => {
+                        module.cerrarProcesando();
+                    });
+                }
+                console.error('Error en procesamiento:', data.message);
+            }
+            // Si sigue processing, continúa haciendo polling
+        } catch (error) {
+            console.error('Error en polling:', error);
+        }
+    }, 2000); // Poll cada 2 segundos
+
+    // Almacenar el intervalo para poder limpiarlo si es necesario
+    window.processingIntervals.set(processingId, pollInterval);
+};
+
+// Función para mostrar resultado del procesamiento (versión global)
+window.showProcessingResult = function(result) {
+    if (result.status === 'approved') {
+        if (typeof aprobado === 'function') {
+            aprobado();
+        } else {
+            import('./modules/toastModule.js').then(module => {
+                module.aprobado();
+            });
+        }
+    } else {
+        if (typeof rechazado === 'function') {
+            rechazado();
+        } else {
+            import('./modules/toastModule.js').then(module => {
+                module.rechazado();
+            });
+        }
+    }
+};
