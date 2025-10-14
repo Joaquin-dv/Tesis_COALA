@@ -4,10 +4,7 @@
 
     // Se carga el componente
 
-	$apunteAprobado = new Extend("apunte_aprobado");
-    $apunteRevision = new Extend("apunte_en_revision");
-    $apunteRechazado = new Extend("apunte_rechazado");
-    $apunteFavorito = new Extend("apunte_favorito");
+    $apunteExtend = new Extend("apunte");
 
     
     // Se carga el modelo de apuntes
@@ -26,21 +23,29 @@
 	// Cargo la informacion en los componentes
 	foreach ($lista_apuntes as $row) {
         if($row['ESTADO'] == "aprobado"){
-            $lista_aprobados .= $apunteAprobado->assignVar($row);
+            $componente_estado = '<div class="icono_estado"><i class="fa-solid fa-circle-check"></i></div>';
+            $row['COMPONENTE_ESTADO'] = $componente_estado;
+            $lista_aprobados .= $apunteExtend->assignVar($row);
         }
 
         if($row['ESTADO'] == "rechazado"){
-            $lista_rechazados .= $apunteRechazado->assignVar($row);
+            $componente_estado = '<div class="icono_estado"><i class="fa-solid fa-circle-xmark"></i></div>';
+            $row['COMPONENTE_ESTADO'] = $componente_estado;
+            $lista_rechazados .= $apunteExtend->assignVar($row);
         }
         
         if($row['ESTADO'] == "en_revision"){
-            $lista_en_revision .= $apunteRevision->assignVar($row);
+            $componente_estado = '<div class="icono_estado"><i class="fa-solid fa-clock"></i></div>';
+            $row['COMPONENTE_ESTADO'] = $componente_estado;
+            $lista_en_revision .= $apunteExtend->assignVar($row);
         }
 	}
 
     //Carga la informacion de los apuntes favoritos
     foreach ($lista_apuntes_favoritos as $row) {
-        $lista_favoritos .= $apunteFavorito->assignVar($row);    
+        $componente_estado = '<div class="icono_estado"><i id="corazon_favorito" class="fa-solid fa-heart"></i></div>';
+        $row['COMPONENTE_ESTADO'] = $componente_estado;
+        $lista_favoritos .= $apunteExtend->assignVar($row);    
 	}
 
     // Verificar listas vacías y asignar mensajes
@@ -57,7 +62,7 @@
         $lista_en_revision = '<p class="msg_vacio">No hay apuntes en revisión</p>';
     }
 
-    $tpl->printExtends(["apunte_favorito", "modalSubirApunte","mobile_nav","apunte_aprobado","apunte_en_revision","apunte_rechazado"]);
+    $tpl->printExtends(["modalSubirApunte","mobile_nav"]);
 
     // $tpl->assignVar(["TITULO" => "Apuntes de Cálculo I", "MATERIA" => "Cálculo I", "ESCUELA" => "UTN FRBA", "AÑO" => "2020", "PUNTUACION" => "4.5", "IMAGEN" => '']);
 	$tpl->assignVar(["APUNTES_FAVORITOS" => $lista_favoritos]);

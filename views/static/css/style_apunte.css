@@ -83,6 +83,8 @@ figure
     padding: 4px 6px;
     background-color: var(--fondo-detalle);
     text-align: center;
+    height: 100%;
+    display: flex;
 }
 h2{
     color: var(--titulo);

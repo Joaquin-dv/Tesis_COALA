@@ -88,6 +88,7 @@ class Apuntes extends DBAbstract
                     "IMAGEN" => "",
                     "USUARIO_ID" => $row["USUARIO_ID"],
                     "NIVEL_CURSO" => $row["NIVEL_CURSO"],
+                    "COMPONENTE_ESTADO" => "", // se asigna luego en el controlador
                 ];
             }
             return $temp_array;
