@@ -10,6 +10,12 @@
     // Se carga el modelo de apuntes
     $apunte = new Apuntes();
 
+    // Verificar si el usuario no está logueado
+    if (!isset($_SESSION[APP_NAME])) {
+        header("Location: ?slug=login");
+        exit();
+    }
+
     // Cargamos la informacion del apunte
     $info_apunte = $apunte->getApunteById($_GET['apunteId'], true)[0];
 
@@ -62,9 +68,15 @@
     // }
 
     // Cargamos los componentes necesarios
-    $tpl->assignVar(["TITULO" => $info_apunte['TITULO'], "MATERIA" => $info_apunte['MATERIA'], "ESCUELA" => $info_apunte['ESCUELA'], "AÑO" => $info_apunte['AÑO'], "PROMEDIO_CALIFICACIONES" => $info_apunte['PROMEDIO_CALIFICACIONES'], "CANTIDAD_PUNTUACIONES" => $info_apunte['CANTIDAD_PUNTUACIONES'], "NOMBRE_USUARIO" => $info_apunte['NOMBRE_USUARIO'], "FECHA_CREACION" => $info_apunte['FECHA_CREACION'], "RUTA_ARCHIVO" => $ruta_archivo, "ERROR_ARCHIVO" => $error_archivo, "ES_FAVORITO" => $es_favorito]);
+    $tpl->assignVar(["TITULO" => $info_apunte['TITULO'], "MATERIA" => $info_apunte['MATERIA'], "ESCUELA" => $info_apunte['ESCUELA'], "AÑO" => $info_apunte['AÑO'], "PROMEDIO_CALIFICACIONES" => $info_apunte['PROMEDIO_CALIFICACIONES'], "CANTIDAD_PUNTUACIONES" => $info_apunte['CANTIDAD_PUNTUACIONES'], "NOMBRE_AUTOR" => $info_apunte['NOMBRE_AUTOR'], "FECHA_CREACION" => $info_apunte['FECHA_CREACION'], "RUTA_ARCHIVO" => $ruta_archivo, "ERROR_ARCHIVO" => $error_archivo, "ES_FAVORITO" => $es_favorito, "MOSTRAR_TOAST_COMENTARIO" => isset($mostrar_toast_comentario) ? 'true' : 'false']);
     $tpl->assignVar(["COMENTARIOS_APUNTE" => $lista_comentarios]);
+
+    // Cargamos la informacion del usuario logueado
+    $tpl->assignVar(["NOMBRE_USUARIO" => $_SESSION[APP_NAME]['user']['nombre_completo'], "USER_ROLE" => $_SESSION[APP_NAME]['user']['rol']]);
     
+	$rol = isset($_SESSION[APP_NAME]['user']['rol']) ? $_SESSION[APP_NAME]['user']['rol'] : "Invitado";
+    $tpl->assignVar(["USER_ROLE" => $rol]);
+
     // Mostramos la vista
     $tpl->printToScreen();
 

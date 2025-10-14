@@ -1,5 +1,8 @@
 @extends(htmlHead)
-
+<script>
+    // Pasar el rol del usuario a JavaScript
+    window.userRole = '{{ USER_ROLE }}';
+</script>
 <body class="josefin-sans-normal">
     @extends(appHeader)
 
