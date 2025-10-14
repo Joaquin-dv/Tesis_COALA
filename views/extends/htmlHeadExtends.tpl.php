@@ -32,6 +32,9 @@
 	<!-- Font Awesome -->
 	<script src="https://kit.fontawesome.com/f63493d67a.js" crossorigin="anonymous"></script>
 
+	<!-- SweetAlert2 -->
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 	<!-- ===== Estilos ===== -->
 	<!-- Inicio -->
 	<link rel="stylesheet" href="/views/static/css/inicio.css">

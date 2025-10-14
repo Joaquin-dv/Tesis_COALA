@@ -43,10 +43,19 @@
 	// Muestro los componentes con la info
 	$tpl->assignVar(["EXPLORAR" => $lista_explorar]);
 
-	$tpl->printExtends(["botonesFiltro" ]);
+	$tpl->printExtends(["botonesFiltro", "mobile_nav" ]);
 
 	// $tpl->assignVar(["TITULO" => "Apuntes de Cálculo I", "MATERIA" => "Cálculo I", "ESCUELA" => "UTN FRBA", "AÑO" => "2020", "PUNTUACION" => "4.5", "IMAGEN" => '']);
-	$tpl->assignVar(["NOMBRE_USUARIO" => $_SESSION[APP_NAME]['user']['nombre_completo'], "ANIOS_LECTIVOS" => $anios_html]);
+	if(isset($_SESSION[APP_NAME]) && isset($_SESSION[APP_NAME]['user']['nombre_completo'])){
+		$nombre_completo = $_SESSION[APP_NAME]['user']['nombre_completo'];
+		$primer_nombre = explode(" ", $_SESSION[APP_NAME]['user']['nombre_completo'])[0];
+		$tpl->assignVar(["PRIMER_NOMBRE_USUARIO" => $primer_nombre]);
+	} else {
+		$nombre_completo = "Invitado";
+	}
+
+	$rol = isset($_SESSION[APP_NAME]['user']['rol']) ? $_SESSION[APP_NAME]['user']['rol'] : "Invitado";
+	$tpl->assignVar(["NOMBRE_USUARIO" => $nombre_completo, "ANIOS_LECTIVOS" => $anios_html, "USER_ROLE" => $rol]);
 	/* Imprime la plantilla en la página */
 	$tpl->printToScreen();
 

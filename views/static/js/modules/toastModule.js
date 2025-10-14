@@ -1,3 +1,6 @@
+    // Detectar si es vista móvil
+    const isMobile = window.innerWidth <= 768;
+
 export function cargando() {
     Swal.fire({
         text: "Subiendo apunte...",
@@ -47,7 +50,7 @@ export function aprobado() {
         showConfirmButton: false,
         timer: 3000,
         timerProgressBar: false,
-        position: 'bottom-right',
+        position: isMobile ? 'top-right' : 'bottom-right',
         toast: true
     });
 }
@@ -60,9 +63,29 @@ export function rechazado() {
         showConfirmButton: false,
         timer: 3000,
         timerProgressBar: false,
-        position: 'bottom-right',
+        position: isMobile ? 'top-right' : 'bottom-right',
         toast: true
     });
+}
+
+export function procesando() {
+    return Swal.fire({
+        icon: "info",
+        text: "Procesando apunte con IA...",
+        showCloseButton: false,
+        showConfirmButton: false,
+        position: isMobile ? 'top-right' : 'bottom-right',
+        toast: true,
+        timer: false, // No se cierra automáticamente
+        customClass: {
+            popup: 'processing-toast'
+        }
+    });
+}
+
+export function cerrarProcesando() {
+    // Cerrar el toast de procesamiento
+    Swal.close();
 }
 
 export function favoritoAgregado() {
@@ -73,7 +96,7 @@ export function favoritoAgregado() {
         showConfirmButton: false,
         timer: 3000,
         timerProgressBar: false,
-        position: 'bottom-right',
+        position: isMobile ? 'top-right' : 'bottom-right',
         toast: true
     });
 }
@@ -86,7 +109,7 @@ export function favoritoRemovido() {
         showConfirmButton: false,
         timer: 3000,
         timerProgressBar: false,
-        position: 'bottom-right',
+        position: isMobile ? 'top-right' : 'bottom-right',
         toast: true
     });
 }
