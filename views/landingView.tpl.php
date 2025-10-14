@@ -39,11 +39,11 @@
                 </div>
                 <div class="eslogan_texto">
                     <span>Lo que sabés, lo compartís.</span>
-                    <span>Lo que no, lo descubrís.</span>
+                    <span>Lo que no, lo <a href="?slug=inicio" class="cta-button">descubrís ahora</a>.</span>
                 </div>
-                <a href="#carta_informacion">
+                <!-- <a href="#carta_informacion">
                     <button class="boton_explorar_coala">Explorar COALA</button>
-                </a>
+                </a> -->
             </section>
 
             <article class="carta_informacion" id="carta_informacion">

@@ -150,6 +150,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (apunteId) {
             corazon.addEventListener("click", async () => {
+                // Verificar si es usuario demo antes de procesar
+                if (window.userRole === 'demo') {
+                    return; // La función checkDemoUser ya muestra el mensaje
+                }
+
                 try {
                     const formData = new FormData();
                     formData.append('model', 'Apuntes');
@@ -173,6 +178,21 @@ document.addEventListener("DOMContentLoaded", () => {
                                 module.favoritoRemovido();
                                 corazon.classList.remove("favorito-activo");
                             }
+                        });
+                    } else if (data.errno === 400) {
+                        // Mostrar mensaje específico para apuntes no aprobados
+                        import('./modules/toastModule.js').then(module => {
+                            // Crear un toast personalizado con el mensaje del servidor
+                            Swal.fire({
+                                icon: "warning",
+                                text: data.error,
+                                showCloseButton: true,
+                                showConfirmButton: false,
+                                timer: 4000,
+                                timerProgressBar: false,
+                                position: 'bottom-right',
+                                toast: true
+                            });
                         });
                     } else {
                         alert("Error al cambiar favorito: " + data.error);
