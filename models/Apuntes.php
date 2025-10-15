@@ -187,7 +187,7 @@ class Apuntes extends DBAbstract
         
             $thumbnailPath = substr($rutaArchivo, 0, $ultimaBarra + 1) . 'thumbnail.jpg';
             if (!file_exists($thumbnailPath)) {
-                return null;
+                return false;
             }
             return $thumbnailPath;
         
