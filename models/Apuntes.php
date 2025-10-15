@@ -304,9 +304,9 @@ class Apuntes extends DBAbstract
 
     public function create(
         $titulo,
-        $descripcion = null,
         $materia,
         $archivo,           // array estilo $_FILES: ['name' => ..., 'tmp_name' => ...]
+        $descripcion = null,
         $curso = null,
         $division = null,
         $visibilidad = 'publico'
@@ -888,4 +888,5 @@ class Apuntes extends DBAbstract
         $result = $this->callSP("CALL sp_obtener_materias_por_anio(?)", [$anio]);
         return $result['result_sets'][0];
     }
+}
 

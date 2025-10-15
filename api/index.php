@@ -1,7 +1,35 @@
 <?php
 session_start();
+header("Content-Type: application/json; charset=utf-8");
 
-header("Content-Type: application/json");
+require_once "../models/Logger.php";
+
+// --- Manejo simple de errores (no cambia la lógica existente) ---
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
+
+set_error_handler(function ($severity, $message, $file, $line) {
+    http_response_code(500);
+    echo json_encode([
+        'ok'    => false,
+        'errno' => 500,
+        'error' => "PHP error: $message",
+        'file'  => $file,
+        'line'  => $line,
+    ], JSON_UNESCAPED_UNICODE);
+    exit;
+});
+
+set_exception_handler(function ($e) {
+    http_response_code(500);
+    echo json_encode([
+        'ok'    => false,
+        'errno' => 500,
+        'error' => $e->getMessage(),
+    ], JSON_UNESCAPED_UNICODE);
+    exit;
+});
+// ----------------------------------------------------------------
 
 $method = $_SERVER['REQUEST_METHOD'];
 
@@ -85,9 +113,9 @@ if ($method == 'GET') {
     if (!empty($_FILES['input_file'])) {
         $params = [
             $bodyParams['titulo'] ?? '',
-            $bodyParams['descripcion'] ?? '',
             $bodyParams['materia'] ?? '',
             $_FILES['input_file'],
+            $bodyParams['descripcion'] ?? '',
             $bodyParams['curso'] ?? null,
             $bodyParams['division'] ?? null,
             $bodyParams['visibilidad'] ?? 'publico'
@@ -102,5 +130,4 @@ if ($method == 'GET') {
     echo json_encode("Método HTTP no soportado.");
     exit();
 }
-
 ?>

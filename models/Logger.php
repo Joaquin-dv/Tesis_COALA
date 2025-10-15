@@ -77,7 +77,9 @@ class Logger {
      */
     public function error ($usuario=null, $codigoError, $mensajeError){
         if($usuario === null){
-            $usuario=$_SESSION[APP_NAME]['user']['id'];
+            if(isset($_SESSION[APP_NAME])){
+                $usuario=$_SESSION[APP_NAME]['user']['id'];
+            }
         }
         $this->writeError('!',$usuario,"ERROR {$codigoError}: {$mensajeError}");
     }
