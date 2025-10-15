@@ -1,7 +1,7 @@
 <a href="?slug=detalleApunte&apunteId={{ APUNTE_ID }}" class="enlace_apunte" onclick="return checkInvitadoUser()">
     <article class="apunte">
     <figure>
-        <img class="imagen_apunte" src="data/thumbnails/tesis_miniaturaa.png" alt="Imagen de apunte">
+        <img class="imagen_apunte" src="{{ IMAGEN }}" alt="Imagen de apunte">
     </figure>
     <section class="informacion">
         <h2>{{ TITULO }}</h2>
