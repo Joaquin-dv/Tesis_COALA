@@ -40,7 +40,9 @@
                 </div>
                 <div class="eslogan_texto">
                     <span>Lo que sabés, lo compartís.</span>
-                    <span>Lo que no, lo <a href="?slug=inicio" class="cta-button">descubrís ahora</a>.</span>
+                    <!-- <span>Lo que no, lo <a href="?slug=inicio" class="cta-button"><span>descubrís ahora</span></a>.</span> -->
+
+                    <span>Lo que no, lo  <a href="?slug=inicio" class="cta-button">descubrís ahora</a>.</span>
                 </div>
                 <!-- <a href="#carta_informacion">
                     <button class="boton_explorar_coala">Explorar COALA</button>
