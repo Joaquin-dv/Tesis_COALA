@@ -331,7 +331,7 @@ class Usuarios extends DBAbstract
         $email = strtolower(trim($form["txt_email"]));
         $estaActivo = 0; // Usuario inactivo hasta verificar email
         $rolCodigo = 'student';
-        $escuelaId = 1;
+        $escuelaId = $form['select_escuela'] ?? 1; // Asignar escuela desde el formulario o 1 por defecto
         $actorId = null;
 
         // Crear usuario con código de verificación en email_token

@@ -19,6 +19,9 @@
     // Cargamos la informacion del apunte
     $info_apunte = $apunte->getApunteById($_GET['apunteId'], true)[0];
 
+    //Incrementar las visitas del apunte
+    $apunte->incrementarVisitas($_GET['apunteId'], $_SESSION[APP_NAME]['user']['id']);
+
     // Verificar si el apunte está en favoritos del usuario actual
     $es_favorito = $apunte->esFavorito($_GET['apunteId']);
     $es_favorito = $es_favorito ? 'favorito-activo' : '';
@@ -68,7 +71,7 @@
     // }
 
     // Cargamos los componentes necesarios
-    $tpl->assignVar(["TITULO" => $info_apunte['TITULO'], "MATERIA" => $info_apunte['MATERIA'], "ESCUELA" => $info_apunte['ESCUELA'], "AÑO" => $info_apunte['AÑO'], "PROMEDIO_CALIFICACIONES" => $info_apunte['PROMEDIO_CALIFICACIONES'], "CANTIDAD_PUNTUACIONES" => $info_apunte['CANTIDAD_PUNTUACIONES'], "NOMBRE_AUTOR" => $info_apunte['NOMBRE_AUTOR'], "FECHA_CREACION" => $info_apunte['FECHA_CREACION'], "RUTA_ARCHIVO" => $ruta_archivo, "ERROR_ARCHIVO" => $error_archivo, "ES_FAVORITO" => $es_favorito, "MOSTRAR_TOAST_COMENTARIO" => isset($mostrar_toast_comentario) ? 'true' : 'false']);
+    $tpl->assignVar(["TITULO" => $info_apunte['TITULO'], "MATERIA" => $info_apunte['MATERIA'], "ESCUELA" => $info_apunte['ESCUELA'], "AÑO" => $info_apunte['AÑO'], "PROMEDIO_CALIFICACIONES" => $info_apunte['PROMEDIO_CALIFICACIONES'], "CANTIDAD_PUNTUACIONES" => $info_apunte['CANTIDAD_PUNTUACIONES'], "NOMBRE_AUTOR" => $info_apunte['NOMBRE_AUTOR'], "FECHA_CREACION" => $info_apunte['FECHA_CREACION'], "RUTA_ARCHIVO" => $ruta_archivo, "ERROR_ARCHIVO" => $error_archivo, "ES_FAVORITO" => $es_favorito, "MOSTRAR_TOAST_COMENTARIO" => isset($mostrar_toast_comentario) ? 'true' : 'false', "CANTIDAD_VISTAS" => $info_apunte['CANTIDAD_VISTAS']]);
     $tpl->assignVar(["COMENTARIOS_APUNTE" => $lista_comentarios]);
 
     // Cargamos la informacion del usuario logueado

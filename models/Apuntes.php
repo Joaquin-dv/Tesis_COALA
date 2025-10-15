@@ -126,6 +126,7 @@ class Apuntes extends DBAbstract
                     "IMAGEN" => "",
                     "NOMBRE_AUTOR" => $row["NOMBRE_USUARIO"],
                     "CANTIDAD_PUNTUACIONES" => $row["CANTIDAD_CALIFICACIONES"],
+                    "CANTIDAD_VISTAS" => $row["CANTIDAD_VISTAS"],
                 ];
                 // Si el apunte no tiene calificaciones, forzamos a 0 la puntuación
                 if ($row["PROMEDIO_CALIFICACIONES"] === null) {
@@ -139,6 +140,25 @@ class Apuntes extends DBAbstract
 
         // Si no querés formateo, devolvés el resultset crudo
         return $result['result_sets'][0];
+    }
+
+    // Sumar vistas
+    public function incrementarVisitas($apunte_id, $usuario_id = null)
+    {
+        if (!is_numeric($apunte_id) || $apunte_id <= 0) {
+            return ["errno" => 500, "error" => "No se obtuvo el ID del apunte correctamente"];
+        }
+
+        if(!is_null($usuario_id) && !isset($_SESSION[APP_NAME])){
+            return ["errno" => 403, "error" => "No autorizado"];
+        }
+
+        if ($usuario_id !== null && (!is_numeric($usuario_id) || $usuario_id <= 0)) {
+            return ["errno" => 500, "error" => "No se obtuvo el ID del usuario correctamente"];
+        }
+        
+        $this->callSP("CALL sp_sumar_vista_apunte(?,?)", [$apunte_id, $usuario_id]);
+        return ["errno" => 200, "error" => "Visitas incrementadas"];
     }
 
     public function getRutaApunteById($apunte_id)
@@ -889,3 +909,4 @@ class Apuntes extends DBAbstract
         return $result['result_sets'][0];
     }
 
+}
