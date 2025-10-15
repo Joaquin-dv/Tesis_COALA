@@ -18,6 +18,16 @@
             $this->creado_en = null;
         }
 
+        /**
+         * Obtiene todas las escuelas disponibles
+         * @return array Lista de escuelas con ID y nombre
+         */
+        public function getEscuelas()
+        {
+            $result = $this->callSP("CALL sp_obtener_escuelas()");
+            return $result['result_sets'][0];
+        }
+
         public function getNameById($escuela_id) {
             $sql = "SELECT nombre FROM `escuelas` WHERE id = ".$escuela_id.";";
 
@@ -42,7 +52,19 @@
             return $result[0]["nombre"];
         }
 
+        public function getNivelesByEscuela($id_escuela, $id_anio_lectivo) {
+            $result = $this->callSP("CALL sp_obtener_niveles_por_escuela(?, ?)", [$id_escuela, $id_anio_lectivo]);
+            return $result['result_sets'][0];
+        } 
+
+        public function getDivisionesPorNivel($id_escuela, $id_anio_lectivo, $nivel) {
+            $result = $this->callSP("CALL sp_obtener_divisiones_por_nivel(?, ?, ?)", [$id_escuela, $id_anio_lectivo, $nivel]);
+            return $result['result_sets'][0];
+        }
+
+
         public function getCursos($id_escuela, $id_anio_lectivo) {
+            
             $sql = "SELECT * FROM `cursos` WHERE escuela_id = ".$id_escuela." AND anio_lectivo_id = ".$id_anio_lectivo." ORDER BY id ASC;";
 
             $result = $this->query($sql);
@@ -56,6 +78,11 @@
             $result = $this->query($sql);
 
             return $result;
+        }
+
+        public function getMateriasByCurso($id_escuela, $id_anio_lectivo, $id_curso) {
+            $result = $this->callSP("CALL sp_obtener_materias_por_curso(?, ?, ?)", [$id_escuela, $id_anio_lectivo, $id_curso]);
+            return $result['result_sets'][0];
         }
 
         public function getMaterias($id_escuela, $id_anio_lectivo) {

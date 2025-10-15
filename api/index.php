@@ -1,7 +1,35 @@
 <?php
 session_start();
+header("Content-Type: application/json; charset=utf-8");
 
-header("Content-Type: application/json");
+require_once "../models/Logger.php";
+
+// --- Manejo simple de errores (no cambia la lógica existente) ---
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
+
+set_error_handler(function ($severity, $message, $file, $line) {
+    http_response_code(500);
+    echo json_encode([
+        'ok'    => false,
+        'errno' => 500,
+        'error' => "PHP error: $message",
+        'file'  => $file,
+        'line'  => $line,
+    ], JSON_UNESCAPED_UNICODE);
+    exit;
+});
+
+set_exception_handler(function ($e) {
+    http_response_code(500);
+    echo json_encode([
+        'ok'    => false,
+        'errno' => 500,
+        'error' => $e->getMessage(),
+    ], JSON_UNESCAPED_UNICODE);
+    exit;
+});
+// ----------------------------------------------------------------
 
 $method = $_SERVER['REQUEST_METHOD'];
 
@@ -83,15 +111,40 @@ if ($method == 'GET') {
 
     // Si hay archivos, agregarlos como parámetro
     if (!empty($_FILES['input_file'])) {
-        $params = [
-            $bodyParams['titulo'] ?? '',
-            $bodyParams['descripcion'] ?? '',
-            $bodyParams['materia'] ?? '',
-            $_FILES['input_file'],
-            $bodyParams['curso'] ?? null,
-            $bodyParams['division'] ?? null,
-            $bodyParams['visibilidad'] ?? 'publico'
-        ];
+        // Si es un array de archivos (múltiples), pasar el array completo
+        if (is_array($_FILES['input_file']['name'])) {
+            $archivos = [];
+            $fileCount = count($_FILES['input_file']['name']);
+            for ($i = 0; $i < $fileCount; $i++) {
+                $archivos[] = [
+                    'name' => $_FILES['input_file']['name'][$i],
+                    'type' => $_FILES['input_file']['type'][$i],
+                    'tmp_name' => $_FILES['input_file']['tmp_name'][$i],
+                    'error' => $_FILES['input_file']['error'][$i],
+                    'size' => $_FILES['input_file']['size'][$i]
+                ];
+            }
+            $params = [
+                $bodyParams['titulo'] ?? '',
+                $bodyParams['materia'] ?? '',
+                $archivos,
+                $bodyParams['descripcion'] ?? '',
+                $bodyParams['curso'] ?? null,
+                $bodyParams['division'] ?? null,
+                $bodyParams['visibilidad'] ?? 'publico'
+            ];
+        } else {
+            // Archivo único (compatibilidad hacia atrás)
+            $params = [
+                $bodyParams['titulo'] ?? '',
+                $bodyParams['materia'] ?? '',
+                $_FILES['input_file'],
+                $bodyParams['descripcion'] ?? '',
+                $bodyParams['curso'] ?? null,
+                $bodyParams['division'] ?? null,
+                $bodyParams['visibilidad'] ?? 'publico'
+            ];
+        }
         $respuesta = call_user_func_array([$modelo, $metodo], $params);
     } else {
         $respuesta = call_user_func_array([$modelo, $metodo], $bodyParams ? array_values($bodyParams) : []);
@@ -102,5 +155,4 @@ if ($method == 'GET') {
     echo json_encode("Método HTTP no soportado.");
     exit();
 }
-
 ?>
