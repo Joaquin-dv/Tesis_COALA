@@ -25,6 +25,7 @@ class Apuntes extends DBAbstract
     private $verificado_en;             // datetime NULL
     private $estado_ia;                 // 'no_escaneado' | 'aprobado' | 'marcado' | 'bloqueado'
     private $motivo_rechazo;            // varchar(255) NULL
+    private $logger;
 
     public function __construct()
     {
@@ -48,6 +49,7 @@ class Apuntes extends DBAbstract
         $this->verificado_en = null;
         $this->estado_ia = "no_escaneado";
         $this->motivo_rechazo = null;
+        $this->logger = new Logger();
     }
 
     /**
@@ -104,7 +106,8 @@ class Apuntes extends DBAbstract
     public function getApunteById($apunte_id, $formated = false)
     {
         if (!is_numeric($apunte_id) || $apunte_id <= 0) {
-            return ["errno" => 500, "error" => "No se obtuvo el ID del apunte correctamente"];
+            $this->logger->error('','500',"No se obtuvo el ID del apunte correctamente");
+            return ["errno" => 500, "error" => "No se obtuvo el ID del apunte correctamente"];;
         }
 
         $result = $this->callSP("CALL sp_obtener_apunte_por_id(?)", [$apunte_id]);
@@ -141,6 +144,7 @@ class Apuntes extends DBAbstract
     public function getRutaApunteById($apunte_id)
     {
         if (!is_numeric($apunte_id) || $apunte_id <= 0) {
+            $this->logger->error('','500',"No se obtuvo el ID del apunte correctamente");
             return ["errno" => 500, "error" => "No se obtuvo el ID del apunte correctamente"];
         }
 
@@ -149,6 +153,7 @@ class Apuntes extends DBAbstract
         if (count($result['result_sets'][0]) > 0) {
             return $result['result_sets'][0][0]['RUTA_ARCHIVO'];
         } else {
+            $this->logger->error('','404',"No se encontro la ruta del apunte");
             return ["errno" => 404, "error" => "No se encontro la ruta del apunte"];
         }
     }
@@ -172,7 +177,8 @@ class Apuntes extends DBAbstract
     public function getApuntesByAlumno($alumno_id, bool $formated = false)
     {
         if (!is_numeric($alumno_id) || $alumno_id <= 0) {
-            return ["errno" => 500, "error" => "No se obtuvo el ID del alumno correctamente"];
+            $this->logger->error('','500',"No se obtuvo el ID del alumno correctamente");
+            return ["errno" => 500, "error" => "No se obtuvo el ID del alumno correctamente"];;
         }
 
         $result = $this->callSP("CALL sp_obtener_apuntes_por_alumno(?)", [$alumno_id]);
@@ -203,7 +209,8 @@ class Apuntes extends DBAbstract
     public function getApuntesFavoritosByAlumno($alumno_id, bool $formated = false)
     {
         if (!is_numeric($alumno_id) || $alumno_id <= 0) {
-            return ["errno" => 500, "error" => "No se obtuvo el ID del alumno correctamente"];
+            $this->logger->error('','500',"No se obtuvo el ID del alumno correctamente");
+            return ["errno" => 500, "error" => "No se obtuvo el ID del alumno correctamente"];;
         }
 
         $result = $this->callSP("CALL sp_obtener_apuntes_favoritos_por_alumno(?)", [$alumno_id]);
@@ -241,6 +248,7 @@ class Apuntes extends DBAbstract
             return 0;
         }
     }
+
 
     /**
      * Genera y asegura la carpeta destino y las rutas de archivo/BD.
@@ -291,6 +299,8 @@ class Apuntes extends DBAbstract
         ];
     }
 
+    
+    /* registra un nuevo apunte */
 
     public function create(
         $titulo,
@@ -302,6 +312,7 @@ class Apuntes extends DBAbstract
         $visibilidad = 'publico'
     ) {
         if (!isset($_SESSION[APP_NAME])) {
+            $this->logger->error('','403',"No autorizado");
             return ["errno" => 403, "error" => "No autorizado"];
         }
 
@@ -316,21 +327,27 @@ class Apuntes extends DBAbstract
 
         // Validaciones
         if ($titulo == "") {
+            $this->logger->error($usuarioId,'400',"Falta el título");
             return ["errno" => 400, "error" => "Falta el título"];
         }
         if ($descripcion == "") {
+            $this->logger->error($usuarioId,'400',"Falta la descripción");
             return ["errno" => 400, "error" => "Falta la descripción"];
         }
         if ($materia == "" || !is_numeric($materia)) {
+            $this->logger->error($usuarioId,'400',"Falta el ID de la materia");
             return ["errno" => 400, "error" => "Falta el ID de la materia"];
         }
         if ($anio_lectivo_id == "" || !is_numeric($anio_lectivo_id)) {
+            $this->logger->error($usuarioId,'400',"Falta el ID del año lectivo");
             return ["errno" => 400, "error" => "Falta el ID del año lectivo"];
         }
         if (!in_array($visibilidad, ["publico", "curso"])) {
+            $this->logger->error($usuarioId,'400',"Visibilidad inválida");
             return ["errno" => 400, "error" => "Visibilidad inválida"];
         }
         if (!is_array($archivo) || !isset($archivo['name'], $archivo['tmp_name'])) {
+            $this->logger->error($usuarioId,'400',"Falta el archivo");
             return ["errno" => 400, "error" => "Falta el archivo"];
         }
 
@@ -346,7 +363,8 @@ class Apuntes extends DBAbstract
         // Verificar tipo permitido (PDF)
         $tiposPermitidos = ['application/pdf'];
         if (!in_array($tipoMime, $tiposPermitidos)) {
-            return ["errno" => 400, "error" => "Tipo de archivo no permitido. Solo se acepta PDF."];
+            $this->logger->error($usuarioId,'400',"Tipo de archivo no permitido. Solo se aceptan PDF o imágenes.");
+            return ["errno" => 400, "error" => "Tipo de archivo no permitido. Solo se aceptan PDF o imágenes."];
         }
 
         // Normalización de opcionales
@@ -361,6 +379,7 @@ class Apuntes extends DBAbstract
         // Evitar duplicado exacto por hash
         $existing = $this->query("SELECT id FROM archivos_apuntes WHERE sha256 = '" . $sha256 . "'");
         if ($existing && count($existing) > 0) {
+            $this->logger->error($usuarioId,'409',"Este archivo ya ha sido subido anteriormente.");
             return ["errno" => 409, "error" => "Este archivo ya ha sido subido anteriormente."];
         }
 
@@ -389,6 +408,7 @@ class Apuntes extends DBAbstract
             $apunte_id = isset($row[0]["id"]) ? (int) $row[0]["id"] : 0;
             if ($apunte_id <= 0) {
                 $this->rollback();
+                $this->logger->error($usuarioId,'500',"No se obtuvo el ID del apunte");
                 return ["errno" => 500, "error" => "No se obtuvo el ID del apunte"];
             }
 
@@ -398,6 +418,7 @@ class Apuntes extends DBAbstract
             // Mover el archivo físicamente (a .../Apunte.pdf)
             if (!move_uploaded_file($rutaTemporal, $rutas['ruta_fisica_pdf'])) {
                 $this->rollback();
+                $this->logger->error($usuarioId,'500',"Error al mover el archivo al destino");
                 return ["errno" => 500, "error" => "Error al mover el archivo al destino"];
             }
 
@@ -431,11 +452,12 @@ class Apuntes extends DBAbstract
             $archivo_id = isset($row2[0]["id"]) ? (int) $row2[0]["id"] : 0;
             if ($archivo_id <= 0) {
                 $this->rollback();
+                $this->logger->error($usuarioId,'500',"No se obtuvo el ID del archivo");
                 return ["errno" => 500, "error" => "No se obtuvo el ID del archivo"];
             }
 
             $this->commit();
-
+             $this->logger->creacion($usuarioId,'apunte',$apunte_id);
             return [
                 "errno"       => 202,
                 "error"       => "El archivo se subió correctamente",
@@ -445,8 +467,10 @@ class Apuntes extends DBAbstract
         } catch (Throwable $e) {
             $this->rollback();
             if (strpos($e->getMessage(), 'Duplicate entry') !== false && strpos($e->getMessage(), 'uk_aa_sha') !== false) {
+                $this->logger->error($usuarioId,'409',"Este archivo ya ha sido subido anteriormente.");
                 return ["errno" => 409, "error" => "Este archivo ya ha sido subido anteriormente."];
             }
+            $this->logger->error($usuarioId,'500',"DB error: " . $e->getMessage());
             return ["errno" => 500, "error" => "DB error: " . $e->getMessage()];
         }
     }
@@ -459,21 +483,26 @@ class Apuntes extends DBAbstract
 
         // Validaciones
         if (!is_numeric($apunte_id) || $apunte_id <= 0) {
+            $this->logger->error(isset($usuario_id)?$usuario_id:(isset($usuarioId)?$usuarioId:''),'400',"ID de apunte inválido");
             return ["errno" => 400, "error" => "ID de apunte inválido"];
         }
         if (isset($form["titulo"]) && $form["titulo"] == "") {
+            $this->logger->error(isset($usuario_id)?$usuario_id:(isset($usuarioId)?$usuarioId:''),'400',"Falta el título");
             return ["errno" => 400, "error" => "Falta el título"];
         }
         if (isset($form["descripcion"]) && $form["descripcion"] == "") {
+            $this->logger->error(isset($usuario_id)?$usuario_id:(isset($usuarioId)?$usuarioId:''),'400',"Falta la descripción");
             return ["errno" => 400, "error" => "Falta la descripción"];
         }
         // if(isset($form["escuela_id"]) && (!is_numeric($form["escuela_id"]) || $form["escuela_id"] <= 0)){
         //     return ["errno" => 400, "error" => "ID de escuela inválido"];
         // }
         if (isset($form["materia"]) && (!is_numeric($form["materia"]) || $form["materia"] <= 0)) {
+            $this->logger->error(isset($usuario_id)?$usuario_id:(isset($usuarioId)?$usuarioId:''),'400',"ID de materia inválido");
             return ["errno" => 400, "error" => "ID de materia inválido"];
         }
         if (isset($form["anio_lectivo_id"]) && (!is_numeric($form["anio_lectivo_id"]) || $form["anio_lectivo_id"] <= 0)) {
+            $this->logger->error(isset($usuario_id)?$usuario_id:(isset($usuarioId)?$usuarioId:''),'400',"ID de año lectivo inválido");
             return ["errno" => 400, "error" => "ID de año lectivo inválido"];
         }
         // if(isset($form["visibilidad"]) && !in_array($form["visibilidad"], ["publico", "curso"])){
@@ -498,8 +527,10 @@ class Apuntes extends DBAbstract
         );
 
         if ($response > 0) {
+            $this->logger->modificacion(isset($usuario_id)?$usuario_id:(isset($usuarioId)?$usuarioId:''),'apunte',$apunte_id);
             return ["errno" => 200, "error" => "Apunte actualizado correctamente"];
         } else {
+            $this->logger->error(isset($usuario_id)?$usuario_id:(isset($usuarioId)?$usuarioId:''),'500',"Error al crear el apunte");
             return ["errno" => 500, "error" => "Error al crear el apunte"];
         }
     }
@@ -507,14 +538,17 @@ class Apuntes extends DBAbstract
     public function delete($apunte_id)
     {
         if (!is_numeric($apunte_id) || $apunte_id <= 0) {
+            $this->logger->error('','400',"ID de apunte inválido");
             return ["errno" => 400, "error" => "ID de apunte inválido"];
         }
 
         $response = $this->callSP("sp_delete_apunte", [$apunte_id]);
 
         if ($response > 0) {
+            $this->logger->eliminacion(isset($usuario_id)?$usuario_id:(isset($usuarioId)?$usuarioId:''),'apunte',$apunte_id);
             return ["errno" => 200, "error" => "Apunte borrado correctamente"];
         } else {
+            $this->logger->error('','500',"Error al borrar el apunte");
             return ["errno" => 500, "error" => "Error al borrar el apunte"];
         }
     }
@@ -525,6 +559,7 @@ class Apuntes extends DBAbstract
         require_once dirname(__DIR__) . "/libs/DocumentAI.php";
 
         if (!is_numeric($apunte_id) || $apunte_id <= 0) {
+            $this->logger->error('','400',"ID de apunte inválido");
             return ["errno" => 400, "error" => "ID de apunte inválido"];
         }
 
@@ -532,6 +567,7 @@ class Apuntes extends DBAbstract
         $sql = "SELECT ruta_archivo FROM archivos_apuntes WHERE apunte_id = " . (int)$apunte_id . " AND es_principal = 1";
         $result = $this->query($sql);
         if (!$result || count($result) == 0) {
+            $this->logger->error('','404',"Archivo no encontrado");
             return ["errno" => 404, "error" => "Archivo no encontrado"];
         }
         $ruta_archivo = $result[0]['ruta_archivo'];
@@ -585,9 +621,11 @@ class Apuntes extends DBAbstract
     public function updateEstado($apunte_id, $estado, $motivo = null)
     {
         if (!is_numeric($apunte_id) || $apunte_id <= 0) {
+            $this->logger->error('','400',"ID de apunte inválido");
             return ["errno" => 400, "error" => "ID de apunte inválido"];
         }
         if (!in_array($estado, ['pendiente', 'en_revision', 'aprobado', 'rechazado'])) {
+            $this->logger->error('','400',"Estado inválido");
             return ["errno" => 400, "error" => "Estado inválido"];
         }
 
@@ -597,6 +635,7 @@ class Apuntes extends DBAbstract
         if ($response) {
             return ["errno" => 200, "error" => "Estado actualizado correctamente"];
         } else {
+            $this->logger->error('','500',"Error al actualizar estado");
             return ["errno" => 500, "error" => "Error al actualizar estado"];
         }
     }
@@ -604,6 +643,7 @@ class Apuntes extends DBAbstract
     public function getComentariosByApunte($apunte_id, bool $formated = false)
     {
         if (!is_numeric($apunte_id) || $apunte_id <= 0) {
+            $this->logger->error('','500',"No se obtuvo el ID del apunte correctamente");
             return ["errno" => 500, "error" => "No se obtuvo el ID del apunte correctamente"];
         }
 
@@ -628,6 +668,7 @@ class Apuntes extends DBAbstract
     public function createComentario($apunte_id, $texto_comentario)
     {
         if (!isset($_SESSION[APP_NAME])) {
+            $this->logger->error('','403',"No autorizado");
             return ["errno" => 403, "error" => "No autorizado"];
         }
 
@@ -637,12 +678,15 @@ class Apuntes extends DBAbstract
 
         // Validaciones
         if (!is_numeric($apunte_id) || $apunte_id <= 0) {
+            $this->logger->error($usuario_id,'400',"ID de apunte inválido");
             return ["errno" => 400, "error" => "ID de apunte inválido"];
         }
         if (empty(trim($texto_comentario))) {
+            $this->logger->error($usuario_id,'400',"El comentario no puede estar vacío");
             return ["errno" => 400, "error" => "El comentario no puede estar vacío"];
         }
         if (strlen($texto_comentario) > 500) {
+            $this->logger->error($usuario_id,'400',"El comentario es demasiado largo (máximo 500 caracteres)");
             return ["errno" => 400, "error" => "El comentario es demasiado largo (máximo 500 caracteres)"];
         }
 
@@ -660,6 +704,7 @@ class Apuntes extends DBAbstract
                 "comentario_id" => $result['result_sets'][0][0]['comentario_id']
             ];
         } else {
+            $this->logger->error($usuario_id,'500',"Error al crear el comentario");
             return ["errno" => 500, "error" => "Error al crear el comentario"];
         }
     }
@@ -672,6 +717,7 @@ class Apuntes extends DBAbstract
     public function toggleFavorito($apunte_id)
     {
         if (!isset($_SESSION[APP_NAME])) {
+            $this->logger->error('','403',"No autorizado");
             return ["errno" => 403, "error" => "No autorizado"];
         }
 
@@ -681,6 +727,7 @@ class Apuntes extends DBAbstract
 
         // Validaciones
         if (!is_numeric($apunte_id) || $apunte_id <= 0) {
+            $this->logger->error($usuario_id,'400',"ID de apunte inválido");
             return ["errno" => 400, "error" => "ID de apunte inválido"];
         }
 
@@ -711,10 +758,12 @@ class Apuntes extends DBAbstract
                 }
             } else {
                 error_log("Result set vacío: " . json_encode($result['result_sets']));
+                $this->logger->error($usuario_id,'500',"Result set vacío");
                 return ["errno" => 500, "error" => "Result set vacío"];
             }
         } else {
             error_log("Resultado inválido del SP: " . json_encode($result));
+            $this->logger->error($usuario_id,'500',"Error al cambiar estado de favorito");
             return ["errno" => 500, "error" => "Error al cambiar estado de favorito"];
         }
     }
@@ -840,4 +889,3 @@ class Apuntes extends DBAbstract
         return $result['result_sets'][0];
     }
 
-}
