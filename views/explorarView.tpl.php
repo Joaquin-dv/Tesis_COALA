@@ -22,10 +22,12 @@
                 {{ EXPLORAR }}
             </section>
     </main>
+    @extends(mobile_nav)
     <script src="views/static/js/botonFiltro.js"></script>
     <script type="module" src="views/static/js/inicioScript.js"></script>
     <script src="views/static/js/generalesScript.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module" src="views/static/js/modules/toastModule.js"></script>
 
 </body>
 

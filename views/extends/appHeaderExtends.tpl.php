@@ -6,7 +6,7 @@
     <nav class="barra_navegacion">
         <a href="?slug=inicio">Inicio</a>
         <a href="?slug=explorar">Explorar</a>
-        <a href="?slug=mochila" onclick="return checkDemoUser()">Mochila</a>
+        <a href="?slug=mochila" onclick="return checkDemoOrInvitadoUser()">Mochila</a>
         <!-- <a href="?slug=clases">Clases</a> -->
     </nav>
 

@@ -135,12 +135,8 @@
 
 
 
-    <footer class="mobile-nav">
-        <a href="?slug=inicio"><i class="fa-solid fa-house"></i></a>
-        <a href="?slug=explorar"><i class="fa-solid fa-magnifying-glass"></i></a>
-        <a href="?slug=mochila" onclick="return checkDemoUser()"><i class="fa-solid fa-box-archive"></i></a>
-        <a href="?slug=clases" onclick="return checkDemoUser()"><i class="fa-solid fa-school"></i></a>
-    </footer>
+    @extends(mobile_nav)
+
     </main>
 
     <script>
@@ -151,6 +147,7 @@
     <script src="views/static/js/detalleApunte.js"></script>
     <script src="views/static/js/generalesScript.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module" src="views/static/js/modules/toastModule.js"></script>
 </body>
 
 </html>
