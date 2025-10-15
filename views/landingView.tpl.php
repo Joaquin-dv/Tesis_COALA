@@ -40,8 +40,6 @@
                 </div>
                 <div class="eslogan_texto">
                     <span>Lo que sabés, lo compartís.</span>
-                    <!-- <span>Lo que no, lo <a href="?slug=inicio" class="cta-button"><span>descubrís ahora</span></a>.</span> -->
-
                     <span>Lo que no, lo  <a href="?slug=inicio" class="cta-button">descubrís ahora</a>.</span>
                 </div>
                 <!-- <a href="#carta_informacion">
@@ -91,7 +89,7 @@
             <div class="team_cards">
                 <div class="team_card">
                     <div class="team_img">
-                        <img src="views/static/img/inicio/foto_perfil.jpg" alt="Creador 1">
+                        <img src="views/static/img/integrantes/ezequiel.jpg" alt="Creador 1">
                     </div>
                     <h3>Ezequiel Cernadas</h3>
                     <p>Back-end</p>
@@ -102,7 +100,7 @@
 
                 <div class="team_card">
                     <div class="team_img">
-                        <img src="views/static/img/inicio/foto_perfil.jpg" alt="Creador 2">
+                        <img src="views/static/img/integrantes/milena.jpg" alt="Creador 2">
                     </div>
                     <h3>Milena Lopez</h3>
                     <p>Front-end</p>
@@ -113,7 +111,7 @@
 
                 <div class="team_card">
                     <div class="team_img">
-                        <img src="views/static/img/inicio/foto_perfil.jpg" alt="Creador 3">
+                        <img src="views/static/img/integrantes/joaquin.jpg" alt="Creador 3">
                     </div>
                     <h3>Joaquin Paez</h3>
                     <p>Back-end</p>
@@ -124,7 +122,7 @@
 
                 <div class="team_card">
                     <div class="team_img">
-                        <img src="views/static/img/inicio/foto_perfil.jpg" alt="Creador 3">
+                        <img src="views/static/img/integrantes/nahuel.jpg" alt="Creador 4">
                     </div>
                     <h3>Nahuel Martinez</h3>
                     <p>Front-end</p>

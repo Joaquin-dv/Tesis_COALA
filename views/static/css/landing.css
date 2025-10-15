@@ -126,7 +126,7 @@ main .eslogan .eslogan_texto .cta-button {
   display: inline-block;
   background-color: var(--color-accion);
   color: var(--txt-blanco);
-  padding: 10px 28px;
+  padding: 10px 17px;
   border-radius: 10px;
   text-decoration: none;
   font-weight: 600;
@@ -140,7 +140,6 @@ main .eslogan .eslogan_texto .cta-button {
   animation: pulso 5s ease-in-out infinite;
 }
 
-/* Efecto de brillo al pasar el mouse */
 main .eslogan .eslogan_texto .cta-button::before {
   content: "";
   position: absolute;
@@ -152,7 +151,6 @@ main .eslogan .eslogan_texto .cta-button::before {
   transition: left 0.6s ease;
 }
 
-/* Hover */
 main .eslogan .eslogan_texto .cta-button:hover {
   background-color: var(--btn-hover);
   box-shadow: 0 6px 16px rgba(86, 174, 255, 0.45);
@@ -163,13 +161,11 @@ main .eslogan .eslogan_texto .cta-button:hover::before {
   left: 100%;
 }
 
-/* Click */
 main .eslogan .eslogan_texto .cta-button:active {
   transform: translateY(0);
   box-shadow: 0 3px 8px rgba(86, 174, 255, 0.3);
 }
 
-/* Animación de pulso suave */
 @keyframes pulso {
   0%, 100% {
     transform: scale(1);
@@ -180,51 +176,6 @@ main .eslogan .eslogan_texto .cta-button:active {
     box-shadow: 0 6px 16px rgba(86, 174, 255, 0.45);
   }
 }
-
-/* 
-main .eslogan .eslogan_texto .cta-button {
-  display: inline-block;
-  background: linear-gradient(135deg, #64d83e, #54d49b);
-  color: white;
-  padding: 12px 24px;
-  border-radius: 50px;
-  text-decoration: none;
-  font-weight: 900;
-  font-size: 28px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  box-shadow: 0 8px 20px rgba(62, 216, 144, 0.4);
-  transition: all 0.3s ease;
-  border: 3px solid transparent;
-  position: relative;
-  overflow: hidden;
-}
-
-main .eslogan .eslogan_texto .cta-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s;
-}
-
-main .eslogan .eslogan_texto .cta-button:hover {
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 12px 30px rgba(62, 216, 144, 0.6);
-  border-color: rgba(255, 255, 255, 0.5);
-}
-
-main .eslogan .eslogan_texto .cta-button:hover::before {
-  left: 100%;
-}
-
-main .eslogan .eslogan_texto .cta-button:active {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 15px rgba(62, 216, 144, 0.4);
-} */
 
 main .eslogan .contenedor_logo {
   width: 210px;
@@ -247,7 +198,6 @@ main .eslogan .boton_explorar_coala {
   margin: 1em;
 }
 
-/* Información de COALA */
 main .informacion_de_coala .carta_informacion {
   display: flex;
   justify-content: center;
@@ -330,13 +280,7 @@ main .informacion_de_coala .informacion p {
   }
 }
 
-/* 
-@media (max-width: 768px) {
-  main .eslogan .eslogan_texto .cta-button {
-    font-size: 24px;
-    padding: 10px 20px;
-  }
-} */
+
 
 @media (max-width: 480px) {
   main .informacion_de_coala .contenedor_imagen_informacion {
@@ -363,10 +307,7 @@ main .informacion_de_coala .informacion p {
   main .eslogan .eslogan_texto .cta-button {
     padding: 7px 15px;
   }
-  /* main .eslogan .eslogan_texto .cta-button {
-    font-size: 20px;
-    padding: 8px 16px;
-  } */
+ 
 }
 
 
@@ -376,7 +317,6 @@ main .informacion_de_coala .informacion p {
 
 
 
-/* ===== FOOTER ===== */
 footer {
   display: flex;
   justify-content: center;
@@ -385,7 +325,6 @@ footer {
   font-size: 16px;
 }
 
-/* ===== SECCIONES ===== */
 #about,
 #team {
   display: none;
@@ -519,7 +458,6 @@ footer {
   text-align: center;
 }
 
-/* ===== CTA REGISTRARSE ===== */
 .cta_registrarse {
   margin: 2em;
   display: flex;
@@ -563,18 +501,15 @@ footer {
     padding: 0.8em 1em !important;
   }
 
-  /* Logo arriba a la izquierda */
   header .logo_secundario {
     order: 1;
     flex: 1;
   }
 
-  /* Botón login arriba a la derecha */
   header .inicios_sesion {
     order: 2;
   }
 
-  /* Secciones centradas en la fila 2 */
   header .eleccion_landing {
     order: 3;
     width: 100%;
@@ -583,7 +518,6 @@ footer {
     padding-top: 0.4em;
   }
 
-  /* Ajustes visuales */
   header .eleccion_landing button {
     padding: 8px 10px;
     font-size: 14px;
@@ -603,5 +537,19 @@ footer {
       width: 160px;
       height: 160px;
       overflow: hidden;
+  }
+}
+
+
+@media (max-width: 569px) {
+  .cta_registrarse {
+    flex-direction: column;
+    gap: 1em;
+    padding: 1em;
+  }
+
+  .cta_registrarse h2 {
+    width: 100%;
+    font-size: 20px;
   }
 }
