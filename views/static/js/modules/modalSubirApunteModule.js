@@ -22,11 +22,29 @@ async function fetchJSON(url, options) {
 }
 
 /**
- * Trae cursos para una escuela/año lectivo.
- * Estructura esperada (ejemplo): [{ id, nivel, division }, ...]
+ * Trae escuelas disponibles.
+ * Estructura esperada (ejemplo): [{ ESCUELA_ID, ESCUELA_NOMBRE }, ...]
  */
-function obtenerCursos(idEscuela, idAnioLectivo) {
-    const url = `api/index.php?model=Escuelas&method=getCursos&id_escuela=${idEscuela}&id_anio_lectivo=${idAnioLectivo}`;
+function obtenerEscuelas() {
+    const url = `api/index.php?model=Escuelas&method=getEscuelas`;
+    return fetchJSON(url);
+}
+
+/**
+ * Trae cursos para una escuela/año lectivo.
+ * Estructura esperada (ejemplo): [{ NIVEL }, ...]
+ */
+function obtenerNiveles(idEscuela, idAnioLectivo) {
+    const url = `api/index.php?model=Escuelas&method=getNivelesByEscuela&id_escuela=${idEscuela}&id_anio_lectivo=${idAnioLectivo}`;
+    return fetchJSON(url);
+}
+
+/**
+ * Trae las divisiones para curso.
+ * Estructura esperada (ejemplo): [{ DIVISION }, ...]
+ */
+function obtenerDivisiones(idEscuela, idAnioLectivo, nivel) {
+    const url = `api/index.php?model=Escuelas&method=getDivisionesPorNivel&id_escuela=${idEscuela}&id_anio_lectivo=${idAnioLectivo}&nivel=${encodeURIComponent(nivel)}`;
     return fetchJSON(url);
 }
 
@@ -34,19 +52,42 @@ function obtenerCursos(idEscuela, idAnioLectivo) {
  * Busca un curso por nivel + división para mapear al ID real.
  * Estructura esperada (ej.): [{ id, nivel, division }]
  */
-function buscarCurso(nivel, division) {
-    const url = `api/index.php?model=Escuelas&method=getCursoByNivelandDivision&nivel=${encodeURIComponent(nivel)}&division=${encodeURIComponent(division)}&id_escuela=${ID_ESCUELA_DEFAULT}&id_anio_lectivo=${ID_ANIO_LECTIVO_DEFAULT}`;
+function buscarCurso(nivel, division, idEscuela) {
+    const url = `api/index.php?model=Escuelas&method=getCursoByNivelandDivision&nivel=${encodeURIComponent(nivel)}&division=${encodeURIComponent(division)}&id_escuela=${idEscuela}&id_anio_lectivo=${ID_ANIO_LECTIVO_DEFAULT}`;
     return fetchJSON(url);
 }
 
 /**
  * Trae materias para una escuela/año lectivo.
- * Estructura esperada (ej.): [{ id, nombre }, ...]
+ * Estructura esperada (ej.): [{ MATERIA_ID, MATERIA_NOMBRE }, ...]
  */
-function obtenerMaterias(idEscuela, idAnioLectivo) {
-    const url = `api/index.php?model=Escuelas&method=getMaterias&id_escuela=${idEscuela}&id_anio_lectivo=${idAnioLectivo}`;
+function obtenerMateriasPorCurso(idEscuela, idAnioLectivo, idCurso) {
+    const url = `api/index.php?model=Escuelas&method=getMateriasByCurso&id_escuela=${idEscuela}&id_anio_lectivo=${idAnioLectivo}&id_curso=${idCurso}`;
     return fetchJSON(url);
 }
+
+function errorLogger(codigoError, mensajeError) {
+  const url = 'api/index.php';
+
+  // Hacemos la llamada al servidor SIN async/await
+  fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'Logger',
+      method: 'error',
+      codigoError,
+      mensajeError: mensajeError?.toString() ?? 'Error desconocido'
+    })
+  })
+  .then(res => res.json())
+  .then(data => console.log('Log enviado:', data))
+  .catch(err => console.error('Fallo al enviar el log:', err));
+
+  // (opcional) log local para depurar
+  console.log('Intentando registrar error:', codigoError, mensajeError);
+}
+
 
 // -------------------------------------------------------------
 // Utilidades de UI simples
@@ -89,8 +130,9 @@ function llenarSelectUnico(select, lista, propValor, propTexto, placeholder) {
  * Valida de forma sencilla los campos mínimos del formulario.
  * Devuelve string con el mensaje de error o "" si todo OK.
  */
-function validarCamposMinimos({ titulo, materia, curso, division, profesor, descripcion, archivo }) {
+function validarCamposMinimos({ titulo, escuela, materia, curso, division, profesor, descripcion, archivo }) {
     if (!titulo) return "Ingresá un título.";
+    if (!escuela) return "Seleccioná una escuela.";
     if (!materia) return "Seleccioná una materia.";
     if (!curso) return "Seleccioná un curso.";
     if (!division) return "Seleccioná una división.";
@@ -126,9 +168,9 @@ async function abrirModalSubida() {
                 <section class="contenido_formulario">
                     <form id="formulario" autocomplete="off" enctype="multipart/form-data">
                         <input type="text" name="titulo" id="titulo" class="campo_modal poppins-semibold" placeholder="Título del apunte">
-
-                        <select name="materia" id="materia" class="campo_modal poppins-semibold">
-                            <option value="">Materia</option>
+                        
+                        <select name="escuela" id="escuela" class="campo_modal poppins-semibold">
+                            <option value="">Escuela</option>
                         </select>
 
                         <section class="curso_division">
@@ -140,7 +182,12 @@ async function abrirModalSubida() {
                             </select>
                         </section>
 
-                        <input type="text" name="profesor" id="profesor" class="campo_modal poppins-semibold" placeholder="Profesor (opcional)">
+                        <select name="materia" id="materia" class="campo_modal poppins-semibold">
+                            <option value="">Materia</option>
+                        </select>
+
+                        <!-- EL CAMPO DE PROFESOR SE COMENTA HASTA QUE SEA FUNCIONAL -->
+                        <!-- <input type="text" name="profesor" id="profesor" class="campo_modal poppins-semibold" placeholder="Profesor (opcional)"> -->
 
                         <textarea id="descripcion" class="campo_modal poppins-semibold" name="descripcion" rows="4" cols="50" placeholder="Descripción (opcional)"></textarea>
 
@@ -168,6 +215,7 @@ async function abrirModalSubida() {
         // Carga inicial de selects cuando abre el popup
         didOpen: async (popup) => {
             const $ = (sel) => popup.querySelector(sel);
+            const selectEscuela = $("#escuela");
             const selectCurso = $("#curso");
             const selectDivision = $("#division");
             const selectMateria = $("#materia");
@@ -179,21 +227,86 @@ async function abrirModalSubida() {
                 Swal.clickConfirm(); // dispara preConfirm
             });
 
+            // Deshabilitar selects dependientes inicialmente
+            selectCurso.disabled = true;
+            selectDivision.disabled = true;
+            selectMateria.disabled = true;
+
             try {
-                // Traemos cursos y materias en paralelo
-                const [cursos, materias] = await Promise.all([
-                    obtenerCursos(ID_ESCUELA_DEFAULT, ID_ANIO_LECTIVO_DEFAULT),
-                    obtenerMaterias(ID_ESCUELA_DEFAULT, ID_ANIO_LECTIVO_DEFAULT),
-                ]);
+                // Cargar escuelas
+                const escuelas = await obtenerEscuelas();
+                llenarSelectUnico(selectEscuela, escuelas, "ESCUELA_ID", "ESCUELA_NOMBRE", "Escuela");
 
-                // Curso = "nivel", División = "division" según tu API
-                llenarSelectUnico(selectCurso, cursos, "nivel", "nivel", "Curso");
-                llenarSelectUnico(selectDivision, cursos, "division", "division", "División");
+                // Agregar event listeners para cascada
+                selectEscuela.addEventListener("change", async () => {
+                    const escuelaId = selectEscuela.value;
+                    if (!escuelaId) {
+                        selectCurso.disabled = true;
+                        selectDivision.disabled = true;
+                        selectMateria.disabled = true;
+                        selectCurso.innerHTML = '<option value="">Curso</option>';
+                        selectDivision.innerHTML = '<option value="">División</option>';
+                        selectMateria.innerHTML = '<option value="">Materia</option>';
+                        return;
+                    }
 
-                // Materias: value=id, label=nombre
-                llenarSelectUnico(selectMateria, materias, "id", "nombre", "Materia");
+                    try {
+                        const cursos = await obtenerNiveles(escuelaId, ID_ANIO_LECTIVO_DEFAULT);
+                        llenarSelectUnico(selectCurso, cursos, "NIVEL", "NIVEL", "Curso");
+                        selectCurso.disabled = false;
+                        selectDivision.disabled = true;
+                        selectMateria.disabled = true;
+                        selectDivision.innerHTML = '<option value="">División</option>';
+                        selectMateria.innerHTML = '<option value="">Materia</option>';
+                    } catch (e) {
+                        console.error("Error cargando cursos:", e);
+                    }
+                });
+
+                selectCurso.addEventListener("change", async () => {
+                    const escuelaId = selectEscuela.value;
+                    const cursoNivel = selectCurso.value;
+                    if (!cursoNivel) {
+                        selectDivision.disabled = true;
+                        selectMateria.disabled = true;
+                        selectDivision.innerHTML = '<option value="">División</option>';
+                        selectMateria.innerHTML = '<option value="">Materia</option>';
+                        return;
+                    }
+
+                    try {
+                        const divisiones = await obtenerDivisiones(escuelaId, ID_ANIO_LECTIVO_DEFAULT, cursoNivel);
+                        llenarSelectUnico(selectDivision, divisiones, "DIVISION", "DIVISION", "División");
+                        selectDivision.disabled = false;
+                        selectMateria.disabled = true;
+                        selectMateria.innerHTML = '<option value="">Materia</option>';
+                    } catch (e) {
+                        console.error("Error cargando divisiones:", e);
+                    }
+                });
+
+                selectDivision.addEventListener("change", async () => {
+                    const escuelaId = selectEscuela.value;
+                    if (!selectDivision.value) {
+                        selectMateria.disabled = true;
+                        selectMateria.innerHTML = '<option value="">Materia</option>';
+                        return;
+                    }
+
+                    try {
+                        const cursoData = await buscarCurso(selectCurso.value, selectDivision.value, escuelaId);
+                        const idCurso = Array.isArray(cursoData) && cursoData[0]?.id ? String(cursoData[0].id) : "";
+                        const materias = await obtenerMateriasPorCurso(escuelaId, ID_ANIO_LECTIVO_DEFAULT, idCurso);
+                        llenarSelectUnico(selectMateria, materias, "MATERIA_ID", "MATERIA_NOMBRE", "Materia");
+                        selectMateria.disabled = false;
+                    } catch (e) {
+                        console.error("Error cargando materias:", e);
+                    }
+                });
+
             } catch (e) {
                 const msg = "No se pudieron cargar las opciones. Reintentá más tarde.";
+                errorLogger('404','No se pudieron cargar las opciones. Reintentá más tarde.');
                 errorGeneral.textContent = msg;
                 Swal.showValidationMessage(msg);
             }
@@ -211,15 +324,19 @@ async function abrirModalSubida() {
 
             // Extraemos valores simples para validar
             const titulo = q("#titulo")?.value.trim() || "";
+            const escuela = q("#escuela")?.value.trim() || "";
             const materia = q("#materia")?.value.trim() || "";
             const cursoNivel = q("#curso")?.value.trim() || "";
             const division = q("#division")?.value.trim() || "";
-            const profesor = q("#profesor")?.value.trim() || "";
+
+            // EL CAMPO DE PROFESOR SE COMENTA HASTA QUE SEA FUNCIONAL
+            const profesor = "No especificado";
+            // const profesor = q("#profesor")?.value.trim() || "";
             const descripcion = q("#descripcion").value.trim() || "";
             const archivo = q("#input_file")?.files?.[0] || null;
 
             // Validación mínima
-            const mensajeError = validarCamposMinimos({ titulo, materia, curso: cursoNivel, division, profesor, descripcion, archivo });
+            const mensajeError = validarCamposMinimos({ titulo, escuela, materia, curso: cursoNivel, division, profesor, descripcion, archivo });
             if (mensajeError) {
                 errorGeneral.textContent = mensajeError;
                 // Swal.showValidationMessage(mensajeError);
@@ -248,11 +365,12 @@ async function abrirModalSubida() {
                 formData.set("visibilidad", "publico");
 
                 // Convertimos curso (nivel + división) al ID real
-                const cursoData = await buscarCurso(cursoNivel, division);
+                const cursoData = await buscarCurso(cursoNivel, division, escuela);
                 const idCurso = Array.isArray(cursoData) && cursoData[0]?.id ? String(cursoData[0].id) : "";
 
                 if (!idCurso) {
                     const msg = "No se encontró el curso seleccionado. Probá de nuevo.";
+                    errorLogger('404','No se encontró el curso seleccionado. Probá de nuevo.');
                     errorGeneral.textContent = msg;
                     Swal.showValidationMessage(msg);
                     return false;
@@ -274,7 +392,8 @@ async function abrirModalSubida() {
                 // Si la API devolvió algo distinto, mostramos mensaje claro
                 // throw new Error(result?.message || "Hubo un error al subir el apunte. Intentá nuevamente.");
             } catch (e) {
-                error();
+                errorLogger('500',e);
+                error(e);
             }
         },
     }).then((result) => {
