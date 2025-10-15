@@ -325,7 +325,7 @@ class Apuntes extends DBAbstract
     public function create(
         $titulo,
         $materia,
-        $archivo,           // array estilo $_FILES: ['name' => ..., 'tmp_name' => ...]
+        $archivos,          // array de archivos o array estilo $_FILES
         $descripcion = null,
         $curso = null,
         $division = null,
@@ -366,26 +366,81 @@ class Apuntes extends DBAbstract
             $this->logger->error($usuarioId,'400',"Visibilidad inválida");
             return ["errno" => 400, "error" => "Visibilidad inválida"];
         }
-        if (!is_array($archivo) || !isset($archivo['name'], $archivo['tmp_name'])) {
+        if (empty($archivos)) {
             $this->logger->error($usuarioId,'400',"Falta el archivo");
             return ["errno" => 400, "error" => "Falta el archivo"];
         }
 
-        // Archivos (nombres temporales)
-        $nombreArchivo = $archivo['name'];
-        $rutaTemporal  = $archivo['tmp_name'];
+        // Determinar si es un array de archivos o un solo archivo
+        $esArrayArchivos = is_array($archivos) && isset($archivos[0]) && is_array($archivos[0]);
+        if (!$esArrayArchivos) {
+            // Convertir archivo único a array para unificar lógica
+            $archivos = [$archivos];
+        }
 
-        // Metadatos: MIME
-        $finfo    = finfo_open(FILEINFO_MIME_TYPE);
-        $tipoMime = finfo_file($finfo, $rutaTemporal);
+        // Determinar tipo de archivos y procesar
+        $primerArchivo = $archivos[0];
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $tipoMimePrimerArchivo = finfo_file($finfo, $primerArchivo['tmp_name']);
         finfo_close($finfo);
 
-        // Verificar tipo permitido (PDF)
-        $tiposPermitidos = ['application/pdf'];
-        if (!in_array($tipoMime, $tiposPermitidos)) {
-            $this->logger->error($usuarioId,'400',"Tipo de archivo no permitido. Solo se aceptan PDF o imágenes.");
-            return ["errno" => 400, "error" => "Tipo de archivo no permitido. Solo se aceptan PDF o imágenes."];
+        $esImagen = strpos($tipoMimePrimerArchivo, 'image/') === 0;
+        $esPDF = $tipoMimePrimerArchivo === 'application/pdf';
+
+        if (!$esImagen && !$esPDF) {
+            $this->logger->error($usuarioId,'400',"Tipo de archivo no permitido. Solo se aceptan imágenes o PDF.");
+            return ["errno" => 400, "error" => "Tipo de archivo no permitido. Solo se aceptan imágenes o PDF."];
         }
+
+        // Si son imágenes, crear PDF primero
+        if ($esImagen) {
+            // Verificar que todos sean imágenes
+            foreach ($archivos as $archivo) {
+                $tipoMime = finfo_file($finfo, $archivo['tmp_name']);
+                finfo_close($finfo);
+                if (strpos($tipoMime, 'image/') !== 0) {
+                    $this->logger->error($usuarioId,'400',"Todos los archivos deben ser imágenes si se suben múltiples.");
+                    return ["errno" => 400, "error" => "Todos los archivos deben ser imágenes si se suben múltiples."];
+                }
+            }
+
+            // Generar rutas temporales para el PDF
+            $tempDir = sys_get_temp_dir();
+            $tempPdfName = 'temp_' . uniqid() . '.pdf';
+            $pdfTemporalPath = $tempDir . DIRECTORY_SEPARATOR . $tempPdfName;
+
+            // Crear PDF desde imágenes
+            $imagePaths = array_map(function($archivo) {
+                return $archivo['tmp_name'];
+            }, $archivos);
+
+            $generadorPDF = new ThumbnailGenerator($tempDir);
+            if (!$generadorPDF->generatePDFFromImages($imagePaths, $pdfTemporalPath)) {
+                $this->logger->error($usuarioId,'500',"Error al crear PDF desde imágenes. Revisa los logs de error para más detalles.");
+                return ["errno" => 500, "error" => "Error al crear PDF desde imágenes. Revisa los logs de error para más detalles."];
+            }
+
+            // Ahora tratar como si fuera un PDF único
+            $archivoFinal = [
+                'name' => $titulo . '.pdf',
+                'tmp_name' => $pdfTemporalPath,
+                'type' => 'application/pdf',
+                'size' => filesize($pdfTemporalPath)
+            ];
+            $tipoMime = 'application/pdf';
+        } else {
+            // Es PDF único
+            if (count($archivos) > 1) {
+                $this->logger->error($usuarioId,'400',"Solo se permite un archivo PDF.");
+                return ["errno" => 400, "error" => "Solo se permite un archivo PDF."];
+            }
+            $archivoFinal = $archivos[0];
+            $tipoMime = $tipoMimePrimerArchivo;
+        }
+
+        // Archivos (nombres temporales)
+        $nombreArchivo = $archivoFinal['name'];
+        $rutaTemporal  = $archivoFinal['tmp_name'];
 
         // Normalización de opcionales
         $curso_id = (isset($curso) && is_numeric($curso)) ? (int) $curso : null;
@@ -436,10 +491,38 @@ class Apuntes extends DBAbstract
             $rutas = $this->generarRutasArchivo($usuarioId, $apunte_id, $titulo, 'pdf');
 
             // Mover el archivo físicamente (a .../Apunte.pdf)
-            if (!move_uploaded_file($rutaTemporal, $rutas['ruta_fisica_pdf'])) {
-                $this->rollback();
-                $this->logger->error($usuarioId,'500',"Error al mover el archivo al destino");
-                return ["errno" => 500, "error" => "Error al mover el archivo al destino"];
+            if ($esImagen) {
+                // Para archivos generados desde imágenes, usar copy en lugar de move_uploaded_file
+                if (!copy($rutaTemporal, $rutas['ruta_fisica_pdf'])) {
+                    $this->rollback();
+                    $this->logger->error($usuarioId,'500',"Error al copiar el archivo generado al destino");
+                    return ["errno" => 500, "error" => "Error al copiar el archivo generado al destino"];
+                }
+
+                // Verificar que el archivo copiado sea válido
+                if (!file_exists($rutas['ruta_fisica_pdf']) || filesize($rutas['ruta_fisica_pdf']) === 0) {
+                    $this->rollback();
+                    $this->logger->error($usuarioId,'500',"El archivo copiado está vacío o no existe");
+                    return ["errno" => 500, "error" => "El archivo copiado está vacío o no existe"];
+                }
+
+                // Verificar que sea un PDF válido
+                $pdfContent = file_get_contents($rutas['ruta_fisica_pdf']);
+                if (strpos($pdfContent, '%PDF-') !== 0) {
+                    $this->rollback();
+                    $this->logger->error($usuarioId,'500',"El archivo copiado no es un PDF válido");
+                    return ["errno" => 500, "error" => "El archivo copiado no es un PDF válido"];
+                }
+
+                error_log("PDF final verification: size=" . filesize($rutas['ruta_fisica_pdf']) . ", valid PDF header: " . (strpos($pdfContent, '%PDF-') === 0 ? 'yes' : 'no'));
+
+            } else {
+                // Para archivos subidos normalmente, usar move_uploaded_file
+                if (!move_uploaded_file($rutaTemporal, $rutas['ruta_fisica_pdf'])) {
+                    $this->rollback();
+                    $this->logger->error($usuarioId,'500',"Error al mover el archivo al destino");
+                    return ["errno" => 500, "error" => "Error al mover el archivo al destino"];
+                }
             }
 
             // ---- Generación de thumbnail (no crítica) ----
@@ -449,7 +532,18 @@ class Apuntes extends DBAbstract
                 $generadorThumb = new ThumbnailGenerator($rutas['carpeta_destino']);
                 $rutaThumbGenerada = $generadorThumb->generateFromPDF($rutaPdfReal, 'thumbnail');
             } catch (Throwable $eThumb) {
-                return ["errno" => 500, "error" => "Error generando thumbnail para apunte {$apunte_id}"];
+                // Log error but don't fail the upload
+                $this->logger->error($usuarioId,'500',"Error generando thumbnail: " . $eThumb->getMessage());
+            }
+
+            // Limpiar archivos temporales si se crearon desde imágenes
+            if ($esImagen && isset($pdfTemporalPath) && file_exists($pdfTemporalPath)) {
+                unlink($pdfTemporalPath);
+            }
+
+            // Para archivos de imagen, cambiar el tipo MIME apropiado
+            if ($esImagen) {
+                $tipoMime = 'application/pdf';
             }
 
             // Guardar registro de archivo principal (PDF)
