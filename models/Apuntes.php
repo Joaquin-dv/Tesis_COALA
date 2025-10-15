@@ -87,7 +87,7 @@ class Apuntes extends DBAbstract
                     "ESCUELA" => $row["ESCUELA"],
                     "AÑO" => $row["AÑO"],
                     "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : "Sin calificar",
-                    "IMAGEN" => $this->getRutaThumbnailByIdApunte($row["APUNTE_ID"]),
+                    "IMAGEN" => $this->getRutaThumbnailByIdApunte($row["APUNTE_ID"]) ?? "/views/static/img/inicio/foto_apunte.png",
                     "USUARIO_ID" => $row["USUARIO_ID"],
                     "NIVEL_CURSO" => $row["NIVEL_CURSO"],
                     "COMPONENTE_ESTADO" => "", // se asigna luego en el controlador
@@ -187,6 +187,9 @@ class Apuntes extends DBAbstract
         
             $thumbnailPath = substr($rutaArchivo, 0, $ultimaBarra + 1) . 'thumbnail.jpg';
     
+            if (!file_exists("../" . $thumbnailPath)) {
+                return null;
+            }
             return $thumbnailPath;
         
     }
@@ -214,7 +217,7 @@ class Apuntes extends DBAbstract
                     "ESCUELA" => $row["ESCUELA"],
                     "AÑO" => $row["AÑO"],
                     "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : "Sin calificar",
-                    "IMAGEN" => "",
+                    "IMAGEN" => $this->getRutaThumbnailByIdApunte($row["APUNTE_ID"]) ?? "/views/static/img/inicio/foto_apunte.png",
                     "ESTADO" => $row["ESTADO"],
                     "NIVEL_CURSO" => $row["NIVEL_CURSO"],
                 ];
@@ -246,7 +249,7 @@ class Apuntes extends DBAbstract
                     "ESCUELA" => $row["ESCUELA"],
                     "AÑO" => $row["AÑO"],
                     "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : "Sin calificar",
-                    "IMAGEN" => "",
+                    "IMAGEN" => $this->getRutaThumbnailByIdApunte($row["APUNTE_ID"]) ?? "/views/static/img/inicio/foto_apunte.png",
                     "NIVEL_CURSO" => $row["NIVEL_CURSO"],
                 ];
             }
@@ -966,7 +969,7 @@ class Apuntes extends DBAbstract
                     "ESCUELA" => $row["ESCUELA"],
                     "AÑO" => $row["AÑO"],
                     "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : null,
-                    "IMAGEN" => "",
+                    "IMAGEN" => $this->getRutaThumbnailByIdApunte($row["APUNTE_ID"]) ?? "/views/static/img/inicio/foto_apunte.png",
                     "USUARIO_ID" => $row["USUARIO_ID"],
                     "NIVEL_CURSO" => $row["NIVEL_CURSO"],
                     "COMPONENTE_ESTADO" => "",
