@@ -15,11 +15,30 @@ const ID_ANIO_LECTIVO_DEFAULT = 1;
  * @param {RequestInit} [options] - Opciones para fetch
  * @returns {Promise<any>} - Respuesta JSON
  */
-async function fetchJSON(url, options) {
-    const resp = await fetch(url, options);
-    if (!resp.ok) throw new Error(`Error HTTP ${resp.status}`);
-    return resp.json();
+async function fetchJSON(url, options = {}) {
+    const res = await fetch(url, {
+        ...options,
+        headers: { Accept: 'application/json', ...(options.headers || {}) },
+    });
+
+    const ct = res.headers.get('content-type') || '';
+    const text = await res.text(); // SIEMPRE leemos texto
+
+    if (!res.ok) {
+        // Te deja ver el HTML de error (o el stack PHP) en consola
+        throw new Error(`HTTP ${res.status} - ${ct}: ${text.slice(0, 500)}`);
+    }
+    if (ct.includes('application/json')) {
+        try {
+            return JSON.parse(text);
+        } catch (e) {
+            throw new Error(`Respuesta no parseable como JSON: ${text.slice(0, 500)}`);
+        }
+    }
+    throw new Error(`Esperaba JSON, llegó ${ct}: ${text.slice(0, 500)}`);
 }
+
+
 
 /**
  * Trae escuelas disponibles.
@@ -67,25 +86,22 @@ function obtenerMateriasPorCurso(idEscuela, idAnioLectivo, idCurso) {
 }
 
 function errorLogger(codigoError, mensajeError) {
-  const url = 'api/index.php';
+    const url = 'api/index.php';
 
-  // Hacemos la llamada al servidor SIN async/await
-  fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'Logger',
-      method: 'error',
-      codigoError,
-      mensajeError: mensajeError?.toString() ?? 'Error desconocido'
+    // Hacemos la llamada al servidor SIN async/await
+    fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            model: 'Logger',
+            method: 'error',
+            codigoError,
+            mensajeError: mensajeError?.toString() ?? 'Error desconocido'
+        })
     })
-  })
-  .then(res => res.json())
-  .then(data => console.log('Log enviado:', data))
-  .catch(err => console.error('Fallo al enviar el log:', err));
-
-  // (opcional) log local para depurar
-  console.log('Intentando registrar error:', codigoError, mensajeError);
+        .then(res => res.json())
+        // .then(data => console.log('Log enviado:', data))
+        // .catch(err => console.error('Fallo al enviar el log:', err));
 }
 
 
@@ -306,7 +322,7 @@ async function abrirModalSubida() {
 
             } catch (e) {
                 const msg = "No se pudieron cargar las opciones. Reintentá más tarde.";
-                errorLogger('404','No se pudieron cargar las opciones. Reintentá más tarde.');
+                errorLogger('404', 'No se pudieron cargar las opciones. Reintentá más tarde.');
                 errorGeneral.textContent = msg;
                 Swal.showValidationMessage(msg);
             }
@@ -370,7 +386,7 @@ async function abrirModalSubida() {
 
                 if (!idCurso) {
                     const msg = "No se encontró el curso seleccionado. Probá de nuevo.";
-                    errorLogger('404','No se encontró el curso seleccionado. Probá de nuevo.');
+                    errorLogger('404', 'No se encontró el curso seleccionado. Probá de nuevo.');
                     errorGeneral.textContent = msg;
                     Swal.showValidationMessage(msg);
                     return false;
@@ -378,21 +394,21 @@ async function abrirModalSubida() {
 
                 // Reemplazamos el valor de 'curso' por el ID real
                 formData.set("curso", idCurso);
-                
+
                 // Envío al backend
-                const result = await fetchJSON("api/index.php", { method: "POST", body: formData });
+                const result = await fetchJSON("/api/", { method: "POST", body: formData });
 
                 // Convención de éxito según tu API
                 if (result?.errno === 202) {
                     return { ok: true, apunte_id: result.apunte_id };
                 }
 
-                error(result.error);
+                // error(result.error);
 
                 // Si la API devolvió algo distinto, mostramos mensaje claro
                 // throw new Error(result?.message || "Hubo un error al subir el apunte. Intentá nuevamente.");
             } catch (e) {
-                errorLogger('500',e);
+                errorLogger('500', e);
                 error(e);
             }
         },
@@ -400,13 +416,14 @@ async function abrirModalSubida() {
         if (result.isConfirmed && result.value?.ok) {
             exito();
             setTimeout(() => {
-            // Iniciar procesamiento del documento usando la función global
-            if (typeof window.startDocumentProcessing === 'function') {
-                window.startDocumentProcessing(result.value.apunte_id);
-            } else {
-                // Fallback al método local si no está disponible globalmente
-                startDocumentProcessing(result.value.apunte_id);
-            }}, 3000);
+                // Iniciar procesamiento del documento usando la función global
+                if (typeof window.startDocumentProcessing === 'function') {
+                    window.startDocumentProcessing(result.value.apunte_id);
+                } else {
+                    // Fallback al método local si no está disponible globalmente
+                    startDocumentProcessing(result.value.apunte_id);
+                }
+            }, 3000);
         }
     });
 }
