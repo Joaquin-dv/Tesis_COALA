@@ -49,25 +49,25 @@ function obtenerMaterias(idEscuela, idAnioLectivo) {
 }
 
 function errorLogger(codigoError, mensajeError) {
-  const url = 'api/index.php';
+    const url = 'api/index.php';
 
-  // Hacemos la llamada al servidor SIN async/await
-  fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'Logger',
-      method: 'error',
-      codigoError,
-      mensajeError: mensajeError?.toString() ?? 'Error desconocido'
+    // Hacemos la llamada al servidor SIN async/await
+    fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            model: 'Logger',
+            method: 'error',
+            codigoError,
+            mensajeError: mensajeError?.toString() ?? 'Error desconocido'
+        })
     })
-  })
-  .then(res => res.json())
-  .then(data => console.log('Log enviado:', data))
-  .catch(err => console.error('Fallo al enviar el log:', err));
+        .then(res => res.json())
+        .then(data => console.log('Log enviado:', data))
+        .catch(err => console.error('Fallo al enviar el log:', err));
 
-  // (opcional) log local para depurar
-  console.log('Intentando registrar error:', codigoError, mensajeError);
+    // (opcional) log local para depurar
+    console.log('Intentando registrar error:', codigoError, mensajeError);
 }
 
 
@@ -173,6 +173,7 @@ async function abrirModalSubida() {
                             <i class="fa-solid fa-file-arrow-up"></i>
                             Subir archivo
                         </label>
+                        <p id="nombre_archivo">Ningún archivo seleccionado</p>
                         <button id="subir_apunte" name="btn_subir_apunte" type="button" class="btn_modal poppins-semibold">Subir Apunte</button>
                         <div class="errorMsg" id="errorGeneral"></div>
                     </form>
@@ -202,6 +203,17 @@ async function abrirModalSubida() {
                 Swal.clickConfirm(); // dispara preConfirm
             });
 
+            const fileInput = document.getElementById('input_file');
+            const fileName = document.getElementById('nombre_archivo');
+
+            fileInput.addEventListener('change', () => {
+                if (fileInput.files.length > 0) {
+                    fileName.textContent = `Archivo seleccionado: ${fileInput.files[0].name}`;
+                } else {
+                    fileName.textContent = 'Ningún archivo seleccionado';
+                }
+            });
+
             try {
                 // Traemos cursos y materias en paralelo
                 const [cursos, materias] = await Promise.all([
@@ -217,7 +229,7 @@ async function abrirModalSubida() {
                 llenarSelectUnico(selectMateria, materias, "id", "nombre", "Materia");
             } catch (e) {
                 const msg = "No se pudieron cargar las opciones. Reintentá más tarde.";
-                errorLogger('404','No se pudieron cargar las opciones. Reintentá más tarde.');
+                errorLogger('404', 'No se pudieron cargar las opciones. Reintentá más tarde.');
                 errorGeneral.textContent = msg;
                 Swal.showValidationMessage(msg);
             }
@@ -277,7 +289,7 @@ async function abrirModalSubida() {
 
                 if (!idCurso) {
                     const msg = "No se encontró el curso seleccionado. Probá de nuevo.";
-                    errorLogger('404','No se encontró el curso seleccionado. Probá de nuevo.');
+                    errorLogger('404', 'No se encontró el curso seleccionado. Probá de nuevo.');
                     errorGeneral.textContent = msg;
                     Swal.showValidationMessage(msg);
                     return false;
@@ -285,7 +297,7 @@ async function abrirModalSubida() {
 
                 // Reemplazamos el valor de 'curso' por el ID real
                 formData.set("curso", idCurso);
-                
+
                 // Envío al backend
                 const result = await fetchJSON("api/index.php", { method: "POST", body: formData });
 
@@ -299,7 +311,7 @@ async function abrirModalSubida() {
                 // Si la API devolvió algo distinto, mostramos mensaje claro
                 // throw new Error(result?.message || "Hubo un error al subir el apunte. Intentá nuevamente.");
             } catch (e) {
-                errorLogger('500',e);
+                errorLogger('500', e);
                 error(e);
             }
         },
@@ -307,13 +319,14 @@ async function abrirModalSubida() {
         if (result.isConfirmed && result.value?.ok) {
             exito();
             setTimeout(() => {
-            // Iniciar procesamiento del documento usando la función global
-            if (typeof window.startDocumentProcessing === 'function') {
-                window.startDocumentProcessing(result.value.apunte_id);
-            } else {
-                // Fallback al método local si no está disponible globalmente
-                startDocumentProcessing(result.value.apunte_id);
-            }}, 3000);
+                // Iniciar procesamiento del documento usando la función global
+                if (typeof window.startDocumentProcessing === 'function') {
+                    window.startDocumentProcessing(result.value.apunte_id);
+                } else {
+                    // Fallback al método local si no está disponible globalmente
+                    startDocumentProcessing(result.value.apunte_id);
+                }
+            }, 3000);
         }
     });
 }
