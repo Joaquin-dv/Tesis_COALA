@@ -85,7 +85,7 @@ class Apuntes extends DBAbstract
                     "ESCUELA" => $row["ESCUELA"],
                     "AÑO" => $row["AÑO"],
                     "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : "Sin calificar",
-                    "IMAGEN" => "",
+                    "IMAGEN" => $this->getRutaThumbnailByIdApunte($row["APUNTE_ID"]),
                     "USUARIO_ID" => $row["USUARIO_ID"],
                     "NIVEL_CURSO" => $row["NIVEL_CURSO"],
                     "COMPONENTE_ESTADO" => "", // se asigna luego en el controlador
@@ -151,6 +151,19 @@ class Apuntes extends DBAbstract
         } else {
             return ["errno" => 404, "error" => "No se encontro la ruta del apunte"];
         }
+    }
+
+    public function getRutaThumbnailByIdApunte($apunte_id){
+        $rutaArchivo = $this->getRutaApunteById($apunte_id);
+        if(isset($rutaArchivo["errno"])){
+            return null;
+        }
+            $ultimaBarra = strrpos($rutaArchivo, '/');
+        
+            $thumbnailPath = substr($rutaArchivo, 0, $ultimaBarra + 1) . 'thumbnail.jpg';
+    
+            return $thumbnailPath;
+        
     }
 
     /**
