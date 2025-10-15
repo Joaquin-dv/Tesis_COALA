@@ -909,5 +909,3 @@ class Apuntes extends DBAbstract
         return $result['result_sets'][0];
     }
 }
-
-}
