@@ -111,15 +111,40 @@ if ($method == 'GET') {
 
     // Si hay archivos, agregarlos como parámetro
     if (!empty($_FILES['input_file'])) {
-        $params = [
-            $bodyParams['titulo'] ?? '',
-            $bodyParams['materia'] ?? '',
-            $_FILES['input_file'],
-            $bodyParams['descripcion'] ?? '',
-            $bodyParams['curso'] ?? null,
-            $bodyParams['division'] ?? null,
-            $bodyParams['visibilidad'] ?? 'publico'
-        ];
+        // Si es un array de archivos (múltiples), pasar el array completo
+        if (is_array($_FILES['input_file']['name'])) {
+            $archivos = [];
+            $fileCount = count($_FILES['input_file']['name']);
+            for ($i = 0; $i < $fileCount; $i++) {
+                $archivos[] = [
+                    'name' => $_FILES['input_file']['name'][$i],
+                    'type' => $_FILES['input_file']['type'][$i],
+                    'tmp_name' => $_FILES['input_file']['tmp_name'][$i],
+                    'error' => $_FILES['input_file']['error'][$i],
+                    'size' => $_FILES['input_file']['size'][$i]
+                ];
+            }
+            $params = [
+                $bodyParams['titulo'] ?? '',
+                $bodyParams['materia'] ?? '',
+                $archivos,
+                $bodyParams['descripcion'] ?? '',
+                $bodyParams['curso'] ?? null,
+                $bodyParams['division'] ?? null,
+                $bodyParams['visibilidad'] ?? 'publico'
+            ];
+        } else {
+            // Archivo único (compatibilidad hacia atrás)
+            $params = [
+                $bodyParams['titulo'] ?? '',
+                $bodyParams['materia'] ?? '',
+                $_FILES['input_file'],
+                $bodyParams['descripcion'] ?? '',
+                $bodyParams['curso'] ?? null,
+                $bodyParams['division'] ?? null,
+                $bodyParams['visibilidad'] ?? 'publico'
+            ];
+        }
         $respuesta = call_user_func_array([$modelo, $metodo], $params);
     } else {
         $respuesta = call_user_func_array([$modelo, $metodo], $bodyParams ? array_values($bodyParams) : []);

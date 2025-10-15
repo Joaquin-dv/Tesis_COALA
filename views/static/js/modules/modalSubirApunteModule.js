@@ -146,7 +146,7 @@ function llenarSelectUnico(select, lista, propValor, propTexto, placeholder) {
  * Valida de forma sencilla los campos mínimos del formulario.
  * Devuelve string con el mensaje de error o "" si todo OK.
  */
-function validarCamposMinimos({ titulo, escuela, materia, curso, division, profesor, descripcion, archivo }) {
+function validarCamposMinimos({ titulo, escuela, materia, curso, division, profesor, descripcion, archivos }) {
     if (!titulo) return "Ingresá un título.";
     if (!escuela) return "Seleccioná una escuela.";
     if (!materia) return "Seleccioná una materia.";
@@ -154,7 +154,27 @@ function validarCamposMinimos({ titulo, escuela, materia, curso, division, profe
     if (!division) return "Seleccioná una división.";
     if (!profesor) return "Ingresá un profesor.";
     if (!descripcion) return "Ingresá una descripcion.";
-    if (!archivo) return "Seleccioná un archivo.";
+    if (!archivos || archivos.length === 0) return "Seleccioná al menos un archivo.";
+
+    // Validar que todos sean imágenes o todos sean PDF
+    const tiposPermitidos = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'application/pdf'];
+    const tiposArchivos = archivos.map(file => file.type);
+
+    // Verificar que todos los archivos sean de tipos permitidos
+    for (const tipo of tiposArchivos) {
+        if (!tiposPermitidos.includes(tipo)) {
+            return "Solo se permiten imágenes (JPG, PNG, GIF, WebP) o archivos PDF.";
+        }
+    }
+
+    // Verificar que no haya mezcla de tipos
+    const tieneImagenes = tiposArchivos.some(tipo => tipo.startsWith('image/'));
+    const tienePDF = tiposArchivos.some(tipo => tipo === 'application/pdf');
+
+    if (tieneImagenes && tienePDF) {
+        return "No se puede subir una mezcla de imágenes y PDF. Seleccioná solo imágenes o solo un PDF.";
+    }
+
     return "";
 }
 
@@ -208,10 +228,10 @@ async function abrirModalSubida() {
                         <textarea id="descripcion" class="campo_modal poppins-semibold" name="descripcion" rows="4" cols="50" placeholder="Descripción (opcional)"></textarea>
 
                         <!-- El input file debe coincidir con el "name" que espera el backend -->
-                        <input type="file" name="input_file" id="input_file" class="poppins-semibold" hidden>
+                        <input type="file" name="input_file[]" id="input_file" class="poppins-semibold" multiple accept="image/*,.pdf" hidden>
                         <label for="input_file" class="btn_label poppins-semibold">
                             <i class="fa-solid fa-file-arrow-up"></i>
-                            Subir archivo
+                            Subir archivos (imágenes o PDF)
                         </label>
                         <button id="subir_apunte" name="btn_subir_apunte" type="button" class="btn_modal poppins-semibold">Subir Apunte</button>
                         <div class="errorMsg" id="errorGeneral"></div>
@@ -349,10 +369,10 @@ async function abrirModalSubida() {
             const profesor = "No especificado";
             // const profesor = q("#profesor")?.value.trim() || "";
             const descripcion = q("#descripcion").value.trim() || "";
-            const archivo = q("#input_file")?.files?.[0] || null;
+            const archivos = Array.from(q("#input_file")?.files || []);
 
             // Validación mínima
-            const mensajeError = validarCamposMinimos({ titulo, escuela, materia, curso: cursoNivel, division, profesor, descripcion, archivo });
+            const mensajeError = validarCamposMinimos({ titulo, escuela, materia, curso: cursoNivel, division, profesor, descripcion, archivos });
             if (mensajeError) {
                 errorGeneral.textContent = mensajeError;
                 // Swal.showValidationMessage(mensajeError);
@@ -403,13 +423,18 @@ async function abrirModalSubida() {
                     return { ok: true, apunte_id: result.apunte_id };
                 }
 
-                // error(result.error);
-
-                // Si la API devolvió algo distinto, mostramos mensaje claro
-                // throw new Error(result?.message || "Hubo un error al subir el apunte. Intentá nuevamente.");
+                // Si hay error, mostrarlo y detener
+                const errorMsg = result?.error || "Hubo un error al subir el apunte. Intentá nuevamente.";
+                errorGeneral.textContent = errorMsg;
+                errorLogger('500', errorMsg);
+                error(errorMsg);
+                return false;
             } catch (e) {
-                errorLogger('500', e);
-                error(e);
+                const errorMsg = e.message || "Error de conexión. Verificá tu conexión a internet.";
+                errorGeneral.textContent = errorMsg;
+                errorLogger('500', errorMsg);
+                error(errorMsg);
+                return false;
             }
         },
     }).then((result) => {
@@ -424,6 +449,9 @@ async function abrirModalSubida() {
                     startDocumentProcessing(result.value.apunte_id);
                 }
             }, 3000);
+        } else if (result.isConfirmed && !result.value?.ok) {
+            // Si el preConfirm devolvió false o no hay valor, mostrar error
+            error("No se pudo completar la subida del apunte.");
         }
     });
 }
