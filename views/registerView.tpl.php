@@ -42,6 +42,12 @@
                         <i class="fa-solid fa-eye-slash"></i>
                     </span>
                 </div>
+
+                <select name="select_escuela" id="select_escuela" class="campo poppins-semibold">
+                    <option value="" disabled selected>Seleccionar escuela</option>
+                    {{ ESCUELAS }}
+                </select>
+
                 <input type="submit" value="Entrar" name="btn_register" class="btn poppins-semibold">
                 <div class="fraseLink">
                     <span class="poppins-regular">¿Ya tienes cuenta?</span><a href="?slug=login"
