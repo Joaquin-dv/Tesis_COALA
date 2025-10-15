@@ -184,13 +184,13 @@ class Apuntes extends DBAbstract
             return null;
         }
             $ultimaBarra = strrpos($rutaArchivo, '/');
-        
+
             $thumbnailPath = substr($rutaArchivo, 0, $ultimaBarra + 1) . 'thumbnail.jpg';
             if (!file_exists($thumbnailPath)) {
-                return false;
+                return null;
             }
             return $thumbnailPath;
-        
+
     }
 
     /**
