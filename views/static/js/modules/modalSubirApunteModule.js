@@ -66,6 +66,29 @@ function obtenerMateriasPorCurso(idEscuela, idAnioLectivo, idCurso) {
     return fetchJSON(url);
 }
 
+function errorLogger(codigoError, mensajeError) {
+  const url = 'api/index.php';
+
+  // Hacemos la llamada al servidor SIN async/await
+  fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'Logger',
+      method: 'error',
+      codigoError,
+      mensajeError: mensajeError?.toString() ?? 'Error desconocido'
+    })
+  })
+  .then(res => res.json())
+  .then(data => console.log('Log enviado:', data))
+  .catch(err => console.error('Fallo al enviar el log:', err));
+
+  // (opcional) log local para depurar
+  console.log('Intentando registrar error:', codigoError, mensajeError);
+}
+
+
 // -------------------------------------------------------------
 // Utilidades de UI simples
 // -------------------------------------------------------------
@@ -283,6 +306,7 @@ async function abrirModalSubida() {
 
             } catch (e) {
                 const msg = "No se pudieron cargar las opciones. Reintentá más tarde.";
+                errorLogger('404','No se pudieron cargar las opciones. Reintentá más tarde.');
                 errorGeneral.textContent = msg;
                 Swal.showValidationMessage(msg);
             }
@@ -346,6 +370,7 @@ async function abrirModalSubida() {
 
                 if (!idCurso) {
                     const msg = "No se encontró el curso seleccionado. Probá de nuevo.";
+                    errorLogger('404','No se encontró el curso seleccionado. Probá de nuevo.');
                     errorGeneral.textContent = msg;
                     Swal.showValidationMessage(msg);
                     return false;
@@ -367,7 +392,8 @@ async function abrirModalSubida() {
                 // Si la API devolvió algo distinto, mostramos mensaje claro
                 // throw new Error(result?.message || "Hubo un error al subir el apunte. Intentá nuevamente.");
             } catch (e) {
-                error();
+                errorLogger('500',e);
+                error(e);
             }
         },
     }).then((result) => {

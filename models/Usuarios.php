@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 /**
  *
@@ -19,13 +19,14 @@ class Usuarios extends DBAbstract
     public $creado_en;
     public $actualizado_en;
     public $borrado_en;
+    private $logger;
 
 
     public function __construct()
     {
         /* se debe invocar al constructor de la clase padre */
-        parent::__construct();
 
+        parent::__construct();
         $this->id = null;
         $this->nombre_completo = "";
         $this->email = "";
@@ -38,6 +39,7 @@ class Usuarios extends DBAbstract
         $this->creado_en = "";
         $this->actualizado_en = "";
         $this->borrado_en = null;
+        $this->logger = new Logger();
     }
 
     /**
@@ -47,9 +49,7 @@ class Usuarios extends DBAbstract
      * */
     public function getCant()
     {
-
         // query("CALL getCant()");
-
         return count($this->query("SELECT * FROM `usuarios`"));
     }
 
@@ -60,7 +60,7 @@ class Usuarios extends DBAbstract
         if (count($response) > 0) {
             return $response[0]["codigo"];
         }
-
+        $this->logger->error($user_id, '404', "No se encontro rol para el usuario");
         return ["errno" => 404, "error" => "No se encontro rol para el usuario"];
     }
 
@@ -71,7 +71,7 @@ class Usuarios extends DBAbstract
         if (count($response) > 0) {
             return $response[0]["escuela_id"];
         }
-
+        $this->logger->error($this->id, '404', "No se encontro escuela para el usuario");
         return ["errno" => 404, "error" => "No se encontro escuela para el usuario"];
     }
 
@@ -84,7 +84,7 @@ class Usuarios extends DBAbstract
         if (count($response) > 0) {
             return $response[0]["id"];
         }
-
+        $this->logger->error($this->id, '404', "No se encontro escuela para el usuario");
         return ["errno" => 404, "error" => "No se encontro escuela para el usuario"];
     }
 
@@ -98,38 +98,41 @@ class Usuarios extends DBAbstract
 	 * 500 = error al crear usuario
      *
      * */
+
     public function register($form)
     {
-
         /* si el email esta vacio*/
         if ($form["txt_email"] == "") {
+            $this->logger->error(null, '400', "Falta email");
             return ["errno" => 400, "error" => "Falta email"];
         }
 
         /* si el password esta vacio*/
         if ($form["txt_password"] == "") {
+            $this->logger->error(null, '400', "Falta contraseña");
             return ["errno" => 400, "error" => "Falta contraseña"];
         }
 
         if (strlen($form["txt_password"]) < 8) {
+            $this->logger->error(null, '400', "La contraseña debe tener al menos 8 caracteres");
             return ["errno" => 400, "error" => "La contraseña debe tener al menos 8 caracteres"];
         }
 
         if ($this->login($form)["errno"] == 404) {
-
             $password_encripted = password_hash($form["txt_password"], PASSWORD_DEFAULT);
-			
+
             // $sql = "INSERT INTO `usuarios` (`id`, `nombre_completo`, `correo_electronico`, `contrasena_hash`, `esta_activo`, `correo_verificado_en`, `creado_en`, `actualizado_en`, `borrado_en`) VALUES (NULL, '', '" . $form["txt_email"] . "', '" . $password_encripted . "', '1', NULL, current_timestamp(), current_timestamp(), NULL);";
 			
             // $response = $this->query($sql);
             
 			// Datos opcionales (ajustá si querés asignar rol/escuela/actor)
-            $nombreCompleto = $form['txt_nombre'] . " " . $form['txt_apellido'];   // si no tenés el nombre en el formulario
-			$email = strtolower(trim($form["txt_email"]));
-            $estaActivo     = 1;
-            $rolCodigo      = 'student'; // p.ej: 'student' | 'teacher' | 'admin'
-            $escuelaId      = 1; // alcance de rol (si aplica)
-            $actorId        = null; // auditoría: quién lo creó (si aplica)
+
+            $nombreCompleto = $form['txt_nombre'] . " " . $form['txt_apellido'];
+            $email = strtolower(trim($form["txt_email"]));
+            $estaActivo = 1;
+            $rolCodigo = 'student';
+            $escuelaId = 1;
+            $actorId = null;
 
             $this->callSP(
                 "CALL sp_crear_usuario(?,?,?,?,?,?,?, @nuevo_id)",
@@ -153,10 +156,9 @@ class Usuarios extends DBAbstract
             // if (!isset($row[0]["id"])) {
             //     return ["errno" => 500, "error" => "Hubo un error al crear el usuario, intente nuevamente mas tarde"];
             // }
-
             return ["errno" => 202, "error" => "Se creo el usuario correctamente"];
         }
-
+        $this->logger->error($this->id, '409', "El email ingresado ya se encuentra registrado");
         return ["errno" => 409, "error" => "El email ingresado ya se encuentra registrado"];
     }
 
@@ -172,69 +174,63 @@ class Usuarios extends DBAbstract
      * */
     public function login($form)
     {
-
-        /* si el email esta vacio*/
         if ($form["txt_email"] == "") {
+            $this->logger->error(null, '400', "Falta email");
             return ["errno" => 400, "error" => "Falta email"];
         }
 
-        /* si el password esta vacio*/
         if ($form["txt_password"] == "") {
+            $this->logger->error(null, '400', "Falta contraseña");
             return ["errno" => 400, "error" => "Falta contraseña"];
         }
-
         /* busca el correo electronico en la tabla usuarios */
         // $response = $this->query("SELECT * FROM `usuarios` WHERE `correo_electronico` LIKE '" . $form["txt_email"] . "'");
-
-        $response = $this->callSP(
-            "CALL sp_obtener_usuario(?)",
-            [$form["txt_email"]]
-        );
+        $response = $this->callSP("CALL sp_obtener_usuario(?)", [$form["txt_email"]]);
 
         /*si la cantidad de filas es 0 no se encontro email en usuarios*/
         if (empty($response['result_sets'][0])) {
+            $this->logger->error(null, '404', "Correo no encontrado");
             return ["errno" => 404, "error" => "Correo no encontrado"];
         }
 
-        /* si se encontro el correo, obtiene la primera fila */
         $usuario = $response['result_sets'][0][0];
-
-        /* correo encontrado pero contraseña incorrecta */
+         /* correo encontrado pero contraseña incorrecta */
         if (!password_verify($form["txt_password"], $usuario["contrasena_hash"])) {
+            $this->logger->error($usuario["id"] ?? null, '403', "Contraseña incorrecta");
             return ["errno" => 403, "error" => "Contraseña incorrecta"];
         }
 
-        /* correo electrónico encontrado y password correcto */
         if ((int)$usuario["esta_activo"] === 0) {
+            $this->logger->error($usuario["id"] ?? null, '423', "Email no verificado");
             return ["errno" => 423, "error" => "Tu email aún no fue verificado. Verifícalo para continuar.", "email" => $usuario["correo_electronico"] ?? $form["txt_email"]];
         }
 
-        $this->id                 = $usuario["id"];
-        $this->nombre_completo    = $usuario["nombre_completo"];
-        $this->email              = $form["txt_email"]; // o $usuario["correo_electronico"]
-        $this->rol                = $this->getUserRole($this->id);
-        $this->id_escuela         = $this->getSchoolID();
-        $this->id_anio_lectivo    = $this->getYearID($this->id_escuela);
-        $this->esta_activo        = $usuario["esta_activo"];
+        $this->id = $usuario["id"];
+        $this->nombre_completo = $usuario["nombre_completo"];
+        $this->email = $form["txt_email"];
+        $this->rol = $this->getUserRole($this->id);
+        $this->id_escuela = $this->getSchoolID();
+        $this->id_anio_lectivo = $this->getYearID($this->id_escuela);
+        $this->esta_activo = $usuario["esta_activo"];
         $this->correo_verificado_en = $usuario["correo_verificado_en"];
-        $this->creado_en          = $usuario["creado_en"];
-        $this->actualizado_en     = $usuario["actualizado_en"];
-        $this->borrado_en         = $usuario["borrado_en"];
+        $this->creado_en = $usuario["creado_en"];
+        $this->actualizado_en = $usuario["actualizado_en"];
+        $this->borrado_en = $usuario["borrado_en"];
 
         $_SESSION[APP_NAME]['user'] = [
-            'id'              => $this->id,
+            'id' => $this->id,
             'nombre_completo' => $this->nombre_completo,
-            'email'           => $this->email,
-            'rol'             => $this->rol,
-            'esta_activo'     => $this->esta_activo,
-            'escuela_id'	  => $this->id_escuela,
+            'email' => $this->email,
+            'rol' => $this->rol,
+            'esta_activo' => $this->esta_activo,
+            'escuela_id' => $this->id_escuela,
             'id_anio_lectivo' => $this->id_anio_lectivo
         ];
-
+        $this->logger->logueo($this->id);
         return ["errno" => 202, "error" => "Acceso valido"];
     }
 
-    /**
+        /**
      * Genera un código de verificación aleatorio de 6 dígitos
      */
     public function generarCodigoVerificacion()
@@ -306,25 +302,26 @@ class Usuarios extends DBAbstract
     {
         /* si el email esta vacio*/
         if ($form["txt_email"] == "") {
+            $this->logger->error(null, '400', "Falta email");
             return ["errno" => 400, "error" => "Falta email"];
         }
 
         /* si el password esta vacio*/
         if ($form["txt_password"] == "") {
+            $this->logger->error(null, '400', "Falta contraseña");
             return ["errno" => 400, "error" => "Falta contraseña"];
         }
 
         if (strlen($form["txt_password"]) < 8) {
+            $this->logger->error(null, '400', "La contraseña debe tener al menos 8 caracteres");
             return ["errno" => 400, "error" => "La contraseña debe tener al menos 8 caracteres"];
         }
 
         // Verificar si el email ya existe
-        $response = $this->callSP(
-            "CALL sp_obtener_usuario(?)",
-            [$form["txt_email"]]
-        );
+        $response = $this->callSP("CALL sp_obtener_usuario(?)", [$form["txt_email"]]);
 
         if (!empty($response["result_sets"][0])) {
+            $this->logger->error(null, '409', "El email ingresado ya se encuentra registrado");
             return ["errno" => 409, "error" => "El email ingresado ya se encuentra registrado"];
         }
 
@@ -338,6 +335,7 @@ class Usuarios extends DBAbstract
         $actorId = null;
 
         // Crear usuario con código de verificación en email_token
+
         $this->callSP(
             "CALL sp_crear_usuario_con_token(?,?,?,?,?,?,?,?, @nuevo_id)",
             [
@@ -356,6 +354,7 @@ class Usuarios extends DBAbstract
         if ($this->enviarCodigoVerificacion($email, $codigo_verificacion, $form['txt_nombre'])) {
             return ["errno" => 201, "error" => "Usuario creado. Se ha enviado un código de verificación a tu email.", "email" => $email];
         } else {
+            $this->logger->error(null, '500', "Error al enviar el código de verificación");
             return ["errno" => 500, "error" => "Error al enviar el código de verificación"];
         }
     }
@@ -366,29 +365,21 @@ class Usuarios extends DBAbstract
     public function verificarCodigo($email, $codigo)
     {
         if (empty($email) || empty($codigo)) {
+            $this->logger->error(null, '400', "Email y código son requeridos");
             return ["errno" => 400, "error" => "Email y código son requeridos"];
         }
 
-        // Buscar usuario con el código en email_token
-        $response = $this->callSP(
-            "CALL sp_obtener_usuario_con_token(?,?)",
-            [$email, $codigo]
-        );
-
+        $response = $this->callSP("CALL sp_obtener_usuario_con_token(?,?)", [$email, $codigo]);
 
         if (empty($response["result_sets"][0])) {
+            $this->logger->error(null, '404', "Código de verificación inválido o expirado");
             return ["errno" => 404, "error" => "Código de verificación inválido o expirado"];
         }
 
         $usuario = $response["result_sets"][0][0];
 
         // Activar usuario y limpiar token
-        $this->callSP(
-            "CALL sp_activar_usuario(?)",
-            [$usuario['id']]
-        );
-
+        $this->callSP("CALL sp_activar_usuario(?)", [$usuario['id']]);
         return ["errno" => 202, "error" => "Email verificado correctamente. Ya puedes iniciar sesión."];
     }
-
 }
