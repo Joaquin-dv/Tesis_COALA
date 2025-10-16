@@ -1,5 +1,9 @@
 <?php
 
+	if(isset($_SESSION[APP_NAME]["user"])){
+		header("Location: ?slug=inicio");
+	}
+
 	/* Log de acceso a la página */
 	$logger = new Logger();
 	$logger->pageLoad(null, 'login');
