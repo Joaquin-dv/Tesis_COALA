@@ -233,6 +233,7 @@ async function abrirModalSubida() {
                             <i class="fa-solid fa-file-arrow-up"></i>
                             Subir archivos (imágenes o PDF)
                         </label>
+                        <p id="nombre_archivo">Ningún archivo seleccionado</p>
                         <button id="subir_apunte" name="btn_subir_apunte" type="button" class="btn_modal poppins-semibold">Subir Apunte</button>
                         <div class="errorMsg" id="errorGeneral"></div>
                     </form>

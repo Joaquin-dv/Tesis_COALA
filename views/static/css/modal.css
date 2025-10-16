@@ -181,6 +181,17 @@ button#subir_apunte {
     transition: 0.3s;
 }
 
+#nombre_archivo {
+    color: var(--txt-form-titulo);
+    min-height: 20px;
+    font-size: 15px;
+    overflow: hidden;
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 95%;
+}
+
 @media screen and (max-width: 750px) {
     .imagen {
         display: none !important;
