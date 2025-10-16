@@ -1,7 +1,7 @@
 <header>
-    <div class="contenedor_logo_secundario">
+    <a href="?" class="contenedor_logo_secundario">
         <img src="/views/static/img/branding/logo_secundario.png" alt="">
-    </div>
+    </a>
 
     <nav class="barra_navegacion">
         <a href="?slug=inicio">Inicio</a>
