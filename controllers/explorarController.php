@@ -39,6 +39,10 @@
 		$anios_html .= '<a href="#" data-anio="' . $anio_lectivo['nivel'] . '">' . $anio_lectivo['nivel'] . 'º Año</a>';
 	}
 
+	// Si no se obtuvo ningun apunte, mostrar mensaje
+	if (empty($lista_apuntes)) {
+		$tpl->assignVar(["EXPLORAR" => "<p class='msg_vacio'>No se encontraron apuntes que coincidan con la búsqueda.</p>"]);
+	}
 	// Cargo la informacion en el componente
 	foreach ($lista_apuntes as $row) {
 		$lista_explorar .= $apunteExtend->assignVar($row);
