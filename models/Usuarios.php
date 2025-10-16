@@ -183,6 +183,15 @@ class Usuarios extends DBAbstract
             $this->logger->error(null, '400', "Falta contraseña");
             return ["errno" => 400, "error" => "Falta contraseña"];
         }
+
+        /* si el usuario no esta activo (no verificado) */
+        $response = $this->callSP("CALL sp_obtener_usuario_por_validar(?)", [$form["txt_email"]]);
+
+        if (!empty($response["result_sets"][0])) {
+            $this->logger->error($usuario["id"] ?? null, '423', "Email no verificado");
+            return ["errno" => 423, "error" => "Tu email aún no fue verificado. Verifícalo para continuar.", "email" => $usuario["correo_electronico"] ?? $form["txt_email"]];
+        }
+
         /* busca el correo electronico en la tabla usuarios */
         // $response = $this->query("SELECT * FROM `usuarios` WHERE `correo_electronico` LIKE '" . $form["txt_email"] . "'");
         $response = $this->callSP("CALL sp_obtener_usuario(?)", [$form["txt_email"]]);
@@ -200,10 +209,6 @@ class Usuarios extends DBAbstract
             return ["errno" => 403, "error" => "Contraseña incorrecta"];
         }
 
-        if ((int)$usuario["esta_activo"] === 0) {
-            $this->logger->error($usuario["id"] ?? null, '423', "Email no verificado");
-            return ["errno" => 423, "error" => "Tu email aún no fue verificado. Verifícalo para continuar.", "email" => $usuario["correo_electronico"] ?? $form["txt_email"]];
-        }
 
         $this->id = $usuario["id"];
         $this->nombre_completo = $usuario["nombre_completo"];
@@ -270,13 +275,20 @@ class Usuarios extends DBAbstract
 
         $mail->CharSet = 'UTF-8';
         $mail->isSMTP();
-        $mail->SMTPDebug = 0 ;
+        $mail->SMTPDebug = 0;
         $mail->Host = HOST;
         $mail->Port = PORT;
-        $mail->SMTPAuth = SMTP_AUTH; //
+        $mail->SMTPAuth = SMTP_AUTH;
         $mail->SMTPSecure = SMTP_SECURE;
         $mail->Username = REMITENTE;
         $mail->Password = PASSWORD;
+        $mail->SMTPOptions = array(
+            'ssl' => array(
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
+            )
+        );
 
         $mail->setFrom(REMITENTE, NOMBRE);
         $mail->addAddress($email);
@@ -286,13 +298,18 @@ class Usuarios extends DBAbstract
         $mail->Subject = $asunto;
         $mail->Body = $mensaje;
 
-        if(!$mail->send()){
-            error_log("Mailer no se pudo enviar el correo!" );
-			return array("errno" => 1, "error" => "No se pudo enviar.");
-        }else{
-			return array("errno" => 0, "error" => "Enviado con exito.");
-		}   
-         mail($email, $asunto, $mensaje, $headers);
+        try {
+            $result = $mail->send();
+            if($result) {
+                return array("errno" => 0, "error" => "Enviado con exito.");
+            } else {
+                error_log("PHPMailer Error: " . $mail->ErrorInfo);
+                return array("errno" => 1, "error" => "No se pudo enviar: " . $mail->ErrorInfo);
+            }
+        } catch (Exception $e) {
+            error_log("PHPMailer Exception: " . $e->getMessage());
+            return array("errno" => 1, "error" => "Error de conexión: " . $e->getMessage());
+        }
     }
 
     /**
@@ -317,13 +334,20 @@ class Usuarios extends DBAbstract
             return ["errno" => 400, "error" => "La contraseña debe tener al menos 8 caracteres"];
         }
 
+        // Verificar si es un email por verificar
+        $response = $this->callSP("CALL sp_obtener_usuario_por_validar(?)", [$form["txt_email"]]);
+        if (!empty($response["result_sets"][0])) {
+            $this->logger->error(null, '410', "Ya existe un registro pendiente de verificación para este email");
+            return ["errno" => 410, "error" => "Ya existe un registro pendiente de verificación para este email"];
+        }
+
         // Verificar si el email ya existe
         $response = $this->callSP("CALL sp_obtener_usuario(?)", [$form["txt_email"]]);
 
         if (!empty($response["result_sets"][0])) {
             $this->logger->error(null, '409', "El email ingresado ya se encuentra registrado");
             return ["errno" => 409, "error" => "El email ingresado ya se encuentra registrado"];
-        }
+        }  
 
         $password_encripted = password_hash($form["txt_password"], PASSWORD_DEFAULT);
         $codigo_verificacion = $this->generarCodigoVerificacion();
@@ -351,13 +375,51 @@ class Usuarios extends DBAbstract
         );
 
         // Enviar email con código
-        if ($this->enviarCodigoVerificacion($email, $codigo_verificacion, $form['txt_nombre'])) {
+        if ($this->enviarCodigoVerificacion($email, $codigo_verificacion, $form['txt_nombre'])['errno'] == 0) {
             return ["errno" => 201, "error" => "Usuario creado. Se ha enviado un código de verificación a tu email.", "email" => $email];
         } else {
             $this->logger->error(null, '500', "Error al enviar el código de verificación");
             return ["errno" => 500, "error" => "Error al enviar el código de verificación"];
         }
     }
+
+    public function reenviarCodigo($email)
+    {
+        if (empty($email)) {
+            $this->logger->error(null, '400', "Email es requerido");
+            return ["errno" => 400, "error" => "Email es requerido"];
+        }
+
+        $response = $this->callSP("CALL sp_obtener_usuario_por_validar(?)", [$email]);
+
+        if (empty($response["result_sets"][0])) {
+            $this->logger->error(null, '404', "Correo no encontrado");
+            return ["errno" => 404, "error" => "Correo no encontrado"];
+        }
+
+        $usuario = $response["result_sets"][0][0];
+
+        if ((int)$usuario["esta_activo"] === 1) {
+            $this->logger->error($usuario["id"] ?? null, '409', "El email ya fue verificado");
+            return ["errno" => 409, "error" => "El email ya fue verificado"];
+        }
+
+        $nuevo_codigo = $this->generarCodigoVerificacion();
+
+        // Actualizar el código en la base de datos
+        $this->callSP("CALL sp_update_token_usuario(?,?)", [$usuario['id'], $nuevo_codigo]);
+
+        // Enviar el nuevo código por email
+        $result = $this->enviarCodigoVerificacion($email, $nuevo_codigo, explode(" ", $usuario["nombre_completo"])[0] ?? '');
+        if ($result['errno'] == 0) {
+            return ["errno" => 200, "error" => "Se ha reenviado el código de verificación a tu email.", "email" => $email];
+        } else {
+            var_dump($result['error']);
+            $this->logger->error(null, '500', "Error al enviar el código de verificación");
+            return ["errno" => 500, "error" => "Error al enviar el código de verificación"];
+        }
+    }
+    
 
     /**
      * Verifica el código de verificación y activa el usuario
