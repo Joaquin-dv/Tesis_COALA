@@ -27,7 +27,7 @@ class Apuntes extends DBAbstract
     private $motivo_rechazo;            // varchar(255) NULL
     private $logger;
 
-    function __construct()
+    public function __construct()
     {
         /* se debe invocar al constructor de la clase padre */
         parent::__construct();
@@ -53,9 +53,9 @@ class Apuntes extends DBAbstract
     }
 
     /**
-     * 
+     *
      * Retorna la cantidad de apuntes
-     * 
+     *
      * */
     public function getCantAprobados()
     {
@@ -71,11 +71,11 @@ class Apuntes extends DBAbstract
     {
         // Evitá inyección por si llega algo raro en $limit
         $limit = (int) $limit;
-        
+
         $result = $this->callSP(
-                "CALL sp_obtener_apuntes(?)",
-                [$limit]
-            );
+            "CALL sp_obtener_apuntes(?)",
+            [$limit]
+        );
 
         if ($formated === true) {
             $temp_array = [];
@@ -87,7 +87,7 @@ class Apuntes extends DBAbstract
                     "ESCUELA" => $row["ESCUELA"],
                     "AÑO" => $row["AÑO"],
                     "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : "Sin calificar",
-                    "IMAGEN" => "",
+                    "IMAGEN" => $this->getRutaThumbnailByIdApunte($row["APUNTE_ID"]),
                     "USUARIO_ID" => $row["USUARIO_ID"],
                     "NIVEL_CURSO" => $row["NIVEL_CURSO"],
                     "COMPONENTE_ESTADO" => "", // se asigna luego en el controlador
@@ -126,11 +126,12 @@ class Apuntes extends DBAbstract
                     "IMAGEN" => "",
                     "NOMBRE_AUTOR" => $row["NOMBRE_USUARIO"],
                     "CANTIDAD_PUNTUACIONES" => $row["CANTIDAD_CALIFICACIONES"],
+                    "CANTIDAD_VISTAS" => $row["CANTIDAD_VISTAS"],
                 ];
                 // Si el apunte no tiene calificaciones, forzamos a 0 la puntuación
                 if ($row["PROMEDIO_CALIFICACIONES"] === null) {
                     $temp_array[0]["PROMEDIO_CALIFICACIONES"] = "0";
-                }else{
+                } else {
                     $temp_array[0]["PROMEDIO_CALIFICACIONES"] = number_format((float)$row["PROMEDIO_CALIFICACIONES"], 1);
                 }
             }
@@ -139,6 +140,25 @@ class Apuntes extends DBAbstract
 
         // Si no querés formateo, devolvés el resultset crudo
         return $result['result_sets'][0];
+    }
+
+    // Sumar vistas
+    public function incrementarVisitas($apunte_id, $usuario_id = null)
+    {
+        if (!is_numeric($apunte_id) || $apunte_id <= 0) {
+            return ["errno" => 500, "error" => "No se obtuvo el ID del apunte correctamente"];
+        }
+
+        if(!is_null($usuario_id) && !isset($_SESSION[APP_NAME])){
+            return ["errno" => 403, "error" => "No autorizado"];
+        }
+
+        if ($usuario_id !== null && (!is_numeric($usuario_id) || $usuario_id <= 0)) {
+            return ["errno" => 500, "error" => "No se obtuvo el ID del usuario correctamente"];
+        }
+        
+        $this->callSP("CALL sp_sumar_vista_apunte(?,?)", [$apunte_id, $usuario_id]);
+        return ["errno" => 200, "error" => "Visitas incrementadas"];
     }
 
     public function getRutaApunteById($apunte_id)
@@ -156,6 +176,19 @@ class Apuntes extends DBAbstract
             $this->logger->error('','404',"No se encontro la ruta del apunte");
             return ["errno" => 404, "error" => "No se encontro la ruta del apunte"];
         }
+    }
+
+    public function getRutaThumbnailByIdApunte($apunte_id){
+        $rutaArchivo = $this->getRutaApunteById($apunte_id);
+        if(isset($rutaArchivo["errno"])){
+            return null;
+        }
+            $ultimaBarra = strrpos($rutaArchivo, '/');
+        
+            $thumbnailPath = substr($rutaArchivo, 0, $ultimaBarra + 1) . 'thumbnail.jpg';
+    
+            return $thumbnailPath;
+        
     }
 
     /**
@@ -236,6 +269,56 @@ class Apuntes extends DBAbstract
         }
     }
 
+
+    /**
+     * Genera y asegura la carpeta destino y las rutas de archivo/BD.
+     * Estructura: data/uploads/<hashUsuario>/<hashApunte>/Apunte.pdf y thumbnail.jpg
+     */
+    // Reemplaza tu función por esta
+    private function generarRutasArchivo(int $usuarioId, int $apunteId, string $titulo, string $extension = 'pdf'): array
+    {
+        $hashUsuario = hash('sha256', (string) $usuarioId);
+        $hashApunte  = hash('sha256', (string) $apunteId);
+
+        $carpetaDestino = "../data/uploads/{$hashUsuario}/{$hashApunte}/";
+        if (!is_dir($carpetaDestino)) {
+            mkdir($carpetaDestino, 0777, true);
+        }
+
+        // --- nombre de archivo desde el título ---
+        $base = trim((string)$titulo);
+        // permitir letras, números, espacios, punto, guion y guion bajo; lo demás a "_"
+        $base = preg_replace('/[^\p{L}\p{N}\s._-]/u', '_', $base);
+        // colapsar espacios y reemplazarlos por "_"
+        $base = preg_replace('/\s+/', '_', $base);
+        // por si queda vacío
+        if ($base === '' || $base === '_') {
+            $base = 'Apunte';
+        }
+        // (opcional simple) recortar a un tamaño razonable
+        if (strlen($base) > 120) {
+            $base = substr($base, 0, 120);
+        }
+
+        $nombreArchivoFinal   = $base . '.' . strtolower($extension);
+        $nombreThumbnailFinal = "thumbnail.jpg";
+
+        $rutaFisicaPdf   = $carpetaDestino . $nombreArchivoFinal;
+        $rutaFisicaThumb = $carpetaDestino . $nombreThumbnailFinal;
+
+        // Rutas para la base de datos (desde web root)
+        $rutaBdPdf   = "/data/uploads/{$hashUsuario}/{$hashApunte}/{$nombreArchivoFinal}";
+        $rutaBdThumb = "/data/uploads/{$hashUsuario}/{$hashApunte}/{$nombreThumbnailFinal}";
+
+        return [
+            'carpeta_destino'   => $carpetaDestino,
+            'ruta_fisica_pdf'   => $rutaFisicaPdf,
+            'ruta_fisica_thumb' => $rutaFisicaThumb,
+            'ruta_bd_pdf'       => $rutaBdPdf,
+            'ruta_bd_thumb'     => $rutaBdThumb,
+        ];
+    }
+
     
     /* registra un nuevo apunte */
 
@@ -254,13 +337,13 @@ class Apuntes extends DBAbstract
         }
 
         // Usuario logueado
-        $usuario = $_SESSION[APP_NAME]["user"];
+        $usuario   = $_SESSION[APP_NAME]["user"];
         $usuarioId = (int) $usuario["id"];
 
         // Completar datos derivados de sesión
         $usuario_cargador_id = $usuarioId;
-        $escuela_id = (int) $usuario["escuela_id"];
-        $anio_lectivo_id = (int) $usuario["id_anio_lectivo"];
+        $escuela_id          = (int) $usuario["escuela_id"];
+        $anio_lectivo_id     = (int) $usuario["id_anio_lectivo"];
 
         // Validaciones
         if ($titulo == "") {
@@ -290,20 +373,15 @@ class Apuntes extends DBAbstract
 
         // Archivos (nombres temporales)
         $nombreArchivo = $archivo['name'];
-        $rutaTemporal = $archivo['tmp_name'];
+        $rutaTemporal  = $archivo['tmp_name'];
 
         // Metadatos: MIME
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $finfo    = finfo_open(FILEINFO_MIME_TYPE);
         $tipoMime = finfo_file($finfo, $rutaTemporal);
         finfo_close($finfo);
 
-        // Verificar tipo permitido (PDF o imagen)
-        $tiposPermitidos = [
-            'application/pdf'
-            // 'image/jpeg',
-            // 'image/png'
-            // 'image/gif'
-        ];
+        // Verificar tipo permitido (PDF)
+        $tiposPermitidos = ['application/pdf'];
         if (!in_array($tipoMime, $tiposPermitidos)) {
             $this->logger->error($usuarioId,'400',"Tipo de archivo no permitido. Solo se aceptan PDF o imágenes.");
             return ["errno" => 400, "error" => "Tipo de archivo no permitido. Solo se aceptan PDF o imágenes."];
@@ -311,25 +389,14 @@ class Apuntes extends DBAbstract
 
         // Normalización de opcionales
         $curso_id = (isset($curso) && is_numeric($curso)) ? (int) $curso : null;
-        $nivel = null; // según tu modelo actual
+        $nivel    = null; // según tu modelo actual
         $division = (isset($division) && $division !== "") ? (string) $division : null;
 
-        // Carpeta destino única por usuario
-        $hashUsuario = hash("sha256", (string) $usuarioId);
-        $carpetaDestino = "../data/uploads/" . $hashUsuario . "/";
-        if (!file_exists($carpetaDestino)) {
-            mkdir($carpetaDestino, 0777, true);
-        }
-        $safeName = preg_replace('/[^A-Za-z0-9._-]/', '_', $nombreArchivo);
-        $rutaFinal = $carpetaDestino . uniqid('', true) . '_' . $safeName;
-
-        // Ruta para guardar en BD (absoluta desde web root)
-        $rutaBd = "/data/uploads/" . $hashUsuario . "/" . basename($rutaFinal);
-
+        // Calcular hash y tamaño ANTES de mover
         $sha256 = hash_file('sha256', $rutaTemporal);
-        $bytes = filesize($rutaTemporal);
+        $bytes  = filesize($rutaTemporal);
 
-        // Verificar si el archivo ya existe
+        // Evitar duplicado exacto por hash
         $existing = $this->query("SELECT id FROM archivos_apuntes WHERE sha256 = '" . $sha256 . "'");
         if ($existing && count($existing) > 0) {
             $this->logger->error($usuarioId,'409',"Este archivo ya ha sido subido anteriormente.");
@@ -365,19 +432,33 @@ class Apuntes extends DBAbstract
                 return ["errno" => 500, "error" => "No se obtuvo el ID del apunte"];
             }
 
-            // Mover el archivo físicamente después de confirmar que el apunte se creó
-            if (!move_uploaded_file($rutaTemporal, $rutaFinal)) {
+            // Generar rutas finales (PDF y thumbnail) ahora que ya tenemos $apunte_id
+            $rutas = $this->generarRutasArchivo($usuarioId, $apunte_id, $titulo, 'pdf');
+
+            // Mover el archivo físicamente (a .../Apunte.pdf)
+            if (!move_uploaded_file($rutaTemporal, $rutas['ruta_fisica_pdf'])) {
                 $this->rollback();
                 $this->logger->error($usuarioId,'500',"Error al mover el archivo al destino");
                 return ["errno" => 500, "error" => "Error al mover el archivo al destino"];
             }
 
+            // ---- Generación de thumbnail (no crítica) ----
+            try {
+                $rutaPdfReal = realpath($rutas['ruta_fisica_pdf']);
+
+                $generadorThumb = new ThumbnailGenerator($rutas['carpeta_destino']);
+                $rutaThumbGenerada = $generadorThumb->generateFromPDF($rutaPdfReal, 'thumbnail');
+            } catch (Throwable $eThumb) {
+                return ["errno" => 500, "error" => "Error generando thumbnail para apunte {$apunte_id}"];
+            }
+
+            // Guardar registro de archivo principal (PDF)
             $this->query("SET @archivo_id := 0");
             $this->callSP(
                 "CALL sp_insert_archivo_apunte(?,?,?,?,?,?,?, @archivo_id)",
                 [
                     (int) $apunte_id,
-                    (string) $rutaBd,
+                    (string) $rutas['ruta_bd_pdf'],
                     (string) $tipoMime,
                     (int) $bytes,
                     (string) $sha256,
@@ -398,10 +479,10 @@ class Apuntes extends DBAbstract
             $this->commit();
              $this->logger->creacion($usuarioId,'apunte',$apunte_id);
             return [
-                "errno" => 202,
-                "error" => "El archivo se subió correctamente",
-                "apunte_id" => $apunte_id,
-                "archivo_id" => $archivo_id
+                "errno"       => 202,
+                "error"       => "El archivo se subió correctamente",
+                "apunte_id"   => $apunte_id,
+                "archivo_id"  => $archivo_id
             ];
         } catch (Throwable $e) {
             $this->rollback();
@@ -413,6 +494,7 @@ class Apuntes extends DBAbstract
             return ["errno" => 500, "error" => "DB error: " . $e->getMessage()];
         }
     }
+
 
     public function update($apunte_id, $form)
     {
@@ -456,13 +538,13 @@ class Apuntes extends DBAbstract
         $updates = [];
 
         $response = $this->callSP(
-                "CALL sp_update_apunte(?,?,?)",
-                [
+            "CALL sp_update_apunte(?,?,?)",
+            [
                     (string) $form["titulo"],
                     (string) $form["descripcion"],
                     (int) $apunte_id
                 ]
-            );
+        );
 
         if ($response > 0) {
             $this->logger->modificacion(isset($usuario_id)?$usuario_id:(isset($usuarioId)?$usuarioId:''),'apunte',$apunte_id);
@@ -711,27 +793,27 @@ class Apuntes extends DBAbstract
          * @param int $apunte_id ID del apunte
          * @return bool True si está en favoritos, false si no
          */
-        public function esFavorito($apunte_id)
-        {
-            if (!isset($_SESSION[APP_NAME])) {
-                return false;
-            }
-    
-            // Usuario logueado
-            $usuario = $_SESSION[APP_NAME]["user"];
-            $usuario_id = (int) $usuario["id"];
-    
-            // Validaciones
-            if (!is_numeric($apunte_id) || $apunte_id <= 0) {
-                return false;
-            }
-    
-            // Query directa para verificar si existe el favorito activo
-            $sql = "SELECT COUNT(*) as count FROM favoritos WHERE usuario_id = " . (int)$usuario_id . " AND apunte_id = " . (int)$apunte_id . " AND activo = 1";
-            $result = $this->query($sql);
-    
-            return isset($result[0]['count']) && (int) $result[0]['count'] > 0;
+    public function esFavorito($apunte_id)
+    {
+        if (!isset($_SESSION[APP_NAME])) {
+            return false;
         }
+
+        // Usuario logueado
+        $usuario = $_SESSION[APP_NAME]["user"];
+        $usuario_id = (int) $usuario["id"];
+
+        // Validaciones
+        if (!is_numeric($apunte_id) || $apunte_id <= 0) {
+            return false;
+        }
+
+        // Query directa para verificar si existe el favorito activo
+        $sql = "SELECT COUNT(*) as count FROM favoritos WHERE usuario_id = " . (int)$usuario_id . " AND apunte_id = " . (int)$apunte_id . " AND activo = 1";
+        $result = $this->query($sql);
+
+        return isset($result[0]['count']) && (int) $result[0]['count'] > 0;
+    }
 
     /**
      * Busca apuntes con filtros opcionales usando stored procedure
