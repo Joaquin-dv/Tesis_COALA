@@ -1,5 +1,9 @@
 <?php
 
+/* Log de acceso a la página */
+$logger = new Logger();
+$logger->pageLoad(null, 'registerConfirm');
+
 $msg_error = "";
 $msg_success = "";
 
