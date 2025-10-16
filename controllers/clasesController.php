@@ -1,5 +1,9 @@
 <?php
 
+	/* Log de acceso a la página */
+	$logger = new Logger();
+	$logger->pageLoad(null, 'clases');
+
     $tpl = new Mopla('clases');
 
     $tpl->printExtends(["modalSubirApunte"]);

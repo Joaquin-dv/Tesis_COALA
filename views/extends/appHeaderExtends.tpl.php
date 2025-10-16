@@ -1,6 +1,6 @@
 <header>
     <div class="contenedor_logo_secundario">
-        <img src="/views/static/img/branding/logo_secundario.png" alt="">
+        <img src="/views/static/img/branding/logo_secundario.webp" alt="">
     </div>
 
     <nav class="barra_navegacion">
