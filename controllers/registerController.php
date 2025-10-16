@@ -1,5 +1,9 @@
 <?php
 
+	if(isset($_SESSION[APP_NAME]["user"])){
+		header("Location: ?slug=inicio");
+	}
+
 	/* Log de acceso a la página */
 	$logger = new Logger();
 	$logger->pageLoad(null, 'register');
@@ -14,6 +18,13 @@
 
 		/* realiza el registro */
 		$response = $usuario->registerConVerificacion($_POST);
+
+		if ($response["errno"] == 410) {
+			// Ya existe un registro pendiente de verificación reenviar al registerConfirm
+			$_SESSION['email_verificacion'] = $_POST['txt_email'];
+			header("Location: ?slug=registerConfirm");
+			exit();
+		}
 		
 		/* si se creo el usuario correctamente entonces va al registerConfirm para verificar el email*/
 		if($response["errno"] == 201){

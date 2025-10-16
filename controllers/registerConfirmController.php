@@ -15,7 +15,7 @@ if(isset($_POST["txt_codigo"])){
     /* obtiene el email de la sesión */
     $email = isset($_SESSION['email_verificacion']) ? $_SESSION['email_verificacion'] : '';
     
-    if(empty($email)){
+    if(empty($email)){       
         $msg_error = "Sesión expirada. Por favor, regístrate nuevamente.";
     } else {
         /* verifica el código */
@@ -29,6 +29,29 @@ if(isset($_POST["txt_codigo"])){
             exit();
         }
         $msg_error = $response["error"];
+    }
+}
+
+/* si existe el boton de reenviar código*/
+if(isset($_GET["btn_reenviar"])){
+    /* se instancia la clase usuario*/
+    $usuario = new Usuarios();	
+
+    /* obtiene el email de la sesión */
+    $email = isset($_SESSION['email_verificacion']) ? $_SESSION['email_verificacion'] : '';
+    
+    if(empty($email)){
+        $msg_error = "Sesión expirada. Por favor, regístrate nuevamente.";
+    } else {
+        /* reenvía el código */
+        $response = $usuario->reenviarCodigo($email);
+
+        /* si se reenvió correctamente entonces muestra mensaje de éxito*/
+        if($response["errno"] == 200){
+            $msg_success = "Código reenviado correctamente. Por favor, revisa tu correo electrónico: ".$response["email"]."";
+        } else {
+            $msg_error = $response["error"];
+        }
     }
 }
 

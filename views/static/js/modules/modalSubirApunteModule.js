@@ -100,8 +100,8 @@ function errorLogger(codigoError, mensajeError) {
         })
     })
         .then(res => res.json())
-        // .then(data => console.log('Log enviado:', data))
-        // .catch(err => console.error('Fallo al enviar el log:', err));
+    // .then(data => console.log('Log enviado:', data))
+    // .catch(err => console.error('Fallo al enviar el log:', err));
 }
 
 
@@ -242,6 +242,7 @@ async function abrirModalSubida() {
         `,
         padding: 0,
         showConfirmButton: false,
+        showCloseButton: true,
         focusConfirm: false,
         customClass: {
             popup: "modal_coala_popup no-padding-modal",
@@ -262,6 +263,18 @@ async function abrirModalSubida() {
             const btnSubir = $("#subir_apunte");
             btnSubir?.addEventListener("click", () => {
                 Swal.clickConfirm(); // dispara preConfirm
+            });
+
+            const form = popup.querySelector('#formulario');
+
+            form?.addEventListener('submit', (event) => {
+                event.preventDefault();            // evita el GET implícito
+            });
+
+            form?.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') {
+                    event.preventDefault();
+                }
             });
 
             // Deshabilitar selects dependientes inicialmente
