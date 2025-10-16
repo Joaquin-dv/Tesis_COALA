@@ -7,13 +7,6 @@
             Escuela Técnica N°3 “Malvinas Argentinas” · Buenos Aires, Argentina
         </p>
 
-        <!-- <nav class="footer_nav">
-            <a href="?slug=inicio">Inicio</a>
-            <a href="?slug=que_es_coala">Proyecto</a>
-            <a href="?slug=comunidad">Comunidad</a>
-            <a href="?slug=contacto">Contacto</a>
-        </nav> -->
-
         <div class="footer_social">
             <a href="https://github.com/" target="_blank" aria-label="GitHub">
                 <i class="fa-brands fa-github"></i>
@@ -25,6 +18,10 @@
                 <i class="fa-solid fa-envelope"></i>
             </a>
         </div>
+
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSdzP-Pc1DZPFfUu5PzlAMvGLOE57T7O8mZdhM1heMUJEuVGqw/viewform?usp=dialog" class="footer_btn_report" target="_blank" id="reportBtn">
+            🛠 Reportar un error
+        </a>
 
         <hr class="footer_divider">
 
