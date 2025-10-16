@@ -1,5 +1,9 @@
 <?php
 
+	/* Log de acceso a la página */
+	$logger = new Logger();
+	$logger->pageLoad(null, 'explorar');
+
     $tpl = new Mopla('explorar');
 
     // Se carga el componente

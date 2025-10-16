@@ -87,7 +87,7 @@ class Apuntes extends DBAbstract
                     "ESCUELA" => $row["ESCUELA"],
                     "AÑO" => $row["AÑO"],
                     "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : "Sin calificar",
-                    "IMAGEN" => $this->getRutaThumbnailByIdApunte($row["APUNTE_ID"]) ?? "/views/static/img/inicio/foto_apunte.png",
+                    "IMAGEN" => $this->getRutaThumbnailByIdApunte($row["APUNTE_ID"]) ?? "/views/static/img/inicio/foto_apunte.webp",
                     "USUARIO_ID" => $row["USUARIO_ID"],
                     "NIVEL_CURSO" => $row["NIVEL_CURSO"],
                     "COMPONENTE_ESTADO" => "", // se asigna luego en el controlador
@@ -217,7 +217,7 @@ class Apuntes extends DBAbstract
                     "ESCUELA" => $row["ESCUELA"],
                     "AÑO" => $row["AÑO"],
                     "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : "Sin calificar",
-                    "IMAGEN" => $this->getRutaThumbnailByIdApunte($row["APUNTE_ID"]) ?? "/views/static/img/inicio/foto_apunte.png",
+                    "IMAGEN" => $this->getRutaThumbnailByIdApunte($row["APUNTE_ID"]) ?? "/views/static/img/inicio/foto_apunte.webp",
                     "ESTADO" => $row["ESTADO"],
                     "NIVEL_CURSO" => $row["NIVEL_CURSO"],
                 ];
@@ -249,7 +249,7 @@ class Apuntes extends DBAbstract
                     "ESCUELA" => $row["ESCUELA"],
                     "AÑO" => $row["AÑO"],
                     "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : "Sin calificar",
-                    "IMAGEN" => $this->getRutaThumbnailByIdApunte($row["APUNTE_ID"]) ?? "/views/static/img/inicio/foto_apunte.png",
+                    "IMAGEN" => $this->getRutaThumbnailByIdApunte($row["APUNTE_ID"]) ?? "/views/static/img/inicio/foto_apunte.webp",
                     "NIVEL_CURSO" => $row["NIVEL_CURSO"],
                 ];
             }
@@ -311,7 +311,7 @@ class Apuntes extends DBAbstract
 
         // Rutas para la base de datos (desde web root)
         $rutaBdPdf   = "/data/uploads/{$hashUsuario}/{$hashApunte}/{$nombreArchivoFinal}";
-        $rutaBdThumb = "/data/uploads/{$hashUsuario}/{$hashApunte}/{$nombreThumbnailFinal}";
+        $rutaBdThumb = "/data/uploads/{$hashUsuario}/{$hashApunte}/thumbnail.jpg";
 
         return [
             'carpeta_destino'   => $carpetaDestino,
@@ -969,7 +969,7 @@ class Apuntes extends DBAbstract
                     "ESCUELA" => $row["ESCUELA"],
                     "AÑO" => $row["AÑO"],
                     "PUNTUACION" => isset($row["PUNTUACION"]) ? (float) $row["PUNTUACION"] : null,
-                    "IMAGEN" => $this->getRutaThumbnailByIdApunte($row["APUNTE_ID"]) ?? "/views/static/img/inicio/foto_apunte.png",
+                    "IMAGEN" => $this->getRutaThumbnailByIdApunte($row["APUNTE_ID"]) ?? "/views/static/img/inicio/foto_apunte.webp",
                     "USUARIO_ID" => $row["USUARIO_ID"],
                     "NIVEL_CURSO" => $row["NIVEL_CURSO"],
                     "COMPONENTE_ESTADO" => "",
