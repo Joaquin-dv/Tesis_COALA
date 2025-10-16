@@ -14,6 +14,13 @@
 
 		/* realiza el registro */
 		$response = $usuario->registerConVerificacion($_POST);
+
+		if ($response["errno"] == 410) {
+			// Ya existe un registro pendiente de verificación reenviar al registerConfirm
+			$_SESSION['email_verificacion'] = $_POST['txt_email'];
+			header("Location: ?slug=registerConfirm");
+			exit();
+		}
 		
 		/* si se creo el usuario correctamente entonces va al registerConfirm para verificar el email*/
 		if($response["errno"] == 201){
