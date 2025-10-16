@@ -5,7 +5,7 @@
  * Formato de columnas:
  * accion | fecha y hora | ip | navegador | usuario(id) | evento
  *
- * acciones: 
+ * acciones:
  * ? -> consulta
  * * -> modificacion
  * - -> eliminacion
@@ -13,6 +13,7 @@
  * > -> logueo
  * < -> deslogueo
  * ! -> error
+ * P -> page load
  * 
  *Eventos:
  * - Logueo / Deslogueo
@@ -30,6 +31,7 @@
  * - modificacion(int $usuario, string $objeto, int $idModificado)
  * - eliminacion(int $usuario, string $objeto, int $idEliminado)
  * - error(int $usuario, string $codigoError, string $mensajeError)
+ * - pageLoad(int $usuario, string $pagina)
  */
 
 class Logger {
@@ -82,6 +84,17 @@ class Logger {
             }
         }
         $this->writeError('!',$usuario,"ERROR {$codigoError}: {$mensajeError}");
+    }
+
+    public function pageLoad ($usuario=null, $pagina){
+        if($usuario === null){
+            if(isset($_SESSION[APP_NAME])){
+                $usuario=$_SESSION[APP_NAME]['user']['id'];
+            } else {
+                $usuario = 0; // Usuario no logueado
+            }
+        }
+        $this->write('P',$usuario,"El usuario accedio a la pagina: {$pagina}");
     }
 
     private function write ($accion,$usuario,$evento){

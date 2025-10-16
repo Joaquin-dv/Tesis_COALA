@@ -1,6 +1,10 @@
 <?php
     // ============================ CONTROLADOR DETALLE APUNTE ============================
 
+	/* Log de acceso a la página */
+	$logger = new Logger();
+	$logger->pageLoad(null, 'detalleApunte');
+
     // Cargamos el motor de plantillas Mopla
     $tpl = new Mopla("detalleApunte");
 

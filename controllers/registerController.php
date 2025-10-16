@@ -1,5 +1,9 @@
 <?php
 
+	/* Log de acceso a la página */
+	$logger = new Logger();
+	$logger->pageLoad(null, 'register');
+
 	$msg_error = "";
 	
 	// var_dump($_POST);

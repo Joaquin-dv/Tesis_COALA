@@ -1,9 +1,13 @@
-<?php 
+<?php
+
+	/* Log de acceso a la página */
+	$logger = new Logger();
+	$logger->pageLoad(null, 'login');
 
 	/**
-	 * 
+	 *
 	 * Lógica
-	 * 
+	 *
 	 * */
 
 	/* por defecto no va a tener msj error*/
