@@ -3,7 +3,8 @@
 
 	/* Log de acceso a la página */
 	$logger = new Logger();
-	$logger->pageLoad(null, 'detalleApunte');
+    // Logueo de page load con ID de apunte
+	$logger->pageLoad(null, 'detalleApunte?apunteId=' . (isset($_GET['apunteId']) ? $_GET['apunteId'] : 'desconocido'));
 
     // Cargamos el motor de plantillas Mopla
     $tpl = new Mopla("detalleApunte");
