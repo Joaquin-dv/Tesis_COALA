@@ -94,6 +94,17 @@ class Logger {
                 $usuario = 0; // Usuario no logueado
             }
         }
+
+        // Si la pagina es detalle de apunte, obtener el ID del apunte
+        if (strpos($pagina, 'detalleApunte?apunteId=') !== false) {
+            $partes = explode('=', $pagina);
+            if (isset($partes[1]) && is_numeric($partes[1])) {
+                $idApunte = (int)$partes[1];
+                $this->write('P',$usuario,"El usuario accedio al detalle del apunte ID: {$idApunte}");
+                return;
+            }
+        }
+
         $this->write('P',$usuario,"El usuario accedio a la pagina: {$pagina}");
     }
 
