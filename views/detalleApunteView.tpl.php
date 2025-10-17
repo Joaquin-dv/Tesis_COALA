@@ -18,6 +18,10 @@
         window.userRole = '{{ USER_ROLE }}';
     </script>
     <main>
+        <div class="contenedor_volver">
+            <a href="javascript:history.back()" class="btn_volver"><i class="fa-solid fa-xmark"></i></a>
+        </div>
+
         <section class="contenedor_detalle_apunte">
             <section class="informacion_apunte">
                 <div class="primer_linea">
