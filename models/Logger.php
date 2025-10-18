@@ -108,6 +108,17 @@ class Logger {
         $this->write('P',$usuario,"El usuario accedio a la pagina: {$pagina}");
     }
 
+    public function busqueda($usuario = null, $tipo, $valor) {
+        if($usuario === null){
+            if(isset($_SESSION[APP_NAME])){
+                $usuario = $_SESSION[APP_NAME]['user']['id'];
+            } else {
+                $usuario = 0;
+            }
+        }
+        $this->write('?', $usuario, "El usuario busco {$tipo}: {$valor}");
+    }
+
     private function write ($accion,$usuario,$evento){
         $fechaHora = date('Y-m-d H:i:s');
         $ip = $_SERVER['REMOTE_ADDR'];
@@ -136,6 +147,16 @@ class Logger {
         }
 
         file_put_contents($this->archivoErrores, $linea, FILE_APPEND);
+    }
+
+    public function registrarBusqueda($tipo, $valor)
+    {   
+        if (empty($tipo) || empty($valor)) {
+            return false;
+        }
+        
+        $this->busqueda(null, $tipo, $valor);
+        return true;
     }
 }
 ?>

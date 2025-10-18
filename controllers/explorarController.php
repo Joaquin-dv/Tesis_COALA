@@ -30,6 +30,19 @@
 		$lista_apuntes = $apunte->getApuntes(30, true);
 	}
 
+	// Loguear la busqueda si existe
+	if (!empty($query)) {
+		$logger->registrarBusqueda('query', $query);
+	}
+	// Loguear el filtro si existe
+	if ($anio !== null) {
+		$logger->registrarBusqueda('anio', $anio);
+	}
+	// Loguear el filtro si existe
+	if ($materia !== null) {
+		$logger->registrarBusqueda('materia', $materia);
+	}
+
 	// Obtener años lectivos para el filtro
 	$anios_lectivos = $apunte->getAniosLectivos();
 
