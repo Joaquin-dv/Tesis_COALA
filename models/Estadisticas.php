@@ -215,7 +215,7 @@ class Estadisticas extends DBAbstract
     }
 
     public function getMateriasMasBuscadas() {
-        $archivoLog = __DIR__ . '../../data/logs/app.log';
+        $archivoLog = __DIR__ . '/../data/logs/app.log';
         
         if (!file_exists($archivoLog)) {
             return [];
