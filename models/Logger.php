@@ -66,16 +66,22 @@ class Logger {
                 $usuario = 0; // Usuario no logueado
             }
         }
-
-        if (!empty($query) && empty($materia) && empty($anio)){
-           $evento="el usuario busco {$query}";
-        }elseif(!empty($anio) && empty($materia) %% empty($query)){
-            $evento="el usuario busco apuntes del año {$anio}";
-        }elseif(!empty($materia) && empty($anio) && empty($query)){
-            $evento="el usuario busco apuntes de la materia {$materia}";
-        }elseif(!empty($query) && !empty($anio) && !empty($materia)){
-            $evento="el usuario busco {$query} del {$anio} año  de la materia {$materia}";
-        
+        if (!empty($query) && empty($materia) && empty($anio)) {
+            $evento = "El usuario buscó '{$query}'";
+        } elseif (!empty($anio) && empty($materia) && empty($query)) {
+            $evento = "El usuario buscó apuntes del año {$anio}";
+        } elseif (!empty($materia) && empty($anio) && empty($query)) {
+            $evento = "El usuario buscó apuntes de la materia {$materia}";
+        } elseif (!empty($query) && !empty($anio) && empty($materia)) {
+            $evento = "El usuario buscó '{$query}' del año {$anio}";
+        } elseif (!empty($query) && !empty($materia) && empty($anio)) {
+            $evento = "El usuario buscó '{$query}' de la materia {$materia}";
+        } elseif (!empty($query) && !empty($anio) && !empty($materia)) {
+            $evento = "El usuario buscó '{$query}' del año {$anio} de la materia {$materia}";
+        } else {
+            $evento = "El usuario realizó una búsqueda sin filtros específicos";
+        }
+        var_dump("hola");
         $this->write('?',$usuario,$evento);
     }
     public function creacion ($usuario,$objeto,$idCreado){

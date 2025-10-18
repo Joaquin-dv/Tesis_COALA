@@ -6,6 +6,24 @@ document.addEventListener("DOMContentLoaded", () => {
     let anioSeleccionado = null;
     let materiaSeleccionada = null;
 
+    function registrarBusqueda(query, anio, materia) {
+    const url = 'api/index.php';
+
+    fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            model: 'Logger',
+            method: 'consulta',
+            usuario: null, 
+            query: query || null,
+            anio: anio || null,
+            materia: materia || null
+        })
+    })
+    .then(res => res.json())
+    .catch(err => console.error('Error al registrar búsqueda:', err));
+}
     // Función para actualizar la URL y recargar apuntes
     function actualizarBusqueda() {
         const params = new URLSearchParams(window.location.search);
@@ -26,8 +44,10 @@ document.addEventListener("DOMContentLoaded", () => {
             params.delete('materia');
         }
 
+        console.log(query);
+        registrarBusqueda(query, anioSeleccionado, materiaSeleccionada);
         // Recargar la página con los nuevos parámetros
-        window.location.search = params.toString();
+        // window.location.search = params.toString();
     }
 
     // Función para cargar materias de un año
