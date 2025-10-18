@@ -25,6 +25,7 @@
 
 	// Si hay búsqueda, usar searchApuntes, sino getApuntes normal
 	if (!empty($query)) {
+		$logger->registrarBusqueda('query', $query);
 		$lista_apuntes = $apunte->searchApuntes($query, null, null, null, 4, true);
 	} else {
 		$lista_apuntes = $apunte->getApuntes(4, true);
