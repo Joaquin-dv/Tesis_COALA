@@ -45,6 +45,8 @@
 	<link rel="stylesheet" href="views/static/css/explorar.css">
     <link rel="stylesheet" href="views/static/css/style_apunte.css">
 
+	<link rel="stylesheet" href="views/static/css/dashboard.css">
+
 	<!-- Clases -->
 	<!-- mismas que Inicio -->
 
