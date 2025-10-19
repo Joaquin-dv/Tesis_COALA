@@ -115,12 +115,9 @@
             @keyframes shimmer {
             0% { filter: drop-shadow(0 0 10px rgba(255, 158, 11, 0.5)); }
             100% { filter: drop-shadow(0 0 20px rgba(255, 158, 11, 1)); }
-            }
-
-
-
-
-    }
+            }   
+             
+  }
 }
 
 
@@ -380,12 +377,18 @@
 
             .contenedor_comentario_derecha{
                 width: 100%;
+                
+                .puntuacion-comentario{
+                    padding: .5em 2em 0 2em;
+                    font-size: 14px;
+                }
+                
                 .header_comentario{
                     display: flex;
                     justify-content: start;
                     gap: 1em;
                     align-items: center;
-                    padding: 1em 0 .3em 2em;
+                    padding: .3em 0 .3em 2em;
 
                     .fecha_creacion_comentario{
                         color: #2B2B2B;
