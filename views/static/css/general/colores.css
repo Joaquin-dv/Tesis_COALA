@@ -1,12 +1,12 @@
 :root{
-    --bg-body: #f7f7f7;
+    --bg-body: #ECECEC;
     
     --bg-boton-verde: #A7D129;
     --bg-boton-verde-hover: #91B21A;
     --bg-celeste: #00a1db;
     --bg-header: #FFFFFF;
     --bg-gris: #DBDBDB;
-    
+    --bg-carta: #FFFFFF;
 
     --txt-negro: #000000;
     --txt-celeste: #00a1db;
