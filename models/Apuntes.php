@@ -574,7 +574,7 @@ class Apuntes extends DBAbstract
             }
 
             $this->commit();
-             $this->logger->creacion($usuarioId,'apunte',$apunte_id);
+            $this->logger->creacion($usuarioId,'apunte',$apunte_id);
             return [
                 "errno"       => 202,
                 "error"       => "El archivo se subió correctamente",
@@ -1045,17 +1045,15 @@ class Apuntes extends DBAbstract
             return ["errno" => 400, "error" => "ID de apunte inválido"];
         }
 
-        $sql = "SELECT solicito_revision FROM apuntes WHERE id = " . (int)$apunte_id;
-        $response = $this->query($sql);
+        $result = $this->callSP("CALL sp_obtener_apunte_por_id(?)", [$apunte_id]);
         
-        if($response[0]["solicito_revision"] == 1){
+        if($result['result_sets'][0][0]["SOLICITO_REVISION"] == 1){
             return ["errno" => 409, "error" => "La revision ya fue solicitada"];
         }
 
-        $sql2 = "UPDATE apuntes SET solicito_revision = 1 WHERE id = " . (int)$apunte_id;
-        $response2 = $this->query($sql);
-
-        if ($response2) {
+        $result2 = $this->callSP("CALL sp_solicitar_revision(?)", [$apunte_id]);
+        
+        if ($result2) {
             return ["errno" => 200, "error" => "Revision solicitada correctamente"];
         } else {
             $this->logger->error('','500',"Error al solicitar revision");

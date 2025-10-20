@@ -183,22 +183,28 @@ document.addEventListener("DOMContentLoaded", () => {
 	const solicitar_revision = document.getElementById("solicitar_revision");
 
 	solicitar_revision.addEventListener("click", () => {
+		// Toast
 		solicitandoRevision();
 
 		solicitarRevisionHumana(apunteId).then(data => {
+
 			if (data["errno"] == 409) {
+				// Toast
 				revisionYaSolicitada();
 				return
 			}
 
 			if (data["errno"] != 200) {
+				// Toast
 				revisionSolicitada(false);
 				return
 			}
 
+			// Toast
 			revisionSolicitada(true);
 		}).catch(err => {
 			console.error("Error al solicitar la revision del apunte:", err);
+			// Toast
 			revisionSolicitada(false);
 		});
 	});
