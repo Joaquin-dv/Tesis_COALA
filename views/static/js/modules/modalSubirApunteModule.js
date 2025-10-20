@@ -452,16 +452,15 @@ async function abrirModalSubida() {
         },
     }).then((result) => {
         if (result.isConfirmed && result.value?.ok) {
-            exito();
-            setTimeout(() => {
-                // Iniciar procesamiento del documento usando la función global
+            exito(() => {
+                // Iniciar procesamiento del documento cuando se cierre el toast de éxito
                 if (typeof window.startDocumentProcessing === 'function') {
                     window.startDocumentProcessing(result.value.apunte_id);
                 } else {
                     // Fallback al método local si no está disponible globalmente
                     startDocumentProcessing(result.value.apunte_id);
                 }
-            }, 3000);
+            });
         } else if (result.isConfirmed && !result.value?.ok) {
             // Si el preConfirm devolvió false o no hay valor, mostrar error
             error("No se pudo completar la subida del apunte.");
