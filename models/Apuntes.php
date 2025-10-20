@@ -1038,4 +1038,28 @@ class Apuntes extends DBAbstract
         $result = $this->callSP("CALL sp_obtener_materias_por_anio(?)", [$anio]);
         return $result['result_sets'][0];
     }
+
+    public function updateSolicitoRevision($apunte_id){
+        if (!is_numeric($apunte_id) || $apunte_id <= 0) {
+            $this->logger->error('','400',"ID de apunte inválido");
+            return ["errno" => 400, "error" => "ID de apunte inválido"];
+        }
+
+        $sql = "SELECT solicito_revision FROM apuntes WHERE id = " . (int)$apunte_id;
+        $response = $this->query($sql);
+        
+        if($response[0]["solicito_revision"] == 1){
+            return ["errno" => 409, "error" => "La revision ya fue solicitada"];
+        }
+
+        $sql2 = "UPDATE apuntes SET solicito_revision = 1 WHERE id = " . (int)$apunte_id;
+        $response2 = $this->query($sql);
+
+        if ($response2) {
+            return ["errno" => 200, "error" => "Revision solicitada correctamente"];
+        } else {
+            $this->logger->error('','500',"Error al solicitar revision");
+            return ["errno" => 500, "error" => "Error al solicitar revision"];
+        }
+    }
 }
