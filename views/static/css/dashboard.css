@@ -1,0 +1,253 @@
+@import url(general/generales.css);
+
+body#dashboard-body {
+    margin: 0;
+    background-color: var(--bg-body);
+    color: var(--txt-primario);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.dashboard-grid{
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.dashboard-header {
+      position: fixed;          
+    top: 0;
+    left: 0;
+    width: 100%;
+      z-index: 1000; 
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between; 
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.dashboard-header h1 {
+    font-size: 1.7em;
+    font-weight: 600;
+    color: var(--txt-primario);
+    margin: 0;
+}
+
+.dashboard-header h1 i {
+    color: var(--txt-celeste);
+    background: rgba(0, 161, 219, 0.15);
+    padding: 10px;
+    border-radius: 12px;
+    font-size: 1.6rem;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.dashboard-header h1 i:hover {
+    transform: rotate(8deg) scale(1.1);
+    background: rgba(0, 161, 219, 0.25);
+}
+
+.dashboard-actions {
+    display: flex;
+    gap: 1em;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8em 1.2em;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    max-width: 200px;
+    line-height: 1; 
+    box-sizing: border-box;
+}
+
+.btn-primary {
+    background-color: var(--bg-celeste);
+    color: var(--txt-blanco);
+    font-size: small;
+}
+
+.btn-primary:hover {
+    background-color: var(--btn-hover);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: var(--bg-boton-verde);
+    color: var(--txt-blanco);
+    font-size: small;
+}
+
+.btn-secondary:hover {
+    background-color: var(--bg-boton-verde-hover);
+    transform: translateY(-2px);
+}
+
+/* ======== CONTENEDOR PRINCIPAL ======== */
+.estadisticas-container {
+    flex: 1;
+    padding: 4em 2em;
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+}
+
+/* ======== Bienvenida ======== */
+.Bienvenida-dashboard {
+    text-align: center;
+    margin: 2.5em auto 2em auto;
+    padding: 1em 0;
+    border-bottom: 1px solid var(--bg-gris);
+    max-width: 900px;
+}
+
+.Bienvenida-dashboard h2 {
+    font-size: 1.8em;
+    font-weight: 600;
+    color: var(--txt-primario);
+    margin-bottom: 0.3em;
+    letter-spacing: 0.5px;
+}
+
+.Bienvenida-dashboard h2 span {
+    color: var(--txt-celeste);
+    font-weight: 700;
+}
+
+.Bienvenida-dashboard p {
+    font-size: 1.05em;
+    color: #555;
+    margin: 0;
+    opacity: 0.85;
+}
+
+.fila-mediana, .fila-grande, .fila-normal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2em;
+}
+
+.chart-card {
+    background-color: var(--bg-carta);
+    border-radius: 12px;
+    padding: 1.5em;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    border: 1px solid var(--bg-gris);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    flex-shrink: 0;
+}
+
+.chart-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+.chart-card h3 {
+    margin-bottom: 1em;
+    font-weight: 600;
+    color: var(--txt-primario);
+    border-left: 5px solid var(--bg-celeste);
+    padding-left: 10px;
+    font-size: 1.1em;
+}
+
+.chart-card.normal {
+    width: 400px;      
+    min-height: 220px;
+}
+
+.chart-card.mediana {
+    width: 350px;     
+    min-height: 230px;
+}
+
+.chart-card.grande {
+    width: 700px;      
+    min-height: 300px;
+}
+
+/* ======== Responsive ======== */
+@media (max-width: 900px) {
+    .fila-mediana, .fila-grande, .fila-normal {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .chart-card {
+        width: 100% !important;
+        min-height: auto;
+    }
+
+    canvas {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+
+    .dashboard-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1em;
+    }
+
+    .dashboard-header h1 {
+        font-size: 1.3em;
+    }
+
+    /* .dashboard-actions {
+        flex-direction: row;
+        display: flex;
+        gap: 0.8em;
+        width: 100%;
+    } */
+
+    .btn {
+        width: 100%;
+        max-width: none;
+    }
+
+    .estadisticas-container {
+        padding: 7em 1em;
+    }
+
+    .Bienvenida-dashboard {
+        margin: 1.5em 1em;
+        padding: 0.5em 0;
+    }
+
+    .Bienvenida-dashboard h2 {
+        font-size: 1.4em;
+    }
+
+    .Bienvenida-dashboard p {
+        font-size: 0.95em;
+    }
+
+    body#dashboard-body {
+        overflow-x: hidden;
+    }
+}
+
+@media (max-width: 333px) {
+    .btn {
+        padding: 0.6em 1em;
+        font-size: 0.80rem;
+    }
+
+    .estadisticas-container {
+        padding: 9em 1em;
+    }
+}
