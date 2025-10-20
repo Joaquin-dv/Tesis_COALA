@@ -353,10 +353,10 @@ class Apuntes extends DBAbstract
             $this->logger->error($usuarioId,'400',"Falta el título");
             return ["errno" => 400, "error" => "Falta el título"];
         }
-        if ($descripcion == "") {
-            $this->logger->error($usuarioId,'400',"Falta la descripción");
-            return ["errno" => 400, "error" => "Falta la descripción"];
-        }
+        // if ($descripcion == "") {
+        //     $this->logger->error($usuarioId,'400',"Falta la descripción");
+        //     return ["errno" => 400, "error" => "Falta la descripción"];
+        // }
         if ($materia == "" || !is_numeric($materia)) {
             $this->logger->error($usuarioId,'400',"Falta el ID de la materia");
             return ["errno" => 400, "error" => "Falta el ID de la materia"];
