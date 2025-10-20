@@ -16,8 +16,13 @@
     <script>
         // Pasar el rol del usuario a JavaScript
         window.userRole = '{{ USER_ROLE }}';
+        window.puntuacionUsuario = {{ PUNTUACION_USUARIO }};
     </script>
     <main>
+        <div class="contenedor_volver">
+            <a href="javascript:history.back()" class="btn_volver"><i class="fa-solid fa-xmark"></i></a>
+        </div>
+
         <section class="contenedor_detalle_apunte">
             <section class="informacion_apunte">
                 <div class="primer_linea">
@@ -58,10 +63,18 @@
                         </p>
                     </div>
                 </div>
+
+                <div class="tercer_linea">
+                    <div>
+                        <p>
+                            <strong>Descripcion:</strong> {{ DESCRIPCION }}
+                        </p>
+                    </div>
+                </div>
             </section>
 
 
-            <!-- <section class="puntuacion_apunte">
+            <section class="puntuacion_apunte">
                 <span class="texto_puntuacion">¿Este apunte te fue útil?</span>
                <div class="rating" onclick="return checkDemoUser()">
                    <i class="fa-solid fa-star" data-value="1"></i>
@@ -70,8 +83,10 @@
                    <i class="fa-solid fa-star" data-value="4"></i>
                    <i class="fa-solid fa-star" data-value="5"></i>
                </div>
-                <input type="hidden" id="rating-value" name="rating" value="0">
-            </section> -->
+               <button type="button" id="reset-rating" class="reset-rating-btn" style="display: none;" onclick="return checkDemoUser()">Limpiar puntuación</button>
+
+                <input type="hidden" id="rating-value" name="rating" value="{{ PUNTUACION_USUARIO }}">
+            </section>
         </section>
         <section class="contenedor_archivos_apunte">
             <div id="visor" class="visor-archivo" data-ruta="{{ RUTA_ARCHIVO }}" data-error="{{ ERROR_ARCHIVO }}"></div>
@@ -88,6 +103,8 @@
                 <i class="fa-solid fa-user-group"></i>
                 <span>Comentarios del apunte</span>
             </p>
+
+
 
             <form id="form-comentario" method="POST" onsubmit="return checkDemoUser()">
                 <div class="input-group">

@@ -117,7 +117,7 @@ class Apuntes extends DBAbstract
             foreach ($result['result_sets'][0] as $row) {
                 $temp_array[] = [
                     "TITULO" => $row["TITULO"],
-                    "DESCRIPCION" => $row["DESCRIPCION"],
+                    "DESCRIPCION" => empty($row["DESCRIPCION"]) ? "Sin descripción" : $row["DESCRIPCION"],
                     "MATERIA" => $row["MATERIA"],
                     "FECHA_CREACION" => $row["FECHA_CREACION"],
                     "ESCUELA" => $row["ESCUELA"],
@@ -353,10 +353,10 @@ class Apuntes extends DBAbstract
             $this->logger->error($usuarioId,'400',"Falta el título");
             return ["errno" => 400, "error" => "Falta el título"];
         }
-        if ($descripcion == "") {
-            $this->logger->error($usuarioId,'400',"Falta la descripción");
-            return ["errno" => 400, "error" => "Falta la descripción"];
-        }
+        // if ($descripcion == "") {
+        //     $this->logger->error($usuarioId,'400',"Falta la descripción");
+        //     return ["errno" => 400, "error" => "Falta la descripción"];
+        // }
         if ($materia == "" || !is_numeric($materia)) {
             $this->logger->error($usuarioId,'400',"Falta el ID de la materia");
             return ["errno" => 400, "error" => "Falta el ID de la materia"];
@@ -773,6 +773,7 @@ class Apuntes extends DBAbstract
                     "NOMBRE_USUARIO" => $row["NOMBRE_USUARIO"],
                     "TEXTO_COMENTARIO" => $row["TEXTO_COMENTARIO"],
                     "FECHA_CREACION" => $row["FECHA_CREACION"],
+                    "PUNTUACION" => isset($row["PUNTUACION"]) ? (int) $row["PUNTUACION"] : null,
                 ];
             }
             return $temp_array;
@@ -782,7 +783,7 @@ class Apuntes extends DBAbstract
         return $result['result_sets'][0];
     }
 
-    public function createComentario($apunte_id, $texto_comentario)
+    public function createComentario($apunte_id, $texto_comentario, $puntuacion = null)
     {
         if (!isset($_SESSION[APP_NAME])) {
             $this->logger->error('','403',"No autorizado");
@@ -806,13 +807,21 @@ class Apuntes extends DBAbstract
             $this->logger->error($usuario_id,'400',"El comentario es demasiado largo (máximo 500 caracteres)");
             return ["errno" => 400, "error" => "El comentario es demasiado largo (máximo 500 caracteres)"];
         }
-
-        // Llamar al stored procedure
-        $result = $this->callSP("CALL sp_crear_comentario(?,?,?)", [
+        if ($puntuacion !== null && (!is_numeric($puntuacion) || $puntuacion < 1 || $puntuacion > 5)) {
+            $this->logger->error($usuario_id,'400',"La puntuación debe ser entre 1 y 5");
+            return ["errno" => 400, "error" => "La puntuación debe ser entre 1 y 5"];
+        }
+        // Debug: verificar parámetros
+        
+        // Llamar al stored procedure con puntuación
+        $result = $this->callSP("CALL sp_crear_comentario(?,?,?,?)", [
             (int) $apunte_id,
             (int) $usuario_id,
-            (string) trim($texto_comentario)
+            (string) trim($texto_comentario),
+            $puntuacion !== null ? (int) $puntuacion : null
         ]);
+        
+        // Debug: verificar resultado
 
         if ($result && isset($result['result_sets'][0][0]['comentario_id'])) {
             return [
@@ -913,6 +922,30 @@ class Apuntes extends DBAbstract
     }
 
     /**
+     * Obtiene la puntuación del usuario actual para un apunte
+     * @param int $apunte_id ID del apunte
+     * @return int|null Puntuación del usuario o null si no ha puntuado
+     */
+    public function getPuntuacionUsuario($apunte_id)
+    {
+        if (!isset($_SESSION[APP_NAME])) {
+            return null;
+        }
+
+        $usuario = $_SESSION[APP_NAME]["user"];
+        $usuario_id = (int) $usuario["id"];
+
+        if (!is_numeric($apunte_id) || $apunte_id <= 0) {
+            return null;
+        }
+
+        $sql = "SELECT puntuacion FROM comentarios WHERE usuario_id = " . (int)$usuario_id . " AND apunte_id = " . (int)$apunte_id . " AND puntuacion IS NOT NULL LIMIT 1";
+        $result = $this->query($sql);
+
+        return isset($result[0]['puntuacion']) ? (int) $result[0]['puntuacion'] : null;
+    }
+
+    /**
      * Busca apuntes con filtros opcionales usando stored procedure
      * @param string $query Texto de búsqueda (título, descripción, materia)
      * @param int|null $anio ID del año lectivo
@@ -940,7 +973,7 @@ class Apuntes extends DBAbstract
                 LEFT JOIN anios_lectivos al ON a.anio_lectivo_id = al.id
                 LEFT JOIN comentarios co ON a.id = co.apunte_id
                 LEFT JOIN cursos c ON a.curso_id = c.id
-                WHERE a.estado = 'aprobado'";
+                WHERE a.estado = 'aprobado' AND a.borrado_en IS NULL";
 
         if (!empty($query)) {
             $searchTerm = "%" . addslashes($query) . "%";

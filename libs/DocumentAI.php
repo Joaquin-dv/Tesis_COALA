@@ -139,7 +139,7 @@ class DocumentAI
             $minTextLength = 120;
             $textLength = strlen($text);
 
-            $allowedTypes = ['Apunte', 'Prueba', 'TrabajoPractico', 'Actividad-Tarea'];
+            $allowedTypes = ['Apunte', 'Prueba', 'TrabajoPractico', 'Actividad-Tarea', 'Cuadro'];
 
             if (in_array(strtolower($topClassification), array_map('strtolower', $allowedTypes)) && $textLength >= $minTextLength) {
                 return ['status' => 'approved', 'type' => $topClassification, 'text_length' => $textLength];

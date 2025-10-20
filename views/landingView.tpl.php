@@ -47,7 +47,7 @@
                 </a> -->
             </section>
 
-            <article class="carta_informacion" id="carta_informacion">
+            <article class="carta_informacion" id="carta_informacion" style="--i: 0;">
                 <div class="contenedor_imagen_informacion">
                     <img src="views/static/img/landing/imagen_comunidad.webp" alt="">
                 </div>
@@ -57,7 +57,7 @@
                 </section>
             </article>
 
-            <article class="carta_informacion">
+            <article class="carta_informacion" style="--i: 1;">
                 <div class="contenedor_imagen_informacion">
                     <img src="views/static/img/landing/imagen_alumnos.webp" alt="">
                 </div>
@@ -67,7 +67,7 @@
                 </section>
             </article>
 
-            <article class="carta_informacion">
+            <article class="carta_informacion" style="--i: 2;">
                 <div class="contenedor_imagen_informacion">
                     <img src="views/static/img/landing/imagen_profesor.webp" alt="">
                 </div>
@@ -77,7 +77,7 @@
                 </section>
             </article>
 
-        </section> <!-- ✅ cierre correcto de ABOUT -->
+        </section> 
 
         <!-- ===================== SECCIÓN TEAM ===================== -->
         <section id="team" class="contenido_team">
@@ -149,5 +149,6 @@
     @extends(footer)
 
     <script src="views/static/js/botonesLanding.js"></script>
+    <script src="views/static/js/animacionLanding.js"></script>
 </body>
 </html>

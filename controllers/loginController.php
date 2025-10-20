@@ -43,9 +43,13 @@
 
 		/* si retorna 202 el usuario y contraseña son validos*/
 		if( $result["errno"] == 202){
-			/* inicializar sesión dentro de PHP */
-			/*¨¨¨*/
-			/* lleva al panel de usuario */
+			/* Si el usuario es un admin redireccionar al dashboard */
+			if($_SESSION[APP_NAME]['user']['rol'] == 'admin'){
+				header("Location: ?slug=dashboard");
+				exit();
+			}
+
+			/* sino llevar al panel de usuario */
 			header("Location: ?slug=inicio");
 			exit();
 		}
