@@ -973,7 +973,7 @@ class Apuntes extends DBAbstract
                 LEFT JOIN anios_lectivos al ON a.anio_lectivo_id = al.id
                 LEFT JOIN comentarios co ON a.id = co.apunte_id
                 LEFT JOIN cursos c ON a.curso_id = c.id
-                WHERE a.estado = 'aprobado'";
+                WHERE a.estado = 'aprobado' AND a.borrado_en IS NULL";
 
         if (!empty($query)) {
             $searchTerm = "%" . addslashes($query) . "%";
