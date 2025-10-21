@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="views/static/css/landing.css">
     <link rel="stylesheet" href="views/static/css/footer.css">
-    <link rel="icon" type="image/png" sizes="32x32" href="views/static/img/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="views/static/img/favicon/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="views/static/img/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/webp" sizes="32x32" href="views/static/img/favicon/favicon-32x32.webp">
+    <link rel="icon" type="image/webp" sizes="16x16" href="views/static/img/favicon/favicon-16x16.webp">
+    <link rel="apple-touch-icon" sizes="180x180" href="views/static/img/favicon/apple-touch-icon.webp">
     <link rel="manifest" href="views/static/img/favicon/site.webmanifest">
     <title>COALA</title>
 </head>
@@ -16,7 +16,7 @@
 <body class="josefin-sans-normal">
     <header>
         <div class="logo_secundario">
-            <img src="views/static/img/branding/logo_secundario.png" alt="">
+            <img src="views/static/img/branding/logo_secundario.webp" alt="">
         </div>
 
         <section class="eleccion_landing">
@@ -36,7 +36,7 @@
 
             <section class="eslogan">
                 <div class="contenedor_logo">
-                    <img src="views/static/img/branding/logo_koala.png" alt="">
+                    <img src="views/static/img/branding/logo_koala.webp" alt="">
                 </div>
                 <div class="eslogan_texto">
                     <span>Lo que sabés, lo compartís.</span>
@@ -47,9 +47,9 @@
                 </a> -->
             </section>
 
-            <article class="carta_informacion" id="carta_informacion">
+            <article class="carta_informacion" id="carta_informacion" style="--i: 0;">
                 <div class="contenedor_imagen_informacion">
-                    <img src="views/static/img/landing/imagen_comunidad.png" alt="">
+                    <img src="views/static/img/landing/imagen_comunidad.webp" alt="">
                 </div>
                 <section class="informacion">
                     <h2>Comunidad</h2>
@@ -57,9 +57,9 @@
                 </section>
             </article>
 
-            <article class="carta_informacion">
+            <article class="carta_informacion" style="--i: 1;">
                 <div class="contenedor_imagen_informacion">
-                    <img src="views/static/img/landing/imagen_alumnos.png" alt="">
+                    <img src="views/static/img/landing/imagen_alumnos.webp" alt="">
                 </div>
                 <section class="informacion">
                     <h2>Alumnos</h2>
@@ -67,9 +67,9 @@
                 </section>
             </article>
 
-            <article class="carta_informacion">
+            <article class="carta_informacion" style="--i: 2;">
                 <div class="contenedor_imagen_informacion">
-                    <img src="views/static/img/landing/imagen_profesor.png" alt="">
+                    <img src="views/static/img/landing/imagen_profesor.webp" alt="">
                 </div>
                 <section class="informacion">
                     <h2>Profesores</h2>
@@ -77,7 +77,7 @@
                 </section>
             </article>
 
-        </section> <!-- ✅ cierre correcto de ABOUT -->
+        </section> 
 
         <!-- ===================== SECCIÓN TEAM ===================== -->
         <section id="team" class="contenido_team">
@@ -89,45 +89,45 @@
             <div class="team_cards">
                 <div class="team_card">
                     <div class="team_img">
-                        <img src="views/static/img/integrantes/ezequiel.jpg" alt="Creador 1">
+                        <img src="views/static/img/integrantes/ezequiel.webp" alt="Creador 1">
                     </div>
                     <h3>Ezequiel Cernadas</h3>
                     <p>Back-end</p>
                     <div class="contenedor_koala_cernadas">
-                        <img class="koala_carta" src="views/static/img/branding/koala_landing_cartas.png" alt="">
+                        <img class="koala_carta" src="views/static/img/branding/koala_landing_cartas.webp" alt="">
                     </div>
                 </div>
 
                 <div class="team_card">
                     <div class="team_img">
-                        <img src="views/static/img/integrantes/milena.jpg" alt="Creador 2">
+                        <img src="views/static/img/integrantes/milena.webp" alt="Creador 2">
                     </div>
                     <h3>Milena Lopez</h3>
                     <p>Front-end</p>
                     <div class="contenedor_koala_milena">
-                        <img class="koala_carta" src="views/static/img/branding/koala_landing_cartas.png" alt="">
+                        <img class="koala_carta" src="views/static/img/branding/koala_landing_cartas.webp" alt="">
                     </div>
                 </div>
 
                 <div class="team_card">
                     <div class="team_img">
-                        <img src="views/static/img/integrantes/joaquin.jpg" alt="Creador 3">
+                        <img src="views/static/img/integrantes/joaquin.webp" alt="Creador 3">
                     </div>
                     <h3>Joaquin Paez</h3>
                     <p>Back-end</p>
                     <div class="contenedor_koala_paez">
-                        <img class="koala_carta" src="views/static/img/branding/koala_landing_cartas.png" alt="">
+                        <img class="koala_carta" src="views/static/img/branding/koala_landing_cartas.webp" alt="">
                     </div>
                 </div>
 
                 <div class="team_card">
                     <div class="team_img">
-                        <img src="views/static/img/integrantes/nahuel.jpg" alt="Creador 4">
+                        <img src="views/static/img/integrantes/nahuel.webp" alt="Creador 4">
                     </div>
                     <h3>Nahuel Martinez</h3>
                     <p>Front-end</p>
                     <div class="contenedor_koala_nahuel">
-                        <img class="koala_carta" src="views/static/img/branding/koala_landing_cartas.png" alt="">
+                        <img class="koala_carta" src="views/static/img/branding/koala_landing_cartas.webp" alt="">
                     </div>
                 </div>
             </div>
@@ -149,5 +149,6 @@
     @extends(footer)
 
     <script src="views/static/js/botonesLanding.js"></script>
+    <script src="views/static/js/animacionLanding.js"></script>
 </body>
 </html>

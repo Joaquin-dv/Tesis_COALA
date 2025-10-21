@@ -1,5 +1,9 @@
 <?php
 
+	/* Log de acceso a la página */
+	$logger = new Logger();
+	$logger->pageLoad(null, 'explorar');
+
     $tpl = new Mopla('explorar');
 
     // Se carga el componente
@@ -26,6 +30,19 @@
 		$lista_apuntes = $apunte->getApuntes(30, true);
 	}
 
+	// Loguear la busqueda si existe
+	if (!empty($query)) {
+		$logger->registrarBusqueda('query', $query);
+	}
+	// Loguear el filtro si existe
+	if ($anio !== null) {
+		$logger->registrarBusqueda('anio', $anio);
+	}
+	// Loguear el filtro si existe
+	if ($materia !== null) {
+		$logger->registrarBusqueda('materia', $materia);
+	}
+
 	// Obtener años lectivos para el filtro
 	$anios_lectivos = $apunte->getAniosLectivos();
 
@@ -35,6 +52,10 @@
 		$anios_html .= '<a href="#" data-anio="' . $anio_lectivo['nivel'] . '">' . $anio_lectivo['nivel'] . 'º Año</a>';
 	}
 
+	// Si no se obtuvo ningun apunte, mostrar mensaje
+	if (empty($lista_apuntes)) {
+		$tpl->assignVar(["EXPLORAR" => "<p class='msg_vacio'>No se encontraron apuntes que coincidan con la búsqueda.</p>"]);
+	}
 	// Cargo la informacion en el componente
 	foreach ($lista_apuntes as $row) {
 		$lista_explorar .= $apunteExtend->assignVar($row);

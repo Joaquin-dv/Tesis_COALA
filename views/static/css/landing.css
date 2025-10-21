@@ -553,3 +553,31 @@ footer {
     font-size: 20px;
   }
 }
+
+
+
+
+
+
+
+.carta_informacion {
+  opacity: 0;
+  transform: translateX(0);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  will-change: transform, opacity;
+}
+
+.carta_informacion.hidden {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.carta_informacion.visible[data-side="right"] {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.carta_informacion.visible[data-side="left"] {
+  opacity: 1;
+  transform: translateX(0);
+}
