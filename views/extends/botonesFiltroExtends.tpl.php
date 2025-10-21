@@ -1,19 +1,17 @@
 <section class="filtros">
 
-    <!-- Dropdown Año -->
     <div class="dropdown">
-        <button class="dropbtn">Año ▾</button>
-        <div class="dropdown-content" id="listaAnios">
+        <label for="selectAnio">Año</label>
+        <select id="selectAnio" class="dropbtn">
             {{ ANIOS_LECTIVOS }}
-        </div>
+        </select>
     </div>
 
-    <!-- Dropdown Materia (oculto al principio) -->
-    <div class="dropdown" id="dropdownMateria" style="display:none;">
-        <button class="dropbtn">Materia ▾</button>
-        <div class="dropdown-content" id="listaMaterias">
-            <!-- Se llenará dinámicamente según año -->
-        </div>
+    <div class="dropdown">
+        <label for="selectMateria">Materia</label>
+        <select id="selectMateria" class="dropbtn" disabled>
+            <option value="">Materia</option>
+        </select>
     </div>
 
 </section>
