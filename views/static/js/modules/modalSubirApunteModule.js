@@ -197,8 +197,8 @@ async function abrirModalSubida() {
     Swal.fire({
         html: `
             <section class="contenido_modal_swal">
-                <section class="imagen">
-                    <img id="koala_modal" src="views/static/img/modal/koala.png" alt="Koala">
+                <section id="archivos" class="archivos">
+                    <span id="tittle_arch">Sin archivos seleccionados</span>
                 </section>
 
                 <section class="contenido_formulario">
@@ -233,7 +233,7 @@ async function abrirModalSubida() {
                             <i class="fa-solid fa-file-arrow-up"></i>
                             Subir archivos (imágenes o PDF)
                         </label>
-                        <p id="nombre_archivo">Ningún archivo seleccionado</p>
+                        <div id="contenedor_celular"></div>
                         <button id="subir_apunte" name="btn_subir_apunte" type="button" class="btn_modal poppins-semibold">Subir Apunte</button>
                         <div class="errorMsg" id="errorGeneral"></div>
                     </form>
@@ -258,6 +258,84 @@ async function abrirModalSubida() {
             const selectDivision = $("#division");
             const selectMateria = $("#materia");
             const errorGeneral = $("#errorGeneral");
+
+            let previewContainer;
+            if (window.innerWidth <= 750) {
+                previewContainer = popup.querySelector("#contenedor_celular");
+
+            } else {
+                previewContainer = popup.querySelector("#archivos");
+            }
+            const fileInput = document.getElementById("input_file");
+            const tittle = popup.querySelector("#tittle_arch");
+            let archs = new Set();
+
+
+            fileInput.addEventListener("change", (e) => {
+                const files = Array.from(e.target.files);
+
+                files.forEach((file) => {
+                    if (archs.has(file.name)) {
+                        return;
+                    }
+                    archs.add(file.name);
+                    const item = document.createElement("div");
+                    item.classList.add("previsualizacion-item");
+                    const tipo = file.type;
+
+                    if (tipo.startsWith("image/")) {
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                            item.innerHTML = `
+                            <div class="contenedor_img_arch">
+                            <img id="img_subir_apunte" src="${event.target.result}"">
+                            </div>
+                            <span id="nombre_archivo">${file.name}</span>
+                            <button id="btn_quitar_arch" class="quitar-btn"><i class="fa-solid fa-xmark"></i></button>
+                        `;
+                            item.querySelector(".quitar-btn").addEventListener("click", () => {
+                                archs.delete(file.name);
+                                item.remove();
+                                if (archs.size === 0) {
+                                    tittle.style.display = "block";
+                                }
+                            });
+                            previewContainer.appendChild(item);
+                        }
+                        reader.readAsDataURL(file);
+                    } else if (tipo === "application/pdf") {
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                            item.innerHTML = `
+                            <div class="contenedor_img_arch pdf-preview">
+                                <i class="fa-solid fa-file-pdf pdf-icon"></i>
+                            </div>
+                            <span id="nombre_archivo">${file.name}</span>
+                            <button id="btn_quitar_arch" class="quitar-btn"><i class="fa-solid fa-xmark"></i></button>
+                        `;
+                            item.querySelector(".quitar-btn").addEventListener("click", () => {
+                                archs.delete(file.name);
+                                item.remove();
+                                if (archs.size === 0) {
+                                    tittle.style.display = "block";
+                                }
+                            });
+                            previewContainer.appendChild(item);
+                        }
+                        reader.readAsDataURL(file);
+                    }
+
+                });
+
+                if (archs.size > 0) {
+                    tittle.style.display = "none";
+                } else {
+                    tittle.style.display = "block";
+                }
+
+                fileInput.value = "";
+            });
+
 
             // 🔽 NUEVO: conectar el botón interno con preConfirm
             const btnSubir = $("#subir_apunte");
