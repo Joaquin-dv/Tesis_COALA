@@ -312,6 +312,148 @@ class Usuarios extends DBAbstract
         }
     }
 
+    public function enviarEmailReestablecer($email)
+    {
+        if (empty($email)) {
+            $this->logger->error(null, '400', "Email es requerido");
+            return ["errno" => 400, "error" => "Email es requerido"];
+        }
+
+        $response = $this->callSP("CALL sp_obtener_usuario(?)", [$email]);
+
+        if (empty($response["result_sets"][0])) {
+            $this->logger->error(null, '404', "Correo no encontrado");
+            return ["errno" => 404, "error" => "Correo no encontrado"];
+        }
+
+        $usuario = $response["result_sets"][0][0];
+
+        $token = $this->generarCodigoVerificacion();
+
+        // Generar enlace de restablecimiento (aquí deberías generar un token seguro)
+        $reset_link = "https://devcoala.escuelarobertoarlt.com/index.php?slug=reestablecer&email=" . urlencode($email) . "&token=" . $token . "";
+
+        // Enviar email
+        $asunto = "Restablecimiento de contraseña - COALA";
+        $mensaje = "
+        <html>
+        <head>
+            <title>Restablecimiento de contraseña</title>
+        </head>
+        <body>
+            <h2>¡Hola " . explode(" ", $usuario["nombre_completo"])[0] . "!</h2>
+            <p>Hemos recibido una solicitud para restablecer tu contraseña. Haz clic en el siguiente enlace para continuar:</p>
+            <a href='" . $reset_link . "'>Restablecer contraseña</a>
+            <p>Si no solicitaste este cambio, puedes ignorar este email.</p>
+            <br>
+            <p>Saludos,<br>El equipo de COALA</p>
+        </body>
+        </html>
+        ";
+
+        $headers = "MIME-Version: 1.0" . "\r\n";
+        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+        $headers .= "From: noreply@coala.com" . "\r\n";
+        $mail = new PHPMailer\PHPMailer\PHPMailer();
+        $mail->CharSet = 'UTF-8';
+        $mail->isSMTP();
+        $mail->SMTPDebug = 0;
+        $mail->Host = HOST;
+        $mail->Port = PORT;
+        $mail->SMTPAuth = SMTP_AUTH;
+        $mail->SMTPSecure = SMTP_SECURE;
+        $mail->Username = REMITENTE;
+        $mail->Password = PASSWORD;
+        $mail->SMTPOptions = array(
+            'ssl' => array(
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
+            )
+        );
+        $mail->setFrom(REMITENTE, NOMBRE);
+        $mail->addAddress($email);
+        $mail->isHTML(true);
+        $mail->Subject = $asunto;
+        $mail->Body = $mensaje;
+        try {
+            $result = $mail->send();
+            if($result) {
+                $this->callSP("CALL sp_actualizar_contrasena_token(?, ?)", [$email, $token]);
+                return ["errno" => 200, "error" => "Se ha enviado un enlace de restablecimiento a tu email."];
+            } else {
+                error_log("PHPMailer Error: " . $mail->ErrorInfo);
+                $this->logger->error(null, '500', "No se pudo enviar: " . $mail->ErrorInfo);
+                return ["errno" => 500, "error" => "No se pudo enviar: " . $mail->ErrorInfo];
+            }
+        } catch (Exception $e) {
+            error_log("PHPMailer Exception: " . $e->getMessage());
+            $this->logger->error(null, '500', "Error de conexión: " . $e->getMessage());
+            return ["errno" => 500, "error" => "Error de conexión: " . $e->getMessage()];
+        }
+    }
+
+    public function verificarCodigoReestablecer($email, $token)
+    {
+        if (empty($email) || empty($token)) {
+            $this->logger->error(null, '400', "Email y token son requeridos");
+            return ["errno" => 400, "error" => "Email y token son requeridos"];
+        }
+
+        $response = $this->callSP("CALL sp_obtener_usuario_con_token_reestablecer(?,?)", [$email, $token]);
+
+        if (empty($response["result_sets"][0])) {
+            $this->logger->error(null, '404', "Token inválido o expirado");
+            return ["errno" => 404, "error" => "Token inválido o expirado"];
+        }
+
+        return ["errno" => 200, "error" => "Token válido"];
+    }
+
+    public function reestablecerContrasena($email, $token, $password, $confirmPassword)
+    {
+        if (empty($email) || empty($password)) {
+            $this->logger->error(null, '400', "Email y contraseña son requeridos");
+            return ["errno" => 400, "error" => "Email y contraseña son requeridos"];
+        }
+
+        if ($password !== $confirmPassword) {
+            $this->logger->error(null, '400', "Las contraseñas no coinciden");
+            return ["errno" => 400, "error" => "Las contraseñas no coinciden"];
+        }
+
+        if (strlen($password) < 8) {
+            $this->logger->error(null, '400', "La contraseña debe tener al menos 8 caracteres");
+            return ["errno" => 400, "error" => "La contraseña debe tener al menos 8 caracteres"];
+        }
+
+        if (empty($token)) {
+            $this->logger->error(null, '400', "Token es requerido");
+            return ["errno" => 400, "error" => "Token es requerido"];
+        }
+
+        if ($this->verificarCodigoReestablecer($email, $token)["errno"] != 200) {
+            return ["errno" => 404, "error" => "Token inválido o expirado"];
+        }
+
+        $response = $this->callSP("CALL sp_obtener_usuario(?)", [$email]);
+
+        if (empty($response["result_sets"][0])) {
+            $this->logger->error(null, '404', "Correo no encontrado");
+            return ["errno" => 404, "error" => "Correo no encontrado"];
+        }
+
+        $usuario = $response["result_sets"][0][0];
+
+        $password_encripted = password_hash($password, PASSWORD_DEFAULT);
+
+        $this->callSP("CALL sp_actualizar_contrasena(?, ?)", [$email, $password_encripted]);
+
+        $this->logger->error($usuario["id"], '200', "Contraseña reestablecida con éxito");
+        return ["errno" => 200, "error" => "Contraseña reestablecida con éxito"];        
+    }
+
+
     /**
      * Registra usuario con código de verificación guardado en email_token
      */

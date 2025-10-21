@@ -74,6 +74,10 @@
 		$msg_error = "Es necesario iniciar sesión para acceder a esta funcionalidad.";
 	}
 
+	if(isset($_GET["msg"]) && $_GET["msg"] == "reset_success"){
+		$msg_success = "Contraseña reestablecida correctamente. Ya puedes iniciar sesión con tu nueva contraseña.";
+	}
+
 
 	/***
 	 * 
