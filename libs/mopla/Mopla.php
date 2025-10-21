@@ -76,7 +76,8 @@ class Mopla
 			"APP_DESCRIPTION",
 			"APP_AUTHOR",
 			"APP_SLOGAN",
-			"APP_URL"
+			"APP_URL",
+			"APP_VERSION"
 		];
 
 		foreach ($environment_vars as $key => $var) {
@@ -99,6 +100,33 @@ class Mopla
 		foreach ($array_replace_assoc as $var => $value) {
 			$this->buffer_tpl = str_replace("{{ " . $var . " }}", $value, $this->buffer_tpl);
 		}
+		
+		// Procesar assets con versiones
+		$this->processAssets();
+	}
+	
+	/**
+	 * Procesa assets agregando versiones automáticamente
+	 */
+	private function processAssets()
+	{
+		// Buscar y reemplazar enlaces CSS
+		$this->buffer_tpl = preg_replace_callback(
+			'/href=["\']([^"\']*\.css)["\']/',
+			function($matches) {
+				return 'href="' . CacheHelper::asset($matches[1]) . '"';
+			},
+			$this->buffer_tpl
+		);
+		
+		// Buscar y reemplazar scripts JS
+		$this->buffer_tpl = preg_replace_callback(
+			'/src=["\']([^"\']*\.js)["\']/',
+			function($matches) {
+				return 'src="' . CacheHelper::asset($matches[1]) . '"';
+			},
+			$this->buffer_tpl
+		);
 	}
 
 	function printExtends($array_extends_assoc)

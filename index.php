@@ -16,6 +16,8 @@
 	require_once 'models/Logger.php';
 	require_once 'models/ThumbnailGenerator.php';
 	require_once "libs/DocumentAI.php"; /*Procesamiento de documentos con IA*/
+	require_once "libs/CacheHelper.php"; /*Helper para control de caché*/
+	require_once "libs/TemplateHelpers.php"; /*Funciones helper para plantillas*/
 	require_once "libs/mopla/Mopla.php"; /*Motor de plantillas*/
 	require_once "libs/mopla/Extends.php"; /*Motor de componentes*/
 
@@ -23,6 +25,9 @@
 	include 'libs/Mailer/src/SMTP.php';
 	include 'libs/Mailer/src/Exception.php';
 
+	// Headers de control de caché para páginas dinámicas
+	CacheHelper::setNoCacheHeaders();
+	
 	session_start();
 	
 	$section = "landing"; /*por defecto section es landing*/
