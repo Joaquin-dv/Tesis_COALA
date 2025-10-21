@@ -331,7 +331,7 @@ class Usuarios extends DBAbstract
         $token = $this->generarCodigoVerificacion();
 
         // Generar enlace de restablecimiento (aquí deberías generar un token seguro)
-        $reset_link = "https://devcoala.escuelarobertoarlt.com/index.php?slug=reestablecer&email=" . urlencode($email) . "&token=" . $token . "";
+        $reset_link = "https://coala.escuelarobertoarlt.com/index.php?slug=reestablecer&email=" . urlencode($email) . "&token=" . $token . "";
 
         // Enviar email
         $asunto = "Restablecimiento de contraseña - COALA";
