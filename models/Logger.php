@@ -57,8 +57,32 @@ class Logger {
     public function deslogueo ($usuario,$evento='El usuario salio de la plataforma'){
         $this->write('<',$usuario,$evento);
     }
-    public function consulta ($usuario,$evento='El usuario consulto el elemento ', $idConsultado){
-        $this->write('?',$usuario,$evento,$idConsultado);
+    public function consulta ($usuario=null,$query,$anio,$materia){
+
+        if($usuario === null){
+            if(isset($_SESSION[APP_NAME])){
+                $usuario=$_SESSION[APP_NAME]['user']['id'];
+            } else {
+                $usuario = 0; // Usuario no logueado
+            }
+        }
+        if (!empty($query) && empty($materia) && empty($anio)) {
+            $evento = "El usuario buscó '{$query}'";
+        } elseif (!empty($anio) && empty($materia) && empty($query)) {
+            $evento = "El usuario buscó apuntes del año {$anio}";
+        } elseif (!empty($materia) && empty($anio) && empty($query)) {
+            $evento = "El usuario buscó apuntes de la materia {$materia}";
+        } elseif (!empty($query) && !empty($anio) && empty($materia)) {
+            $evento = "El usuario buscó '{$query}' del año {$anio}";
+        } elseif (!empty($query) && !empty($materia) && empty($anio)) {
+            $evento = "El usuario buscó '{$query}' de la materia {$materia}";
+        } elseif (!empty($query) && !empty($anio) && !empty($materia)) {
+            $evento = "El usuario buscó '{$query}' del año {$anio} de la materia {$materia}";
+        } else {
+            $evento = "El usuario realizó una búsqueda sin filtros específicos";
+        }
+        var_dump("hola");
+        $this->write('?',$usuario,$evento);
     }
     public function creacion ($usuario,$objeto,$idCreado){
         $this->write('+',$usuario,"El usuario creo el {$objeto} de id:{$idCreado}");

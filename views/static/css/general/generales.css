@@ -116,6 +116,9 @@ header .barra_navegacion a:hover {
 
     .mobile-nav {
         display: flex;
+        padding-bottom: 1em;
+        height: 4em;
+        align-items: center;
     }
 
     /* Ajustar posición de toasts en móvil para no tapar la navegación */

@@ -99,12 +99,16 @@ section.contenido_formulario {
     height: 100%;
 }
 
-section.imagen {
+section.archivos {
     width: 48%;
     background-color: white;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
+    gap: .5em;
+    flex-direction: column;
+    padding: 2em 0;
 }
 
 section.curso_division {
@@ -181,11 +185,105 @@ button#subir_apunte {
     transition: 0.3s;
 }
 
+#nombre_archivo {
+    color: var(--txt-negro);
+    min-height: 20px;
+    font-size: 14px;
+    overflow: hidden;
+    display: block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 70%;
+}
+
+#btn_quitar_arch {
+    border: none;
+    background: transparent;
+    position: absolute;
+    top: .5em;
+    color: var(--linea);
+    right: 1em;
+}
+
+.contenedor_img_arch {
+    width: 5em;
+    height: 3em;
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 11px;
+}
+
+.previsualizacion-item {
+    width: 90%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.5em;
+    gap: 10px;
+    position: relative;
+    border-radius: 15px;
+    border: solid 1.5px var(--linea);
+}
+
+#img_subir_apunte {
+    width: 100%;
+}
+.pdf-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8f8f8;
+  border-radius: 10px;
+}
+.pdf-icon {
+  font-size: 2rem;
+  color: #e74c3c;
+}
+
 @media screen and (max-width: 750px) {
-    .imagen {
+    .archivos {
         display: none !important;
     }
 
+    .previsualizacion-item {
+        width: 8em;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0.5em;
+        gap: 6px;
+        position: relative;
+        border-radius: 15px;
+        border: solid 2.5px var(--bg-boton-verde-hover);
+        justify-content: center;
+    }
+
+    .contenedor_img_arch {
+        width: 6em;
+        height: 3.5em;
+        display: flex;
+        overflow: hidden;
+        flex-direction: column;
+        justify-content: center;
+        border-radius: 11px;
+    }
+
+    div#contenedor_celular {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    #btn_quitar_arch{
+        color: var(--txt-negro);
+        right: .5em;
+    }
     .contenido_formulario {
         width: 100% !important;
     }
