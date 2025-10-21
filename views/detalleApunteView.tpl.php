@@ -91,7 +91,7 @@
         <section class="contenedor_archivos_apunte">
             <div id="visor" class="visor-archivo" data-ruta="{{ RUTA_ARCHIVO }}" data-error="{{ ERROR_ARCHIVO }}"></div>
             <section class="contenedor_botones_bajo_visor">
-                <button id="solicitar_revision">Solicitar revision</button>
+                {{ BOTON_REVISION }}
                 <a id="descargar" href="#" download onclick="return checkDemoUser()">Descargar archivo</a>
             </section>
         </section>

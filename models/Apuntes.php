@@ -127,6 +127,7 @@ class Apuntes extends DBAbstract
                     "NOMBRE_AUTOR" => $row["NOMBRE_USUARIO"],
                     "CANTIDAD_PUNTUACIONES" => $row["CANTIDAD_CALIFICACIONES"],
                     "CANTIDAD_VISTAS" => $row["CANTIDAD_VISTAS"],
+                    "ESTADO" => $row["ESTADO"]
                 ];
                 // Si el apunte no tiene calificaciones, forzamos a 0 la puntuación
                 if ($row["PROMEDIO_CALIFICACIONES"] === null) {
