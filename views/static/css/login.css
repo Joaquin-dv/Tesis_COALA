@@ -9,16 +9,11 @@
     align-items: center;
 }
 .logo{
-    flex: 0 0 45%;
-    background: url("../img/branding/logo_koala.png") no-repeat center left;
+    background: url("../img/branding/coala_login.png") no-repeat center left;
     height: 100vh;
     background-size: auto 136%;
-    background-position: -26em center;
-    opacity: 0.5;
     position: absolute;
-    top: 0;
     left: 0;
-    z-index: -1;
     width: 100vw;
 }
 
@@ -78,10 +73,5 @@
     }
     .contenedorFormulario{
         padding:  2rem 2rem 2rem;
-    }
-}
-@media screen and (max-width: 1920px) {
-    .logo{
-         background-position: -31em center;
     }
 }

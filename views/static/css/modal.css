@@ -93,14 +93,14 @@ i#cerrar_modal {
 }
 
 section.contenido_formulario {
-    width: 53%;
+    width: 50%;
     padding: 1em;
     background: var(--modal-bg);
     height: 100%;
 }
 
 section.archivos {
-    width: 48%;
+    width: 50%;
     background-color: white;
     display: flex;
     align-items: center;
