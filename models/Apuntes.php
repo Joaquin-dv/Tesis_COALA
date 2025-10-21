@@ -1046,19 +1046,33 @@ class Apuntes extends DBAbstract
             return ["errno" => 400, "error" => "ID de apunte inválido"];
         }
 
+        // Verifica que no se haya solicitado antes
         $result = $this->callSP("CALL sp_obtener_apunte_por_id(?)", [$apunte_id]);
         
         if($result['result_sets'][0][0]["SOLICITO_REVISION"] == 1){
             return ["errno" => 409, "error" => "La revision ya fue solicitada"];
         }
 
+        // Solicita la revision
         $result2 = $this->callSP("CALL sp_solicitar_revision(?)", [$apunte_id]);
         
-        if ($result2) {
-            return ["errno" => 200, "error" => "Revision solicitada correctamente"];
-        } else {
+        if (!$result2) {
             $this->logger->error('','500',"Error al solicitar revision");
             return ["errno" => 500, "error" => "Error al solicitar revision"];
         }
+
+        // Cambia el estado
+        $result3 = $this->updateEstado($apunte_id, "en_revision", "revision humana");
+
+        if ($result3["errno"] == 500){
+            return $result3;
+        }
+
+        return ["errno" => 200, "error" => "Revision solicitada correctamente"];
+    }
+
+    public function getApuntesEnRevisionSolicitada($limit = 100){
+        $result = $this->callSP("CALL sp_obtener_apuntes_revision_solicitada(?)", [$limit]);
+        return $result['result_sets'][0];
     }
 }
