@@ -2,7 +2,14 @@
 
 <body id="dashboard-body" class="josefin-sans-normal">
     <header class="dashboard-header">
-        <h1><i class="fa-solid fa-chart-simple"></i> Panel de Estadísticas - COALA</h1>
+        <h1><i class="fa-solid fa-chart-simple"  id="menu-icon"></i> Panel de Estadísticas - COALA</h1>
+        <div id="dropdown-menu" class="dropdown">
+            <ul>
+                <li><a href="?slug=dashboard">Estadísticas</a></li>
+                <li><a href="?slug=apuntesRechazados">Apuntes Rechazados</a></li>
+                <li><a href="?slug=apuntes_reportados">Apuntes Reportados</a></li>
+            </ul>
+        </div>
         <div class="dashboard-actions">
             <div>
 
@@ -104,4 +111,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="/views/static/js/reportes.js"></script>
+    <script src="/views/static/js/menu-desplegable.js"></script>
 </body>

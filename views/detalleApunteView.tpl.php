@@ -87,7 +87,13 @@
 
                 <input type="hidden" id="rating-value" name="rating" value="{{ PUNTUACION_USUARIO }}">
             </section>
+
         </section>
+        <section class="botones_admin">
+            <button class="boton_cancelar_admin">Cancelar</button>
+            <button class="boton_eliminar_admin">Eliminar</button>
+        </section>
+
         <section class="contenedor_archivos_apunte">
             <div id="visor" class="visor-archivo" data-ruta="{{ RUTA_ARCHIVO }}" data-error="{{ ERROR_ARCHIVO }}"></div>
 
