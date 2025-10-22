@@ -96,6 +96,12 @@
     $tpl->assignVar(["DESCRIPCION" => $info_apunte['DESCRIPCION']]);
     $tpl->assignVar(["COMENTARIOS_APUNTE" => $lista_comentarios]);
 
+    if($info_apunte["ESTADO"] == "rechazado"){
+        $tpl->assignVar(["BOTON_REVISION" => "<button id='solicitar_revision'>Solicitar revision</button>"]);
+    } else{
+        $tpl->assignVar(["BOTON_REVISION" => ""]);
+    }
+
     // Cargamos la informacion del usuario logueado
     $tpl->assignVar(["NOMBRE_USUARIO" => $_SESSION[APP_NAME]['user']['nombre_completo'], "USER_ROLE" => $_SESSION[APP_NAME]['user']['rol']]);
     

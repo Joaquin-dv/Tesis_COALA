@@ -49,6 +49,7 @@ main .buscador_subir_apunte{
     border-radius: 8px;
     cursor: pointer;
     transition: 0.2s;
+    width: 150px;
 }
 
 .dropbtn:hover {

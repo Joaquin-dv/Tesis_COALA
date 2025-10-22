@@ -47,9 +47,11 @@
 	$anios_lectivos = $apunte->getAniosLectivos();
 
 	// Formatear años para la vista
-	$anios_html = "";
+	$anios_html = '<option value="">Año</option>';
 	foreach ($anios_lectivos as $anio_lectivo) {
-		$anios_html .= '<a href="#" data-anio="' . $anio_lectivo['nivel'] . '">' . $anio_lectivo['nivel'] . 'º Año</a>';
+		$valor = (int) $anio_lectivo['nivel'];
+		$selected = ($anio !== null && $anio === $valor) ? ' selected' : '';
+		$anios_html .= '<option value="' . $valor . '"' . $selected . '>' . $valor . 'º Año</option>';
 	}
 
 	// Si no se obtuvo ningun apunte, mostrar mensaje

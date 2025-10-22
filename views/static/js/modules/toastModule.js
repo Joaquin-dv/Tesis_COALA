@@ -118,3 +118,43 @@ export function favoritoRemovido() {
         toast: true
     });
 }
+
+export function solicitandoRevision(){
+    Swal.fire({
+        icon: "info",
+        text: "Solicitando revision del apunte",
+        showCloseButton: false,
+        timer: 10000,
+        timerProgressBar: false,
+        showConfirmButton: false,
+        position: isMobile ? 'top-right' : 'bottom-right',
+        toast: true
+    });
+    Swal.showLoading();
+}
+
+export function revisionYaSolicitada(){
+    Swal.fire({
+        icon: "error",
+        text: "La revision del apunte ya fue solicitada",
+        showCloseButton: false,
+        timer: 10000,
+        timerProgressBar: false,
+        showConfirmButton: false,
+        position: isMobile ? 'top-right' : 'bottom-right',
+        toast: true
+    });
+}
+
+export function revisionSolicitada(estado = true) {
+    Swal.fire({
+        icon: estado ? "success" : "error",
+        text: estado ? "La revision del apunte fue solicitada" : "Hubo un error al solicitar la revision del apunte",
+        showCloseButton: true,
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: false,
+        position: isMobile ? 'top-right' : 'bottom-right',
+        toast: true
+    });
+}

@@ -127,6 +127,7 @@ class Apuntes extends DBAbstract
                     "NOMBRE_AUTOR" => $row["NOMBRE_USUARIO"],
                     "CANTIDAD_PUNTUACIONES" => $row["CANTIDAD_CALIFICACIONES"],
                     "CANTIDAD_VISTAS" => $row["CANTIDAD_VISTAS"],
+                    "ESTADO" => $row["ESTADO"]
                 ];
                 // Si el apunte no tiene calificaciones, forzamos a 0 la puntuación
                 if ($row["PROMEDIO_CALIFICACIONES"] === null) {
@@ -574,7 +575,7 @@ class Apuntes extends DBAbstract
             }
 
             $this->commit();
-             $this->logger->creacion($usuarioId,'apunte',$apunte_id);
+            $this->logger->creacion($usuarioId,'apunte',$apunte_id);
             return [
                 "errno"       => 202,
                 "error"       => "El archivo se subió correctamente",
@@ -1036,6 +1037,42 @@ class Apuntes extends DBAbstract
         }
 
         $result = $this->callSP("CALL sp_obtener_materias_por_anio(?)", [$anio]);
+        return $result['result_sets'][0];
+    }
+
+    public function updateSolicitoRevision($apunte_id){
+        if (!is_numeric($apunte_id) || $apunte_id <= 0) {
+            $this->logger->error('','400',"ID de apunte inválido");
+            return ["errno" => 400, "error" => "ID de apunte inválido"];
+        }
+
+        // Verifica que no se haya solicitado antes
+        $result = $this->callSP("CALL sp_obtener_apunte_por_id(?)", [$apunte_id]);
+        
+        if($result['result_sets'][0][0]["SOLICITO_REVISION"] == 1){
+            return ["errno" => 409, "error" => "La revision ya fue solicitada"];
+        }
+
+        // Solicita la revision
+        $result2 = $this->callSP("CALL sp_solicitar_revision(?)", [$apunte_id]);
+        
+        if (!$result2) {
+            $this->logger->error('','500',"Error al solicitar revision");
+            return ["errno" => 500, "error" => "Error al solicitar revision"];
+        }
+
+        // Cambia el estado
+        $result3 = $this->updateEstado($apunte_id, "en_revision", "revision humana");
+
+        if ($result3["errno"] == 500){
+            return $result3;
+        }
+
+        return ["errno" => 200, "error" => "Revision solicitada correctamente"];
+    }
+
+    public function getApuntesEnRevisionSolicitada($limit = 100){
+        $result = $this->callSP("CALL sp_obtener_apuntes_revision_solicitada(?)", [$limit]);
         return $result['result_sets'][0];
     }
 }
