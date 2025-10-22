@@ -75,4 +75,4 @@ function agregarBotonReporte() {
 }
 
 // Ejecutar cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', agregarBotonReporte);
+// document.addEventListener('DOMContentLoaded', agregarBotonReporte);
