@@ -2,7 +2,7 @@
 
 <body id="dashboard-body" class="josefin-sans-normal">
     <header class="dashboard-header">
-        <h1><i class="fa-solid fa-chart-simple"  id="menu-icon"></i> Apuntes Rechazados - COALA</h1>
+        <h1><i class="fa-solid fa-chart-simple"  id="menu-icon"></i> Apuntes Reportados - COALA</h1>
         <div id="dropdown-menu" class="dropdown">
             <ul>
                 <li><a href="?slug=dashboard">Estadísticas</a></li>
@@ -19,8 +19,8 @@
 
     <main class="rechazados-container">
         <section class="Bienvenida-dashboard">
-            <h2>Control de Calidad <span>IA</span></h2>
-            <p>Supervisá los apuntes detectados por la IA y asegurá la calidad del contenido en COALA.</p>
+            <h2>Revisión de Apuntes <span>Reportados</span></h2>
+            <p>Analizá y decidí sobre los apuntes señalados por la comunidad para mantener la calidad de COALA.</p>
         </section>
 
         <section class="contenedor_apuntes_rechazados">

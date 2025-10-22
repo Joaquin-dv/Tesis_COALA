@@ -90,8 +90,8 @@
 
         </section>
         <section class="botones_admin">
-            <button class="boton_cancelar_admin">Cancelar</button>
             <button class="boton_eliminar_admin">Eliminar</button>
+            <button class="boton_aprobar_admin">Aprobar</button>
         </section>
 
         <section class="contenedor_archivos_apunte">

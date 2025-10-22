@@ -610,7 +610,7 @@ input[type="radio"] {
 
 }
 
-.boton_cancelar_admin, .boton_eliminar_admin{
+.boton_cancelar_admin, .boton_eliminar_admin, .boton_aprobar_admin{
     border: none;
     padding: 8px 14px;
     font-weight: 600;
@@ -625,6 +625,15 @@ input[type="radio"] {
 }
 .boton_eliminar_admin{
   background-color: #F44336;
+}
+
+.boton_aprobar_admin{
+  background-color: #4CAF50;
+}
+
+.boton_aprobar_admin:hover{
+  background-color: #388E3C;
+  transform: scale(1.05);
 }
 
 .boton_cancelar_admin:hover{
