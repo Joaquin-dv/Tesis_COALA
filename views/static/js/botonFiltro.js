@@ -1,10 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const listaMaterias = document.getElementById("listaMaterias");
-    const dropdownMateria = document.getElementById("dropdownMateria");
+    const selectAnio = document.getElementById("selectAnio");
+    const selectMateria = document.getElementById("selectMateria");
     const inputBuscador = document.getElementById("input_buscador");
 
-    let anioSeleccionado = null;
+    let anioSeleccionado = selectAnio && selectAnio.value ? selectAnio.value : null;
     let materiaSeleccionada = null;
+
+    function resetMateria() {
+        if (!selectMateria) {
+            return;
+        }
+        selectMateria.innerHTML = '<option value="">Materia</option>';
+        selectMateria.value = "";
+        selectMateria.disabled = true;
+    }
 
     // Función para actualizar la URL y recargar apuntes
     function actualizarBusqueda() {
@@ -31,34 +40,38 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Función para cargar materias de un año
-    async function cargarMaterias(anio) {
+    async function cargarMaterias(anio, materiaPreseleccionada = null) {
+        if (!selectMateria || !anio) {
+            resetMateria();
+            return;
+        }
+
         try {
             const response = await fetch(`api/index.php?model=Apuntes&method=getMateriasPorAnio&anio=${anio}`);
             const materias = await response.json();
 
-            // Mostrar dropdown de materia
-            dropdownMateria.style.display = "inline-block";
+            resetMateria();
 
-            // Llenar materias
-            listaMaterias.innerHTML = "";
-            if (materias && Array.isArray(materias)) {
+            if (materias && Array.isArray(materias) && materias.length > 0) {
                 materias.forEach(materia => {
-                    let a = document.createElement("a");
-                    a.href = "#";
-                    a.textContent = materia.nombre;
-                    a.dataset.materia = materia.nombre;
-                    listaMaterias.appendChild(a);
-
-                    // Click en materia
-                    a.addEventListener("click", (e) => {
-                        e.preventDefault();
-                        materiaSeleccionada = materia.nombre;
-                        actualizarBusqueda();
-                    });
+                    const option = document.createElement("option");
+                    option.value = materia.nombre;
+                    option.textContent = materia.nombre;
+                    selectMateria.appendChild(option);
                 });
+
+                selectMateria.disabled = false;
+
+                if (materiaPreseleccionada) {
+                    selectMateria.value = materiaPreseleccionada;
+                    if (selectMateria.value === materiaPreseleccionada) {
+                        materiaSeleccionada = materiaPreseleccionada;
+                    }
+                }
             }
         } catch (error) {
             console.error("Error cargando materias:", error);
+            resetMateria();
         }
     }
 
@@ -86,20 +99,32 @@ document.addEventListener("DOMContentLoaded", () => {
         if (materiaParam) {
             materiaSeleccionada = materiaParam;
         }
-        cargarMaterias(anioSeleccionado);
+        if (selectAnio) {
+            selectAnio.value = anioSeleccionado;
+        }
+        cargarMaterias(anioSeleccionado, materiaParam);
+    } else {
+        resetMateria();
     }
 
-    // Click en año
-    document.querySelectorAll("#listaAnios a").forEach(link => {
-        link.addEventListener("click", async (e) => {
-            e.preventDefault();
-            anioSeleccionado = link.dataset.anio;
+    // Cambio en año
+    if (selectAnio) {
+        selectAnio.addEventListener("change", async () => {
+            anioSeleccionado = selectAnio.value ? selectAnio.value : null;
             materiaSeleccionada = null;
 
-            // Cargar materias para este año
             await cargarMaterias(anioSeleccionado);
 
             actualizarBusqueda();
         });
-    });
+    }
+
+    // Cambio en materia
+    if (selectMateria) {
+        selectMateria.addEventListener("change", () => {
+            const value = selectMateria.value;
+            materiaSeleccionada = value ? value : null;
+            actualizarBusqueda();
+        });
+    }
 });

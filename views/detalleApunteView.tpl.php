@@ -90,8 +90,10 @@
         </section>
         <section class="contenedor_archivos_apunte">
             <div id="visor" class="visor-archivo" data-ruta="{{ RUTA_ARCHIVO }}" data-error="{{ ERROR_ARCHIVO }}"></div>
-
-            <a id="descargar" href="#" download onclick="return checkDemoUser()">Descargar archivo</a>
+            <section class="contenedor_botones_bajo_visor">
+                {{ BOTON_REVISION }}
+                <a id="descargar" href="#" download onclick="return checkDemoUser()">Descargar archivo</a>
+            </section>
         </section>
         <!-- <section class="contenedor_botones_detalle_apunte">
 
@@ -161,7 +163,7 @@
         window.userRole = '{{ USER_ROLE }}';
     </script>
     <script src="views/static/js/puntuarApunte.js"></script>
-    <script src="views/static/js/detalleApunte.js"></script>
+    <script type="module" src="views/static/js/detalleApunte.js"></script>
     <script src="views/static/js/generalesScript.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="views/static/js/modules/toastModule.js"></script>

@@ -100,8 +100,6 @@ function errorLogger(codigoError, mensajeError) {
         })
     })
         .then(res => res.json())
-    // .then(data => console.log('Log enviado:', data))
-    // .catch(err => console.error('Fallo al enviar el log:', err));
 }
 
 

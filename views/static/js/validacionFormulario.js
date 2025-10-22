@@ -15,7 +15,6 @@ export function validarFormulario(form, errorSelector = '#errorGeneral') {
 
         // Si es input file, verificamos que tenga archivos seleccionados
         if (input.type === 'file') {
-            console.log(input.files);
             if (input.files.length === 0) {
                 valido = false;
                 input.classList.add('remarcadoError');
