@@ -7,7 +7,7 @@
             <ul>
                 <li><a href="?slug=dashboard">Estadísticas</a></li>
                 <li><a href="?slug=apuntesRechazados">Apuntes Rechazados</a></li>
-                <li><a href="?slug=apuntesReportados">Apuntes Reportados</a></li>
+                <!-- <li><a href="?slug=apuntesReportados">Apuntes Reportados</a></li> -->
             </ul>
         </div>
         <div class="dashboard-actions">
@@ -24,14 +24,7 @@
         </section>
 
         <section class="contenedor_apuntes_rechazados">
-            
-            @extends(apunte)
-            @extends(apunte)
-            @extends(apunte)
-            @extends(apunte)
-            
-            @extends(apunte)
-
+           {{ APUNTES_EN_REVISION}}
         </section>
 
 

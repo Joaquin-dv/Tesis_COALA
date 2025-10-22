@@ -1,4 +1,4 @@
-<a href="?slug=detalleApunte&apunteId=160" class="enlace_apunte" onclick="return checkInvitadoUser()">
+<a href="?slug=detalleApunte&apunteId={{ APUNTE_ID }}" class="enlace_apunte" onclick="return checkInvitadoUser()">
     <article class="apunte">
     <figure>
         <img class="imagen_apunte" src="{{ IMAGEN }}" alt="Imagen de apunte">

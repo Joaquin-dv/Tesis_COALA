@@ -24,14 +24,6 @@
         </section>
 
         <section class="contenedor_apuntes_rechazados">
-            
-            @extends(apunte)
-            @extends(apunte)
-            @extends(apunte)
-            @extends(apunte)
-            
-            @extends(apunte)
-
         </section>
 
 
