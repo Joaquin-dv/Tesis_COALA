@@ -73,8 +73,10 @@
                 </div>
                 <section class="informacion">
                     <h2>Colegios</h2>
-                    Los colegios pueden acceder a estadísticas sobre el rendimiento y la participación de sus estudiantes. 
-           COALA ofrece una nueva perspectiva del aprendizaje institucional, basada en datos reales y colaboración entre alumnos.</p>
+                    <p>
+                        Los colegios pueden acceder a estadísticas sobre el rendimiento y la participación de sus estudiantes. 
+                        COALA ofrece una nueva perspectiva del aprendizaje institucional, basada en datos reales y colaboración entre alumnos.
+                    </p>
                 </section>
             </article>
 
