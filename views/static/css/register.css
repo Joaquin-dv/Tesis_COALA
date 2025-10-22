@@ -8,15 +8,11 @@
     flex-direction: row-reverse;
 }
 .logo{
-    flex: 0 0 45%;
-    background: url("../img/branding/logo_koala.png") no-repeat center right;
+    background: url("../img/branding/coala_register.png") no-repeat center right;
     height: 100vh;
     background-size: auto 136%;
-    opacity: 0.5;
     position: absolute;
-    top: 0;
-    left: 26em;
-    z-index: -1;
+    right: 0;
     width: 100vw;
 }
 
@@ -37,13 +33,6 @@
         padding: 3rem 2rem 2rem 2rem;
     }
 }
-
-@media screen and (max-width: 1920px) {
-    .logo{
-        left: 30em;
-    }
-}
-
 /* Estilos específicos para la página de verificación */
 .texto-verificacion {
     text-align: center;
