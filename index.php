@@ -34,6 +34,8 @@
 	$secciones_permitidas_logeado = array("inicio","explorar","mochila","clases","detalleApunte","logout");
 	$secciones_permitidas_deslogeado = array("inicio","explorar","landing","login","registro","registerConfirm","error404","logout");
 	$secciones_permitidas_demo = array("inicio","explorar","detalleApunte","registro");
+	$secciones_permitidas_admin = array("dashboard");
+
 
 	/* Se especifico una sección pero esta no existe */
 	if(!file_exists("controllers/".$section."Controller.php")){
@@ -59,6 +61,14 @@
 	if(in_array($section, $secciones_permitidas_logeado) == true && !in_array($section, $secciones_permitidas_demo)){
 		if(isset($_SESSION[APP_NAME]) && $_SESSION[APP_NAME]['user']['rol'] == 'demo'){
 			header("Location: index.php?slug=inicio"); /*lo llevamos a inicio si intenta acceder a secciones no permitidas*/
+		}
+	}
+
+	/* Protección para usuario admin */
+	if(in_array($section, $secciones_permitidas_admin) == true){
+		if(!isset($_SESSION[APP_NAME]) || $_SESSION[APP_NAME]['user']['rol'] != 'admin'){
+			header("Location: index.php?slug=login&msg=requiere_login"); /*lo llevamos a login con mensaje*/
+			exit();
 		}
 	}
 

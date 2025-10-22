@@ -1,9 +1,17 @@
-<?php 
+<?php
+
+	if(isset($_SESSION[APP_NAME]["user"])){
+		header("Location: ?slug=inicio");
+	}
+
+	/* Log de acceso a la página */
+	$logger = new Logger();
+	$logger->pageLoad(null, 'login');
 
 	/**
-	 * 
+	 *
 	 * Lógica
-	 * 
+	 *
 	 * */
 
 	/* por defecto no va a tener msj error*/
@@ -35,9 +43,13 @@
 
 		/* si retorna 202 el usuario y contraseña son validos*/
 		if( $result["errno"] == 202){
-			/* inicializar sesión dentro de PHP */
-			/*¨¨¨*/
-			/* lleva al panel de usuario */
+			/* Si el usuario es un admin redireccionar al dashboard */
+			if($_SESSION[APP_NAME]['user']['rol'] == 'admin'){
+				header("Location: ?slug=dashboard");
+				exit();
+			}
+
+			/* sino llevar al panel de usuario */
 			header("Location: ?slug=inicio");
 			exit();
 		}
@@ -60,6 +72,10 @@
 
 	if(isset($_GET["msg"]) && $_GET["msg"] == "requiere_login"){
 		$msg_error = "Es necesario iniciar sesión para acceder a esta funcionalidad.";
+	}
+
+	if(isset($_GET["msg"]) && $_GET["msg"] == "reset_success"){
+		$msg_success = "Contraseña reestablecida correctamente. Ya puedes iniciar sesión con tu nueva contraseña.";
 	}
 
 

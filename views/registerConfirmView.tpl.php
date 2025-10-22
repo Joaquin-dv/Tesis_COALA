@@ -26,17 +26,17 @@
                 <input type="text" id="codigo" name="txt_codigo" class="campo poppins-semibold" placeholder="Código de verificación" maxlength="6" pattern="[0-9]{6}" required>
                 <input type="submit" value="Verificar" name="btn_verificar" class="btn poppins-semibold">
                 <div class="fraseLink">
-                    <span class="poppins-regular">¿No recibiste el código?</span><a href="?slug=register"
-                        class="link poppins-bold">Registrarse nuevamente</a>
+                    <span class="poppins-regular">¿No recibiste el código?</span>
+                    <a href="?slug=registerConfirm&btn_reenviar=1" class="link poppins-bold">Reenviar código</a>
                 </div>
                 <div class="errorMsg" id="errorGeneral">{{ MSG_ERROR }}</div>
                 <div class="successMsg" id="successGeneral">{{ MSG_SUCCESS }}</div>
+                <div class="btn_volver">
+                    <a href="?slug=register" class="btn_volver_login">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </a>
+                </div>
             </form>
-            <div class="btn_volver">
-                <a href="?slug=register" class="btn_volver_login">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </a>
-            </div>
         </section>
     </section>
 </body>

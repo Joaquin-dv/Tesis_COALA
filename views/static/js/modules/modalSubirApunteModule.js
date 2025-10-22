@@ -100,8 +100,8 @@ function errorLogger(codigoError, mensajeError) {
         })
     })
         .then(res => res.json())
-        // .then(data => console.log('Log enviado:', data))
-        // .catch(err => console.error('Fallo al enviar el log:', err));
+    // .then(data => console.log('Log enviado:', data))
+    // .catch(err => console.error('Fallo al enviar el log:', err));
 }
 
 
@@ -146,14 +146,14 @@ function llenarSelectUnico(select, lista, propValor, propTexto, placeholder) {
  * Valida de forma sencilla los campos mínimos del formulario.
  * Devuelve string con el mensaje de error o "" si todo OK.
  */
-function validarCamposMinimos({ titulo, escuela, materia, curso, division, profesor, descripcion, archivos }) {
+function validarCamposMinimos({ titulo, escuela, materia, curso, division, profesor, archivos }) {
     if (!titulo) return "Ingresá un título.";
     if (!escuela) return "Seleccioná una escuela.";
     if (!materia) return "Seleccioná una materia.";
     if (!curso) return "Seleccioná un curso.";
     if (!division) return "Seleccioná una división.";
     if (!profesor) return "Ingresá un profesor.";
-    if (!descripcion) return "Ingresá una descripcion.";
+    // if (!descripcion) return "Ingresá una descripcion.";
     if (!archivos || archivos.length === 0) return "Seleccioná al menos un archivo.";
 
     // Validar que todos sean imágenes o todos sean PDF
@@ -241,6 +241,7 @@ async function abrirModalSubida() {
         `,
         padding: 0,
         showConfirmButton: false,
+        showCloseButton: true,
         focusConfirm: false,
         customClass: {
             popup: "modal_coala_popup no-padding-modal",
@@ -261,6 +262,18 @@ async function abrirModalSubida() {
             const btnSubir = $("#subir_apunte");
             btnSubir?.addEventListener("click", () => {
                 Swal.clickConfirm(); // dispara preConfirm
+            });
+
+            const form = popup.querySelector('#formulario');
+
+            form?.addEventListener('submit', (event) => {
+                event.preventDefault();            // evita el GET implícito
+            });
+
+            form?.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') {
+                    event.preventDefault();
+                }
             });
 
             // Deshabilitar selects dependientes inicialmente
@@ -372,7 +385,7 @@ async function abrirModalSubida() {
             const archivos = Array.from(q("#input_file")?.files || []);
 
             // Validación mínima
-            const mensajeError = validarCamposMinimos({ titulo, escuela, materia, curso: cursoNivel, division, profesor, descripcion, archivos });
+            const mensajeError = validarCamposMinimos({ titulo, escuela, materia, curso: cursoNivel, division, profesor, archivos });
             if (mensajeError) {
                 errorGeneral.textContent = mensajeError;
                 // Swal.showValidationMessage(mensajeError);
@@ -439,16 +452,15 @@ async function abrirModalSubida() {
         },
     }).then((result) => {
         if (result.isConfirmed && result.value?.ok) {
-            exito();
-            setTimeout(() => {
-                // Iniciar procesamiento del documento usando la función global
+            exito(() => {
+                // Iniciar procesamiento del documento cuando se cierre el toast de éxito
                 if (typeof window.startDocumentProcessing === 'function') {
                     window.startDocumentProcessing(result.value.apunte_id);
                 } else {
                     // Fallback al método local si no está disponible globalmente
                     startDocumentProcessing(result.value.apunte_id);
                 }
-            }, 3000);
+            });
         } else if (result.isConfirmed && !result.value?.ok) {
             // Si el preConfirm devolvió false o no hay valor, mostrar error
             error("No se pudo completar la subida del apunte.");
