@@ -72,8 +72,11 @@
                     <img src="views/static/img/landing/imagen_profesor.webp" alt="">
                 </div>
                 <section class="informacion">
-                    <h2>Profesores</h2>
-                    <p>Podés subir tus apuntes y guías de estudio para ayudar a tus estudiantes y recibir retroalimentación de ellos. COALA facilita la interacción educativa y el seguimiento del aprendizaje.</p>
+                    <h2>Colegios</h2>
+                    <p>
+                        Los colegios pueden acceder a estadísticas sobre el rendimiento y la participación de sus estudiantes. 
+                        COALA ofrece una nueva perspectiva del aprendizaje institucional, basada en datos reales y colaboración entre alumnos.
+                    </p>
                 </section>
             </article>
 
