@@ -233,7 +233,18 @@ async function abrirModalSubida() {
                             <i class="fa-solid fa-file-arrow-up"></i>
                             Subir archivos (imágenes o PDF)
                         </label>
-                        <div id="contenedor_celular"></div>
+                        <details id="mobile-file-toggle" class="archivos-mobile">
+                            <summary class="archivos-mobile__summary poppins-semibold">
+                                <span class="archivos-mobile__tittle">Archivos seleccionados</span>
+                                <span class="archivos-mobile__meta">
+                                    <span id="mobile-file-count" class="archivos-mobile__count">(0)</span>
+                                    <i class="fa-solid fa-chevron-down archivos-mobile__chevron" aria-hidden="true"></i>
+                                </span>
+                            </summary>
+                            <div id="contenedor_celular" class="archivos-mobile__content">
+                                <span id="tittle_arch_mobile">Sin archivos seleccionados</span>
+                            </div>
+                        </details>
                         <button id="subir_apunte" name="btn_subir_apunte" type="button" class="btn_modal poppins-semibold">Subir Apunte</button>
                         <div class="errorMsg" id="errorGeneral"></div>
                     </form>
@@ -259,82 +270,112 @@ async function abrirModalSubida() {
             const selectMateria = $("#materia");
             const errorGeneral = $("#errorGeneral");
 
-            let previewContainer;
-            if (window.innerWidth <= 750) {
-                previewContainer = popup.querySelector("#contenedor_celular");
+            const isMobileView = window.innerWidth <= 750;
+            const previewContainer = isMobileView ? popup.querySelector("#contenedor_celular") : popup.querySelector("#archivos");
+            const tittleDesktop = popup.querySelector("#tittle_arch");
+            const tittleMobile = popup.querySelector("#tittle_arch_mobile");
+            const mobileToggle = popup.querySelector("#mobile-file-toggle");
+            const mobileCount = popup.querySelector("#mobile-file-count");
+            const fileInput = popup.querySelector("#input_file");
+            const archivosSeleccionados = new Map();
+            popup.archivosSeleccionados = archivosSeleccionados;
 
-            } else {
-                previewContainer = popup.querySelector("#archivos");
-            }
-            const fileInput = document.getElementById("input_file");
-            const tittle = popup.querySelector("#tittle_arch");
-            let archs = new Set();
+            const buildFileKey = (file) => `${file.name}-${file.lastModified}`;
 
+            const updateEmptyState = () => {
+                const hayArchivos = archivosSeleccionados.size > 0;
+                if (tittleDesktop) {
+                    tittleDesktop.style.display = hayArchivos ? "none" : "block";
+                }
+                if (tittleMobile) {
+                    tittleMobile.style.display = hayArchivos ? "none" : "block";
+                }
+            };
 
-            fileInput.addEventListener("change", (e) => {
-                const files = Array.from(e.target.files);
-
-                files.forEach((file) => {
-                    if (archs.has(file.name)) {
-                        return;
+            const updateMobileMeta = () => {
+                if (!isMobileView) return;
+                if (mobileCount) {
+                    mobileCount.textContent = `(${archivosSeleccionados.size})`;
+                }
+                if (mobileToggle) {
+                    if (archivosSeleccionados.size === 0) {
+                        mobileToggle.removeAttribute("open");
                     }
-                    archs.add(file.name);
-                    const item = document.createElement("div");
-                    item.classList.add("previsualizacion-item");
-                    const tipo = file.type;
+                }
+            };
 
-                    if (tipo.startsWith("image/")) {
-                        const reader = new FileReader();
-                        reader.onload = (event) => {
-                            item.innerHTML = `
+            updateEmptyState();
+            updateMobileMeta();
+
+            if (fileInput && previewContainer) {
+                fileInput.addEventListener("change", (e) => {
+                    const files = Array.from(e.target.files);
+
+                    files.forEach((file) => {
+                        const fileKey = buildFileKey(file);
+                        if (archivosSeleccionados.has(fileKey)) {
+                            return;
+                        }
+                        archivosSeleccionados.set(fileKey, file);
+
+                        const item = document.createElement("div");
+                        item.classList.add("previsualizacion-item");
+                        item.dataset.fileKey = fileKey;
+                        const tipo = file.type;
+
+                        if (tipo.startsWith("image/")) {
+                            const reader = new FileReader();
+                            reader.onload = (event) => {
+                                item.innerHTML = `
                             <div class="contenedor_img_arch">
                             <img id="img_subir_apunte" src="${event.target.result}"">
                             </div>
                             <span id="nombre_archivo">${file.name}</span>
                             <button id="btn_quitar_arch" class="quitar-btn"><i class="fa-solid fa-xmark"></i></button>
                         `;
-                            item.querySelector(".quitar-btn").addEventListener("click", () => {
-                                archs.delete(file.name);
-                                item.remove();
-                                if (archs.size === 0) {
-                                    tittle.style.display = "block";
-                                }
-                            });
-                            previewContainer.appendChild(item);
-                        }
-                        reader.readAsDataURL(file);
-                    } else if (tipo === "application/pdf") {
-                        const reader = new FileReader();
-                        reader.onload = (event) => {
-                            item.innerHTML = `
+                                item.querySelector(".quitar-btn").addEventListener("click", () => {
+                                    const key = item.dataset.fileKey;
+                                    if (key) {
+                                        archivosSeleccionados.delete(key);
+                                    }
+                                    item.remove();
+                                    updateEmptyState();
+                                    updateMobileMeta();
+                                });
+                                previewContainer.appendChild(item);
+                            }
+                            reader.readAsDataURL(file);
+                        } else if (tipo === "application/pdf") {
+                            const reader = new FileReader();
+                            reader.onload = (event) => {
+                                item.innerHTML = `
                             <div class="contenedor_img_arch pdf-preview">
                                 <i class="fa-solid fa-file-pdf pdf-icon"></i>
                             </div>
                             <span id="nombre_archivo">${file.name}</span>
                             <button id="btn_quitar_arch" class="quitar-btn"><i class="fa-solid fa-xmark"></i></button>
                         `;
-                            item.querySelector(".quitar-btn").addEventListener("click", () => {
-                                archs.delete(file.name);
-                                item.remove();
-                                if (archs.size === 0) {
-                                    tittle.style.display = "block";
-                                }
-                            });
-                            previewContainer.appendChild(item);
+                                item.querySelector(".quitar-btn").addEventListener("click", () => {
+                                    const key = item.dataset.fileKey;
+                                    if (key) {
+                                        archivosSeleccionados.delete(key);
+                                    }
+                                    item.remove();
+                                    updateEmptyState();
+                                    updateMobileMeta();
+                                });
+                                previewContainer.appendChild(item);
+                            }
+                            reader.readAsDataURL(file);
                         }
-                        reader.readAsDataURL(file);
-                    }
 
+                    });
+
+                    updateEmptyState();
+                    updateMobileMeta();
+                    fileInput.value = "";
                 });
-
-                if (archs.size > 0) {
-                    tittle.style.display = "none";
-                } else {
-                    tittle.style.display = "block";
-                }
-
-                fileInput.value = "";
-            });
+            }
 
 
             // 🔽 NUEVO: conectar el botón interno con preConfirm
@@ -461,7 +502,8 @@ async function abrirModalSubida() {
             const profesor = "No especificado";
             // const profesor = q("#profesor")?.value.trim() || "";
             const descripcion = q("#descripcion").value.trim() || "";
-            const archivos = Array.from(q("#input_file")?.files || []);
+            const archivosSeleccionadosMap = popup.archivosSeleccionados instanceof Map ? popup.archivosSeleccionados : new Map();
+            const archivos = Array.from(archivosSeleccionadosMap.values());
 
             // Validación mínima
             const mensajeError = validarCamposMinimos({ titulo, escuela, materia, curso: cursoNivel, division, profesor, archivos });
@@ -486,6 +528,10 @@ async function abrirModalSubida() {
             try {
                 // FormData directo del form (incluye archivo)
                 const formData = new FormData(form);
+                formData.delete("input_file[]");
+                archivos.forEach((file) => {
+                    formData.append("input_file[]", file);
+                });
 
                 // Campos que el backend espera
                 formData.set("model", "Apuntes");

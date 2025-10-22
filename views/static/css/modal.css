@@ -111,6 +111,10 @@ section.archivos {
     padding: 2em 0;
 }
 
+details.archivos-mobile {
+    display: none;
+}
+
 section.curso_division {
     display: flex;
     justify-content: center;
@@ -247,6 +251,69 @@ button#subir_apunte {
         display: none !important;
     }
 
+    details.archivos-mobile {
+        display: block;
+        width: 100%;
+        border: 1px solid var(--linea);
+        border-radius: 12px;
+        background: #fff;
+        overflow: hidden;
+    }
+
+    .archivos-mobile__summary {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5em;
+        padding: 0.75em 1em;
+        list-style: none;
+        cursor: pointer;
+    }
+
+    .archivos-mobile__tittle{
+        font-size: .8em;
+    }
+
+    .archivos-mobile__summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .archivos-mobile__meta {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+        font-size: 0.85rem;
+        color: var(--txt-negro);
+    }
+
+    .archivos-mobile__count {
+        color: var(--txt-gris, #6f6f6f);
+    }
+
+    .archivos-mobile__chevron {
+        transition: transform 0.2s ease;
+    }
+
+    details.archivos-mobile[open] .archivos-mobile__summary {
+        border-bottom: 1px solid var(--linea);
+    }
+
+    details.archivos-mobile[open] .archivos-mobile__chevron {
+        transform: rotate(180deg);
+    }
+
+    .archivos-mobile__content {
+        padding: 0.75em 0.75em 1em;
+    }
+
+    #tittle_arch_mobile {
+        display: block;
+        width: 100%;
+        text-align: center;
+        color: var(--txt-gris, #6f6f6f);
+        font-size: 0.9rem;
+    }
+
     .previsualizacion-item {
         width: 8em;
         display: flex;
@@ -278,6 +345,7 @@ button#subir_apunte {
         align-items: center;
         flex-wrap: wrap;
         justify-content: center;
+        padding: 0.5em 0.25em 0.75em;
     }
 
     #btn_quitar_arch{
