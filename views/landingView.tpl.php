@@ -69,7 +69,7 @@
 
             <article class="carta_informacion" style="--i: 2;">
                 <div class="contenedor_imagen_informacion">
-                    <img src="views/static/img/landing/imagen_profesor.webp" alt="">
+                    <img src="views/static/img/landing/imagen_estadisticas.webp" alt="">
                 </div>
                 <section class="informacion">
                     <h2>Colegios</h2>
