@@ -105,7 +105,7 @@
                     <div class="team_img">
                         <img src="views/static/img/integrantes/milena.webp" alt="Creador 2">
                     </div>
-                    <h3>Milena Lopez</h3>
+                    <h3>Milena López</h3>
                     <p>Front-end</p>
                     <div class="contenedor_koala_milena">
                         <img class="koala_carta" src="views/static/img/branding/koala_landing_cartas.webp" alt="">
