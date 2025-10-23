@@ -30,7 +30,7 @@
                         <h1>{{ TITULO }}</h1>
                     </div>
                     <div>
-                        <p class="puntuacion_apunte">⭐{{ PROMEDIO_CALIFICACIONES }}/5 ({{ CANTIDAD_PUNTUACIONES }} valoraciones)</p>
+                        <p class="puntuacion_apunte_promedio">⭐{{ PROMEDIO_CALIFICACIONES }}/5 ({{ CANTIDAD_PUNTUACIONES }} valoraciones)</p>
                     </div>
                     <i class="fa-solid fa-heart corazon {{ ES_FAVORITO }}" onclick="return checkDemoUser()"></i>
 

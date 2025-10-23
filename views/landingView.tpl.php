@@ -69,11 +69,14 @@
 
             <article class="carta_informacion" style="--i: 2;">
                 <div class="contenedor_imagen_informacion">
-                    <img src="views/static/img/landing/imagen_profesor.webp" alt="">
+                    <img src="views/static/img/landing/imagen_estadisticas.webp" alt="">
                 </div>
                 <section class="informacion">
-                    <h2>Profesores</h2>
-                    <p>Podés subir tus apuntes y guías de estudio para ayudar a tus estudiantes y recibir retroalimentación de ellos. COALA facilita la interacción educativa y el seguimiento del aprendizaje.</p>
+                    <h2>Colegios</h2>
+                    <p>
+                        Los colegios pueden acceder a estadísticas sobre el rendimiento y la participación de sus estudiantes. 
+                        COALA ofrece una nueva perspectiva del aprendizaje institucional, basada en datos reales y colaboración entre alumnos.
+                    </p>
                 </section>
             </article>
 
@@ -102,7 +105,7 @@
                     <div class="team_img">
                         <img src="views/static/img/integrantes/milena.webp" alt="Creador 2">
                     </div>
-                    <h3>Milena Lopez</h3>
+                    <h3>Milena López</h3>
                     <p>Front-end</p>
                     <div class="contenedor_koala_milena">
                         <img class="koala_carta" src="views/static/img/branding/koala_landing_cartas.webp" alt="">
