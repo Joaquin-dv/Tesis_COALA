@@ -40,16 +40,49 @@
             display: flex;
             margin: .5em 0;
         }
-    }
+    } 
 
+    .puntuacion_apunte_promedio{
+        width: auto;
+    }
 
     .puntuacion_apunte{
         /* background-color: orange; */
         width: auto;
+        display: flex;
+        flex-direction: column;
         .texto_puntuacion{
             color: #2B2B2B;
             font-size: 16px;
         }
+.reset-rating-btn {
+  background-color: #E5E7EB; 
+  color: #374151; 
+  border: 1px solid #D1D5DB; 
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  margin: 1em;
+}
+
+.reset-rating-btn:hover {
+  background-color: #F3F4F6; 
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+}
+
+.reset-rating-btn:active {
+  background-color: #E5E7EB;
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+
+
+        
 
       
 
@@ -381,6 +414,10 @@
                 .puntuacion-comentario{
                     padding: .5em 2em 0 2em;
                     font-size: 14px;
+
+                    .fa-star{
+                        color: #ff9e0b;
+                    }
                 }
                 
                 .header_comentario{
@@ -611,7 +648,25 @@ main{
 }
 
 
+/* .reset-rating-btn{
+    background-color: #ff4c4c;
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    position: absolute;
+    transition: background-color 0.3s ease;
+    float: right;
+    top: 50px;
+    right: 0;
+    margin: .6em;
 
+    &:hover {
+        background-color: #da2626;
+    }
+}
+ */
 
 
 
