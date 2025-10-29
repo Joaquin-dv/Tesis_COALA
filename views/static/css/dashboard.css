@@ -9,23 +9,23 @@ body#dashboard-body {
     min-height: 100vh;
 }
 
-.dashboard-grid{
+.dashboard-grid {
     display: flex;
     flex-direction: column;
     gap: 1em;
 }
 
 .dashboard-header {
-      position: fixed;          
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-      z-index: 1000; 
+    z-index: 1000;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between; 
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    justify-content: space-between;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .dashboard-header h1 {
@@ -69,7 +69,7 @@ body#dashboard-body {
     font-size: 0.95rem;
     transition: all 0.2s ease;
     max-width: 200px;
-    line-height: 1; 
+    line-height: 1;
     box-sizing: border-box;
 }
 
@@ -133,7 +133,9 @@ body#dashboard-body {
     opacity: 0.85;
 }
 
-.fila-mediana, .fila-grande, .fila-normal {
+.fila-mediana,
+.fila-grande,
+.fila-normal {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -144,7 +146,7 @@ body#dashboard-body {
     background-color: var(--bg-carta);
     border-radius: 12px;
     padding: 1.5em;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
     border: 1px solid var(--bg-gris);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     flex-shrink: 0;
@@ -152,7 +154,7 @@ body#dashboard-body {
 
 .chart-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
 .chart-card h3 {
@@ -165,83 +167,86 @@ body#dashboard-body {
 }
 
 .chart-card.normal {
-    width: 400px;      
+    width: 400px;
     min-height: 220px;
 }
 
 .chart-card.mediana {
-    width: 350px;     
+    width: 350px;
     min-height: 230px;
 }
 
 .chart-card.grande {
-    width: 700px;      
+    width: 700px;
     min-height: 300px;
 }
 
 
 
 #menu-icon {
-  cursor: pointer;
-  margin-right: 8px;
-  transition: transform 0.2s ease;
+    cursor: pointer;
+    margin-right: 8px;
+    transition: transform 0.2s ease;
 }
 
 
-.dropdown {
-  position: absolute;
-  background: white;
-  border: 1px solid var(--bg-gris);
-  border-radius: 10px;
-  padding: 10px 0;
-  width: 200px;
-  top: 70px; 
-  left: 40px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  z-index: 999;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  opacity: 0;
-  transform: translateY(-10px);
-  pointer-events: none;
+#dropdown-menu {
+    position: absolute;
+    background: white;
+    border: 1px solid var(--bg-gris);
+    border-radius: 10px;
+    padding: 10px 0;
+    width: 200px;
+    top: 70px;
+    left: 40px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 999;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
 }
 
-.dropdown.active {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
+#dropdown-menu.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
 }
 
-.dropdown ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+#dropdown-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-.dropdown li {
-  padding: 10px 20px;
-  transition: background 0.2s;
+#dropdown-menu li {
+    padding: 10px 20px;
+    transition: background 0.2s;
 }
 
-.dropdown li:hover {
-  background: var(--bg-gris);
+#dropdown-menu li:hover {
+    background: var(--bg-gris);
 }
 
-.dropdown a {
-  text-decoration: none;
-  color: black;
-  display: block;
+#dropdown-menu a {
+    text-decoration: none;
+    color: black;
+    display: block;
 }
 
 
 
 /* ======== Responsive ======== */
 @media (max-width: 900px) {
-    .fila-mediana, .fila-grande, .fila-normal {
+
+    .fila-mediana,
+    .fila-grande,
+    .fila-normal {
         flex-direction: column;
         align-items: center;
     }
 
-    .dropdown{
+    #dropdown-menu {
         width: 90%;
     }
 
@@ -279,8 +284,9 @@ body#dashboard-body {
         max-width: none;
     }
 
-    .estadisticas-container, .rechazados-container {
-        padding: 7em 1em!important;
+    .estadisticas-container,
+    .rechazados-container {
+        padding: 7em 1em !important;
     }
 
     .Bienvenida-dashboard {
@@ -307,13 +313,14 @@ body#dashboard-body {
         font-size: 0.80rem;
     }
 
-    .estadisticas-container, .rechazados-container {
-        padding: 9em 1em!important;
+    .estadisticas-container,
+    .rechazados-container {
+        padding: 9em 1em !important;
     }
 }
 
 @media (max-width: 700px) {
-    .dropdown{
-        width: 229px;   
+    #dropdown-menu {
+        width: 229px;
     }
 }

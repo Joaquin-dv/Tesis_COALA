@@ -1,5 +1,8 @@
 @import url(colores.css);
 @import url(tipografias.css);
+@import url(../modules/apunte.module.css);
+
+@import url(../modules/footer.module.css);
 
 * {
     padding: 0;
@@ -10,6 +13,7 @@
 /* ===== Main ===== */
 body {
     background-color: var(--bg-body);
+    scroll-behavior: smooth;
 }
 
 *::-webkit-scrollbar {
@@ -233,4 +237,17 @@ header .barra_navegacion a:hover {
 
 .boton_subir_apunte button:active {
     background-color: #7e9c1d;
+}
+
+/* ===== Apuntes ===== */
+.contenedor_apuntes {
+    margin: 1em 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.contenedor_apuntes > a {
+    text-decoration: none;
 }

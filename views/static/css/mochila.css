@@ -1,14 +1,5 @@
 @import url(general/generales.css);
 
-
-.contenedor_apuntes {
-    margin: 1em 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-}
-
 .apunte_mochila{
     border: 1px solid #ccc;
     border-radius: 24px;

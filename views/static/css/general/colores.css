@@ -23,4 +23,11 @@
     --modal-bg:  #A7D129;
     --txt-form-titulo: #2B2B2B;
     --modal-placeholder: #C0C0C0;
+
+    /* APUNTES */
+    --fondo: #ffffff;
+    --linea: #b8b8b8;
+    --titulo: #2b2b2b;
+    --detalle: #71717A;
+    --fondo-detalle: #E5E5E5;
 }

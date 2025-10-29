@@ -1,14 +1,9 @@
 @import url(general/generales.css);
+@import url(./modules/toast.module.css);
+@import url(./modules/modal.module.css);
 
 .vistos_recientemente,
 .para_ti {
     font-size: 22px;
 }
 
-.contenedor_apuntes {
-    margin: 1em 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-}

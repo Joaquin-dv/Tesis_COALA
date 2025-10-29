@@ -1,23 +1,4 @@
-:root 
-{
-    --fondo: #ffffff;
-    --linea: #b8b8b8;
-    --titulo: #2b2b2b;
-    --detalle: #71717A;
-    --fondo-detalle: #E5E5E5
-}
-
-*{
-    margin:0;
-    padding: 0;
-    box-sizing: border-box;
-}
-a{
-    text-decoration: none;
-}
-
-article
-{
+.apunte {
     position: relative;
     border: solid 1px var(--linea);
     background-color: var(--fondo);
@@ -30,23 +11,22 @@ article
     gap: .3em;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.08);
 }
-figure
-{
+
+.apunte > figure {
     background-color: rgb(194, 234, 240);
     border-radius: 0.8em;
     width: 100%;
     height: 8em;
 }
 
-.imagen_apunte
-{
+.imagen_apunte {
     width: 100%;
     height: 100%;
     object-fit: cover;
     border-radius: 0.8em;
 }
-.informacion
-{
+
+.apunte > .informacion {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -55,7 +35,7 @@ figure
     gap: .5em;
 }
 
-.datos_apunte{
+.apunte > .informacion > .datos_apunte {
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -63,20 +43,21 @@ figure
     gap: 10px;
 }
 
-.datos_apunte_izquierda{
+.datos_apunte > .datos_apunte_izquierda {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 5px;
 
 }
-.datos_apunte_derecha{
+
+.datos_apunte > .datos_apunte_derecha {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.informacion_apunte{
+.datos_apunte_izquierda > .informacion_apunte {
     font-size: 11px;
     border-radius: 0.5em;
     align-items: center;
@@ -86,54 +67,77 @@ figure
     height: 100%;
     display: flex;
 }
-h2{
+
+.datos_apunte_derecha > .informacion_apunte {
+    font-size: 11px;
+    border-radius: 0.5em;
+    align-items: center;
+    padding: 4px 6px;
+    background-color: var(--fondo-detalle);
+    text-align: center;
+    height: 100%;
+    display: flex;
+}
+
+.apunte > .informacion > h2 {
     color: var(--titulo);
     font-size: 19px;
 }
-p{
+
+.datos_apunte_izquierda > p {
     color: var(--detalle);
-    font-size: 15px;
+    /* font-size: 15px; */
 }
 
-.icono_estado{
-    position: absolute;   
+.datos_apunte_derecha > p {
+    color: var(--detalle);
+    /* font-size: 15px; */
+}
+
+.apunte > .informacion > .icono_estado {
+    position: absolute;
     top: 10px;
     right: 10px;
     font-size: 20px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    overflow: hidden;
     z-index: 1;
+    background-color: white;
 }
 
-
-.fa-heart{
+.icono_estado > .fa-heart {
     color: #e74c3c;
 }
 
-.fa-circle-check{
+.icono_estado > .fa-circle-check {
     color: #27ae60;
 }
 
-.fa-clock{
+.icono_estado > .fa-clock {
     color: #f39c12;
 }
 
-.fa-circle-xmark{
+.icono_estado > .fa-circle-xmark {
     color: #c0392b;
 }
 
 @media (max-width: 768px) {
-  article{
-    width: 200px;
-    height: auto    ;
-  }
-
-  .datos_apunte{
-    color: red;
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    .apunte {
+        width: 200px;
+        height: auto;
     }
-    .datos_apunte_izquierda{
+
+    .apunte > .informacion > .datos_apunte {
+        color: red;
+        justify-content: center;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .datos_apunte > .datos_apunte_izquierda {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -142,43 +146,40 @@ p{
 }
 
 @media (max-width: 506px) {
-  article{
-    width: 150px;
-  }
+    .apunte {
+        width: 150px;
+    }
 
-  .informacion_apunte{
-    font-size: 9px;
-    padding: 3px 4px;
-  }
+    .informacion_apunte {
+        font-size: 9px;
+        padding: 3px 4px;
+    }
 
-  figure{
-    width: 90%;
-  }
+    .apunte > figure {
+        width: 90%;
+    }
 
-    h2{
+    .apunte > .informacion > h2 {
         font-size: 16px;
     }
-  
+
 }
 
-
 @media (max-width: 407px) {
-    article{
-    width: 250px;
-  }
+    .apunte {
+        width: 250px;
+    }
 
-   .datos_apunte{
+    .apunte > .informacion > .datos_apunte {
         justify-content: center;
         display: flex;
         gap: 8px;
     }
-    .datos_apunte_izquierda{
+
+    .datos_apunte > .datos_apunte_izquierda {
         display: flex;
         flex-direction: row;
         align-items: center;
         gap: 5px;
     }
 }
-
-
-

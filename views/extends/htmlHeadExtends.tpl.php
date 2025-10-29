@@ -38,12 +38,10 @@
 	<!-- ===== Estilos ===== -->
 	<!-- Inicio -->
 	<link rel="stylesheet" href="/views/static/css/inicio.css">
-    <link rel="stylesheet" href="/views/static/css/modal.css">
-    <link rel="stylesheet" href="/views/static/css/style_apunte.css">
-	<link rel="stylesheet" href="/views/static/css/toast.css">
+    <!-- <link rel="stylesheet" href="/views/static/css/modal.css"> -->
+	<!-- <link rel="stylesheet" href="/views/static/css/toast.css"> -->
 	<!-- Explorar -->
 	<link rel="stylesheet" href="views/static/css/explorar.css">
-    <link rel="stylesheet" href="views/static/css/style_apunte.css">
 
 	<link rel="stylesheet" href="views/static/css/dashboard.css">
 	<link rel="stylesheet" href="views/static/css/apuntes_rechazados.css">
