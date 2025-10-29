@@ -37,7 +37,9 @@ main .buscador_subir_apunte{
 
 .dropdown {
     position: relative;
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
+    
 }
 
 .dropbtn {
