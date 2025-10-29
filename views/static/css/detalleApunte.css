@@ -672,8 +672,55 @@ input[type="radio"] {
 	transform: scale(1.03);
 }
 
-main {
-	position: relative;
+
+
+.botones_admin{
+  /* background-color: green; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+  padding: 1.5em;
+
+}
+
+.boton_cancelar_admin, .boton_eliminar_admin, .boton_aprobar_admin{
+    border: none;
+    padding: 8px 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    color: var(--txt-blanco);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.boton_cancelar_admin{
+  background-color: var(--bg-celeste);
+}
+.boton_eliminar_admin{
+  background-color: #F44336;
+}
+
+.boton_aprobar_admin{
+  background-color: #4CAF50;
+}
+
+.boton_aprobar_admin:hover{
+  background-color: #388E3C;
+  transform: scale(1.05);
+}
+
+.boton_cancelar_admin:hover{
+  background-color: var(--bg-celeste);
+  transform: scale(1.05);
+}
+.boton_eliminar_admin:hover{
+  background-color: #D32F2F;
+  transform: scale(1.05);
+}
+
+main{
+  position: relative;
 }
 
 @keyframes latido {

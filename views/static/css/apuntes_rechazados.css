@@ -1,0 +1,11 @@
+@import url(general/generales.css);
+
+.rechazados-container{
+    padding: 4em 0;
+}
+.contenedor_apuntes_rechazados{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    justify-content: center;
+}
