@@ -245,11 +245,13 @@ header .barra_navegacion a:hover {
 /* ===== Apuntes ===== */
 .contenedor_apuntes {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 1em;
     margin: 1em 0;
+    place-items: center;
 }
 
-.contenedor_apuntes>a {
+.contenedor_apuntes > a {
     text-decoration: none;
+    height: 100%;
 }

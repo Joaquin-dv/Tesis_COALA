@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="views/static/css/genereales.css">
+    <link rel="stylesheet" href="views/static/css/general/generales.css">
     <link rel="stylesheet" href="views/static/css/modal.css">
     <link rel="stylesheet" href="views/static/css/mochila.css">
     <link rel="stylesheet" href="views/static/css/style_apunte.css">
