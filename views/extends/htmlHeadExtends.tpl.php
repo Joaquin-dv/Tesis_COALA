@@ -36,10 +36,10 @@
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 	<!-- ===== Estilos ===== -->
+	<link rel="stylesheet" href="/views/static/css/general/generales.css">
 	<!-- Inicio -->
 	<link rel="stylesheet" href="/views/static/css/inicio.css">
-    <!-- <link rel="stylesheet" href="/views/static/css/modal.css"> -->
-	<!-- <link rel="stylesheet" href="/views/static/css/toast.css"> -->
+
 	<!-- Explorar -->
 	<link rel="stylesheet" href="views/static/css/explorar.css">
 

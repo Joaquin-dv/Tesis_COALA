@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="views/static/css/general/generales.css">
     <link rel="stylesheet" href="views/static/css/landing.css">
     <!-- <link rel="stylesheet" href="views/static/css/footer.css"> -->
     <link rel="icon" type="image/webp" sizes="32x32" href="views/static/img/favicon/favicon-32x32.webp">
