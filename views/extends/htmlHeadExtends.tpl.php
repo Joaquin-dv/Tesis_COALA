@@ -30,20 +30,18 @@
     <link rel="manifest" href="views/static/img/favicon/site.webmanifest">
 
 	<!-- Font Awesome -->
-	<script src="https://kit.fontawesome.com/f63493d67a.js" crossorigin="anonymous"></script>
+	<script src="https://kit.fontawesome.com/f63493d67a.js" crossorigin="anonymous" defer></script>
 
 	<!-- SweetAlert2 -->
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 	<!-- ===== Estilos ===== -->
+	<link rel="stylesheet" href="/views/static/css/general/generales.css">
 	<!-- Inicio -->
 	<link rel="stylesheet" href="/views/static/css/inicio.css">
-    <link rel="stylesheet" href="/views/static/css/modal.css">
-    <link rel="stylesheet" href="/views/static/css/style_apunte.css">
-	<link rel="stylesheet" href="/views/static/css/toast.css">
+
 	<!-- Explorar -->
 	<link rel="stylesheet" href="views/static/css/explorar.css">
-    <link rel="stylesheet" href="views/static/css/style_apunte.css">
 
 	<link rel="stylesheet" href="views/static/css/dashboard.css">
 	<link rel="stylesheet" href="views/static/css/apuntes_rechazados.css">

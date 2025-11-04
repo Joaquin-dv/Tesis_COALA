@@ -77,13 +77,6 @@ i#cerrar_modal {
     width: 100%;
 }
 
-.datos_apunte {
-    display: flex;
-    gap: 1em;
-    justify-content: center;
-    padding: .8em 0em;
-}
-
 #curso {
     width: 100%;
 }
