@@ -124,6 +124,14 @@ header .barra_navegacion a:hover {
         display: flex;
     }
 
+    main {
+        padding: 1em 1em !important;
+    }
+
+    .buscador_subir_apunte {
+        padding: 10px 0px !important;
+    }
+
     /* Ajustar posición de toasts en móvil para no tapar la navegación */
     .swal2-toast.swal2-top-right {
         top: 20px !important;
@@ -251,7 +259,7 @@ header .barra_navegacion a:hover {
     place-items: center;
 }
 
-.contenedor_apuntes > a {
+.contenedor_apuntes>a {
     text-decoration: none;
     height: 100%;
 }

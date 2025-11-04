@@ -30,10 +30,15 @@
 .apunte > .informacion {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     align-items: flex-start;
     background-color: var(--fondo);
     width: 100%;
     gap: .5em;
+}
+
+.apunte > .informacion > h2 {
+    height: 38px;
 }
 
 .apunte > .informacion > .datos_apunte {
@@ -49,13 +54,13 @@
     justify-content: center;
     align-items: center;
     gap: 5px;
-
 }
 
 .datos_apunte > .datos_apunte_derecha {
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 5px;
 }
 
 .datos_apunte_izquierda > .informacion_apunte {

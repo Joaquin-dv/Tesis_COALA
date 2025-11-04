@@ -30,7 +30,7 @@
     <link rel="manifest" href="views/static/img/favicon/site.webmanifest">
 
 	<!-- Font Awesome -->
-	<script src="https://kit.fontawesome.com/f63493d67a.js" crossorigin="anonymous"></script>
+	<script src="https://kit.fontawesome.com/f63493d67a.js" crossorigin="anonymous" defer></script>
 
 	<!-- SweetAlert2 -->
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
