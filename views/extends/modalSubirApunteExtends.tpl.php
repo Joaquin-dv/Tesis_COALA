@@ -2,7 +2,7 @@
     <section class="contenido_modal">
         <i id="cerrar_modal" class="fa-solid fa-x"></i>
         <section class="imagen">
-            <img id="koala_modal" src="views/static/img/modal/koala.png" alt="">
+            <img id="koala_modal" src="views/static/img/modal/koala.webp" alt="">
         </section>
         <section class="contenido_formulario">
             <span class="form_titulo poppins-bold">Subi tu apunte a COALA</span>

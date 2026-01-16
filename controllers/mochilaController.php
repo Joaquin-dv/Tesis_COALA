@@ -1,5 +1,9 @@
 <?php
 
+	/* Log de acceso a la página */
+	$logger = new Logger();
+	$logger->pageLoad(null, 'mochila');
+
     $tpl = new Mopla('mochila');
 
     // Se carga el componente

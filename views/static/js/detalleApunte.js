@@ -98,46 +98,7 @@ async function obtenerRutaApunte(apunteId) {
     return data;
 }
 
-// Función para manejar el envío de comentarios
-document.addEventListener("DOMContentLoaded", () => {
-    const formComentario = document.getElementById("form-comentario");
-    const inputComentario = document.getElementById("txt-comentario");
-
-    if (formComentario) {
-        formComentario.addEventListener("submit", async (e) => {
-            e.preventDefault();
-
-            const comentario = inputComentario.value.trim();
-            if (!comentario) {
-                alert("Por favor, escribe un comentario.");
-                return;
-            }
-
-            try {
-                const formData = new FormData();
-                formData.append('comentario', comentario);
-
-                const response = await fetch(window.location.href, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (response.ok) {
-                    // Limpiar el input
-                    inputComentario.value = '';
-
-                    // Recargar la página para mostrar el nuevo comentario
-                    window.location.reload();
-                } else {
-                    alert("Error al enviar el comentario. Inténtalo de nuevo.");
-                }
-            } catch (error) {
-                console.error("Error:", error);
-                alert("Error al enviar el comentario. Inténtalo de nuevo.");
-            }
-        });
-    }
-});
+// Los comentarios ahora se manejan vía POST tradicional en el controlador
 
 // Función para manejar el corazón de favoritos
 document.addEventListener("DOMContentLoaded", () => {

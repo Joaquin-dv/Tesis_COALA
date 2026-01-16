@@ -1,6 +1,11 @@
 <?php
     // ============================ CONTROLADOR DETALLE APUNTE ============================
 
+	/* Log de acceso a la página */
+	$logger = new Logger();
+    // Logueo de page load con ID de apunte
+	$logger->pageLoad(null, 'detalleApunte?apunteId=' . (isset($_GET['apunteId']) ? $_GET['apunteId'] : 'desconocido'));
+
     // Cargamos el motor de plantillas Mopla
     $tpl = new Mopla("detalleApunte");
 
@@ -26,6 +31,10 @@
     $es_favorito = $apunte->esFavorito($_GET['apunteId']);
     $es_favorito = $es_favorito ? 'favorito-activo' : '';
 
+    // Obtener puntuación del usuario actual
+    $puntuacion_usuario = $apunte->getPuntuacionUsuario($_GET['apunteId']);
+    $puntuacion_usuario = $puntuacion_usuario ? $puntuacion_usuario : 0;
+
     // Array para guardar el componente con la informacion cargada
     $lista_comentarios = "";
 
@@ -43,12 +52,15 @@
         $error_archivo = "";
     }
 
-    // Manejar envío de comentario
+    // Manejar envío de comentario con puntuación opcional
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comentario'])) {
-        $resultado = $apunte->createComentario($_GET['apunteId'], $_POST['comentario']);
+        $puntuacion = isset($_POST['puntuacion']) && $_POST['puntuacion'] > 0 ? (int)$_POST['puntuacion'] : null;
+        $resultado = $apunte->createComentario($_GET['apunteId'], $_POST['comentario'], $puntuacion);
         if ($resultado['errno'] === 201) {
             // Recargar comentarios después de crear uno nuevo
             $lista_comentarios_apunte = $apunte->getComentariosByApunte($_GET['apunteId']);
+            // Recargar información del apunte para actualizar promedio
+            $info_apunte = $apunte->getApunteById($_GET['apunteId'], true)[0];
         }
     }
     // Incrementar las visitas del apunte (descomentariar para probar)
@@ -56,6 +68,14 @@
 
     // Cargo la informacion en los componentes
     foreach ($lista_comentarios_apunte as $row) {
+        // Agregar estrellas si hay puntuación
+        if (isset($row['PUNTUACION']) && $row['PUNTUACION'] > 0) {
+            $estrellas = str_repeat('<i class="fa-solid fa-star"></i>', $row['PUNTUACION']);
+            $estrellas .= str_repeat('<i class="fa-regular fa-star"></i>', 5 - $row['PUNTUACION']);
+            $row['ESTRELLAS'] = $estrellas;
+        } else {
+            $row['ESTRELLAS'] = '';
+        }
         $lista_comentarios .= $comentarioExtend->assignVar($row);
     }
 
@@ -71,7 +91,9 @@
     // }
 
     // Cargamos los componentes necesarios
-    $tpl->assignVar(["TITULO" => $info_apunte['TITULO'], "MATERIA" => $info_apunte['MATERIA'], "ESCUELA" => $info_apunte['ESCUELA'], "AÑO" => $info_apunte['AÑO'], "PROMEDIO_CALIFICACIONES" => $info_apunte['PROMEDIO_CALIFICACIONES'], "CANTIDAD_PUNTUACIONES" => $info_apunte['CANTIDAD_PUNTUACIONES'], "NOMBRE_AUTOR" => $info_apunte['NOMBRE_AUTOR'], "FECHA_CREACION" => $info_apunte['FECHA_CREACION'], "RUTA_ARCHIVO" => $ruta_archivo, "ERROR_ARCHIVO" => $error_archivo, "ES_FAVORITO" => $es_favorito, "MOSTRAR_TOAST_COMENTARIO" => isset($mostrar_toast_comentario) ? 'true' : 'false', "CANTIDAD_VISTAS" => $info_apunte['CANTIDAD_VISTAS']]);
+
+    $tpl->assignVar(["TITULO" => $info_apunte['TITULO'], "MATERIA" => $info_apunte['MATERIA'], "ESCUELA" => $info_apunte['ESCUELA'], "AÑO" => $info_apunte['AÑO'], "PROMEDIO_CALIFICACIONES" => $info_apunte['PROMEDIO_CALIFICACIONES'], "CANTIDAD_PUNTUACIONES" => $info_apunte['CANTIDAD_PUNTUACIONES'], "NOMBRE_AUTOR" => $info_apunte['NOMBRE_AUTOR'], "FECHA_CREACION" => $info_apunte['FECHA_CREACION'], "RUTA_ARCHIVO" => $ruta_archivo, "ERROR_ARCHIVO" => $error_archivo, "ES_FAVORITO" => $es_favorito, "MOSTRAR_TOAST_COMENTARIO" => isset($mostrar_toast_comentario) ? 'true' : 'false', "CANTIDAD_VISTAS" => $info_apunte['CANTIDAD_VISTAS'], "PUNTUACION_USUARIO" => $puntuacion_usuario]);
+    $tpl->assignVar(["DESCRIPCION" => $info_apunte['DESCRIPCION']]);
     $tpl->assignVar(["COMENTARIOS_APUNTE" => $lista_comentarios]);
 
     // Cargamos la informacion del usuario logueado

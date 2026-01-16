@@ -5,7 +5,7 @@
  * Formato de columnas:
  * accion | fecha y hora | ip | navegador | usuario(id) | evento
  *
- * acciones: 
+ * acciones:
  * ? -> consulta
  * * -> modificacion
  * - -> eliminacion
@@ -13,6 +13,7 @@
  * > -> logueo
  * < -> deslogueo
  * ! -> error
+ * P -> page load
  * 
  *Eventos:
  * - Logueo / Deslogueo
@@ -30,6 +31,7 @@
  * - modificacion(int $usuario, string $objeto, int $idModificado)
  * - eliminacion(int $usuario, string $objeto, int $idEliminado)
  * - error(int $usuario, string $codigoError, string $mensajeError)
+ * - pageLoad(int $usuario, string $pagina)
  */
 
 class Logger {
@@ -84,6 +86,39 @@ class Logger {
         $this->writeError('!',$usuario,"ERROR {$codigoError}: {$mensajeError}");
     }
 
+    public function pageLoad ($usuario=null, $pagina){
+        if($usuario === null){
+            if(isset($_SESSION[APP_NAME])){
+                $usuario=$_SESSION[APP_NAME]['user']['id'];
+            } else {
+                $usuario = 0; // Usuario no logueado
+            }
+        }
+
+        // Si la pagina es detalle de apunte, obtener el ID del apunte
+        if (strpos($pagina, 'detalleApunte?apunteId=') !== false) {
+            $partes = explode('=', $pagina);
+            if (isset($partes[1]) && is_numeric($partes[1])) {
+                $idApunte = (int)$partes[1];
+                $this->write('P',$usuario,"El usuario accedio al detalle del apunte ID: {$idApunte}");
+                return;
+            }
+        }
+
+        $this->write('P',$usuario,"El usuario accedio a la pagina: {$pagina}");
+    }
+
+    public function busqueda($usuario = null, $tipo, $valor) {
+        if($usuario === null){
+            if(isset($_SESSION[APP_NAME])){
+                $usuario = $_SESSION[APP_NAME]['user']['id'];
+            } else {
+                $usuario = 0;
+            }
+        }
+        $this->write('?', $usuario, "El usuario busco {$tipo}: {$valor}");
+    }
+
     private function write ($accion,$usuario,$evento){
         $fechaHora = date('Y-m-d H:i:s');
         $ip = $_SERVER['REMOTE_ADDR'];
@@ -112,6 +147,16 @@ class Logger {
         }
 
         file_put_contents($this->archivoErrores, $linea, FILE_APPEND);
+    }
+
+    public function registrarBusqueda($tipo, $valor)
+    {   
+        if (empty($tipo) || empty($valor)) {
+            return false;
+        }
+        
+        $this->busqueda(null, $tipo, $valor);
+        return true;
     }
 }
 ?>

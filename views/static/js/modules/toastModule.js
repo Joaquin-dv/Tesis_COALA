@@ -30,7 +30,7 @@ export function error(mensajeError) {
     });
 }
 
-export function exito() {
+export function exito(onClose) {
     Swal.fire({
         icon: "success",
         text: "Apunte subido con éxito",
@@ -39,6 +39,11 @@ export function exito() {
         topLayer: true,
         timer: 8000,
         timerProgressBar: true,
+        didClose: () => {
+            if (onClose && typeof onClose === 'function') {
+                onClose();
+            }
+        }
     });
 }
 

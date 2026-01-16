@@ -31,7 +31,7 @@
                     </span>
                 </div>
 
-                <!-- <a href="?slug=reestablecer" class="poppins-regular">¿Olvidaste tu contraseña?</a> -->
+                <a href="?slug=reestablecer" class="poppins-regular">¿Olvidaste tu contraseña?</a>
                 <input type="submit" value="Entrar" name="btn_login" class="btn poppins-semibold">
                 <div class="fraseLink">
                     <span class="poppins-regular">¿No tienes cuenta?</span>
